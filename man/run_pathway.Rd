@@ -7,7 +7,17 @@
 run_pathway(entity, exp.fc, compare, gage.dir, cnts, grp.idx)
 }
 \arguments{
-\item{grp.idx}{}
+\item{entity}{: scientific name of the species}
+
+\item{exp.fc}{: log fold expression values}
+
+\item{compare}{: how the comparision is done for GAGE, see gage for details}
+
+\item{gage.dir}{: directory in which GAGE will be run}
+
+\item{cnts}{: counts of genes to use in pathview}
+
+\item{grp.idx}{: index of the reference and sample for differential analysis}
 }
 \description{
 Title

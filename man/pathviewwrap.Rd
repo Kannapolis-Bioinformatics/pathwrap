@@ -5,20 +5,44 @@
 \title{Title}
 \usage{
 pathviewwrap(
-  fq.dir = "mouse_raw",
   ref.dir = NA,
   phenofile = NA,
   outdir = "results",
-  endness = "SE",
   entity = "Mus musculus",
-  corenum = 8,
-  diff.tool = "DESEQ2",
+  corenum = 2,
   compare = "unpaired",
-  seq_tech = "Illumina"
+  diff.tool = "DESeq2",
+  seq_tech = "Illumina",
+  keep_tmp = FALSE,
+  rerun = FALSE,
+  cacheDir = NULL,
+  aligner
 )
 }
 \arguments{
-\item{seq_tech}{}
+\item{ref.dir}{: path to reference directory which contain reference file(\emph{.fa) and annotation file(}.gtf), can be NULL}
+
+\item{phenofile}{: path to phenofile ; see note on test data to see the format of phenofile}
+
+\item{outdir}{: give the name of parent result dir , this can be existing or not , rest of directory will be formed by program for organization}
+
+\item{entity}{: Scientific name of species whose RNA is being analyzed}
+
+\item{corenum}{: number of cores available for analysis #defaut 2}
+
+\item{compare}{: what is sample/experimental design you have, paired or unpaired, as.group}
+
+\item{diff.tool}{:  what differential tool to to use, “DESEQ2” or “edgeR” available}
+
+\item{seq_tech}{: Illumina, pacbio or nanopore}
+
+\item{keep_tmp}{: set TRUE if keeping the aligned bam files, if set FALSE, bam files are deleted}
+
+\item{rerun}{: if FALSE the previously complete step will not be rerunned, if TRUE analysis starts from first step}
+
+\item{cacheDir}{: directory where temporary files created during alignment are stored}
+
+\item{aligner}{: One of "Rhisat2" or "Rbowtie2"; Rbowtie2 can be very slow for human and eukaryotic species}
 }
 \description{
 Title

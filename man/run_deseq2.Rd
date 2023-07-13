@@ -7,7 +7,14 @@
 run_deseq2(cnts, grp.idx, deseq2.dir)
 }
 \arguments{
-\item{deseq2.dir}{}
+\item{cnts}{:counts of gene}
+
+\item{grp.idx}{: index of reference and samples for differential analysis}
+
+\item{deseq2.dir}{: directory to store results of deseq2}
+}
+\value{
+exp.fc : fold change values
 }
 \description{
 Title

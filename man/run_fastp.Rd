@@ -2,13 +2,13 @@
 % Please edit documentation in R/path_rna_fastp.R
 \name{run_fastp}
 \alias{run_fastp}
-\title{Title}
+\title{to run trimming}
 \usage{
-run_fastp(samplename)
+run_fastp(sampleName)
 }
 \arguments{
-\item{samplename}{}
+\item{sampleName}{: name of the sample}
 }
 \description{
-Title
+to run trimming
 }

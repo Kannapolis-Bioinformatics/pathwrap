@@ -1,16 +1,16 @@
 #' Title
 #'
-#' @param cnts
-#' @param grp.idx
-#' @param deseq2.dir
+#' @param cnts :counts of gene
+#' @param grp.idx : index of reference and samples for differential analysis
+#' @param deseq2.dir : directory to store results of deseq2
 #'
 #' @import EnhancedVolcano EnhancedVolcano
 #' @import DESeq2
 #'
-#' @return
+#' @return exp.fc : fold change values
 #' @export
 #'
-#' @examples
+
 run_deseq2 <- function(cnts,grp.idx, deseq2.dir){
   library(DESeq2)
   coldat=DataFrame(grp=factor(grp.idx))

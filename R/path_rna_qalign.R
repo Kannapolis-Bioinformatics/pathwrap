@@ -4,19 +4,21 @@
 
 #' Title
 #'
-#' @param corenum
-#' @param endness
-#' @param sampleFile
-#' @param genomeFile
-#' @param geneAnnotation
-#' @param ref.dir
+#' @param corenum : the number of cores used during alignment
+#' @param endness : weather its paired end or single end
+#' @param sampleFile : the file where information about location of sample is stored, see qAlign for more
+#' @param genomeFile : the genome file used for alignment or bioconductor genome package
+#' @param geneAnnotation : gene annnotaion file used for gene counting or bioconductor annotation package
+#' @param ref.dir : directory in which genomeFile and genomeAnnotaion are stored
+#' @param cacheDir : directory where temporary files genrated during alignment are store
+#' @param  aligner : weather Rhisat2 or Rbowtie should be used for alignment
 #'
 #' @importFrom QuasR qAlign
 #'
-#' @return
+#' @return aligned_proj : the R object generated from the alignment step
 #' @export
 #'
-#' @examples
+
 run_qAlign <- function(corenum, endness, sampleFile, genomeFile,geneAnnotation, ref.dir,cacheDir, aligner){
   #does ref.dir also have ref index, if not make indexes
   if( !is.na(ref.dir)){

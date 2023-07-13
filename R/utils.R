@@ -1,21 +1,22 @@
 #make sure force = T is good
 #' Title
 #'
-#' @param ref.dir
-#' @param outdir
-#' @param entity
-#' @param corenum
-#' @param compare
-#'
+#' @param ref.dir : directory for reference files
+#' @param outdir : directory for result
+#' @param entity : scientific name of species of interest
+#' @param corenum : number of cores
+#' @param compare : comparision to make for gage
+#' @param rerun if FALSE the previously complete step will not be rerunned, if TRUE analysis starts from first step
 #' @importFrom stringr str_replace_all
 #'
-#' @return
+
+#'
 #' @export
 #'
-#' @examples
+
 sanity_check <- function( ref.dir , outdir,  entity , corenum , compare, rerun){
   library(stringr)
-  if (file.exists(outdir) & rerun == T){
+  if (file.exists(outdir) & rerun == F){
     unlink(outdir, recursive = T)
   }
 
@@ -70,7 +71,7 @@ sanity_check <- function( ref.dir , outdir,  entity , corenum , compare, rerun){
     species_no <- which(ref_info$species==entity)
     annotate_pkg <- ref_info$annotation[species_no]
     genome_pkg <- ref_info$genome[species_no]
-    
+
     # (set of genome and annotation pkg come from developers list)
     #
     if(file.exists(file.path(.libPaths()[1],annotate_pkg, "extdata", paste0(annotate_pkg, ".sqlite.md5" ) ))){
@@ -115,6 +116,6 @@ sanity_check <- function( ref.dir , outdir,  entity , corenum , compare, rerun){
   }
   print("this is utils File, qc.dir,trim.dir, genomeFile, geneAnnotation, deseq2.dir, edger.dir, gage.dir")
   print(paste0(qc.dir,trim.dir, genomeFile, geneAnnotation, deseq2.dir, edger.dir, gage.dir))
-  
+
   return (c(qc.dir,trim.dir, genomeFile, geneAnnotation, deseq2.dir, edger.dir, gage.dir))
 }

@@ -4,10 +4,36 @@
 \alias{run_qAlign}
 \title{Title}
 \usage{
-run_qAlign(corenum, endness, sampleFile, genomeFile, geneAnnotation, ref.dir)
+run_qAlign(
+  corenum,
+  endness,
+  sampleFile,
+  genomeFile,
+  geneAnnotation,
+  ref.dir,
+  cacheDir,
+  aligner
+)
 }
 \arguments{
-\item{ref.dir}{}
+\item{corenum}{: the number of cores used during alignment}
+
+\item{endness}{: weather its paired end or single end}
+
+\item{sampleFile}{: the file where information about location of sample is stored, see qAlign for more}
+
+\item{genomeFile}{: the genome file used for alignment or bioconductor genome package}
+
+\item{geneAnnotation}{: gene annnotaion file used for gene counting or bioconductor annotation package}
+
+\item{ref.dir}{: directory in which genomeFile and genomeAnnotaion are stored}
+
+\item{cacheDir}{: directory where temporary files genrated during alignment are store}
+
+\item{aligner}{: weather Rhisat2 or Rbowtie should be used for alignment}
+}
+\value{
+aligned_proj : the R object generated from the alignment step
 }
 \description{
 Title

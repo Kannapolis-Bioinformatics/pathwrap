@@ -1,17 +1,18 @@
 #' Title
 #'
-#' @param genomeFile
-#' @param geneAnnotation
-#' @param aligned_proj
-#' @param corenum
-#' @param result.dir
-#' @param txdb
+#' @param aligned_proj : the name of R object saved or generated during alignment
+#' @param corenum : the number of cores used for alignment
+#' @param result.dir : the directory in which result is stored
+#' @param txdb : the txdb object which is used for counting
+#' @param entity : the scientific name of the species of interest
 #'
-#' @return
+#' @importFrom QuasR qCount
+#'
+#' @return cnts : count of genes
 #' @export
 #'
-#' @examples
-run_qCount <- function(genomeFile, geneAnnotation, aligned_proj,corenum, result.dir, txdb, entity){
+
+run_qCount <- function( aligned_proj,corenum, result.dir, txdb, entity){
   ##
   #for mapping
   library(Rsamtools) #scanFaIndex

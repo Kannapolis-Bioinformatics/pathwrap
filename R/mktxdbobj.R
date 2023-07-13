@@ -1,19 +1,21 @@
 #' Title
 #'
-#' @param geneAnnotation
-#' @param corenum
-#' @param genomeFile
-#' @param entity
-#' @param outdir
+#' @param geneAnnotation : annotation file or package
+#' @param corenum : the number of cores
+#' @param genomeFile : genomeFile or package
+#' @param entity  : the scientific name of the organism
+#' @param outdir : the directory in which output is stored, Results is default
 #'
 #' @import GenomicFeatures
 #' @import Rsamtools
+#' @importFrom AnnotationDbi loadDb
+#' @importFrom GenomeInfoDb seqinfo
 #'
-#' @return
+#' @return txdb : txdb object that is returned
 #'
 #' @export
 #'
-#' @examples
+
 make_txdbobj <- function(geneAnnotation, corenum, genomeFile, entity, outdir){
 txdb <- try(loadDb(geneAnnotation), silent = T)
 cl2 <- makeCluster(corenum)

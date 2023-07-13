@@ -7,7 +7,11 @@
 run_qc(fq.dir, qc.dir, corenum)
 }
 \arguments{
-\item{corenum}{}
+\item{fq.dir}{: the directory in which raw RNAseq files are stored}
+
+\item{qc.dir}{: the directory in which results of quality check are stored}
+
+\item{corenum}{: the number of cores used for running quality check}
 }
 \description{
 Title

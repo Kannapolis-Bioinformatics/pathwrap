@@ -1,26 +1,24 @@
 #' Title
 #'
-#' @param fq.dir : path of folder where raw fastq files are : one fasta per sample
 #' @param ref.dir : path to reference directory which contain reference file(*.fa) and annotation file(*.gtf), can be NULL
 #' @param phenofile : path to phenofile ; see note on test data to see the format of phenofile
 #' @param outdir  : give the name of parent result dir , this can be existing or not , rest of directory will be formed by program for organization
-#' @param endness : can be “PE” for paired and “SE” for unpaired data
 #' @param entity  : Scientific name of species whose RNA is being analyzed
 #' @param corenum : number of cores available for analysis #defaut 2
 #' @param diff.tool :  what differential tool to to use, “DESEQ2” or “edgeR” available
 #' @param compare : what is sample/experimental design you have, paired or unpaired, as.group
 #' @param seq_tech : Illumina, pacbio or nanopore
 #' @param aligner : One of "Rhisat2" or "Rbowtie2"; Rbowtie2 can be very slow for human and eukaryotic species
+#' @param keep_tmp : set TRUE if keeping the aligned bam files, if set FALSE, bam files are deleted
+#' @param rerun : if FALSE the previously complete step will not be rerunned, if TRUE analysis starts from first step
+#' @param cacheDir : directory where temporary files created during alignment are stored
+#'
 #'
 #' @importFrom stringr str_replace_all
 #' @import parallel
+#' @import utils
 #'
-#' @return
 #' @export
-#'
-#'
-#' @examples pathviewwrap( ref.dir = "~/Documents/Research/UNCC/old/Data/Reference/mouse", phenofile = "~/Documents/Research/UNCC/old/mouse/fresh/mouse_raw/pheno.txt", outdir="~/Documents/Research/UNCC/Research_rotation-II/newtmp/pathviewwrap/results_withoutref", endness = "SE", entity = "Mus musculus", corenum = 8, diff.tool  = "DESEQ2", compare = "unpaired", seq_tech = "Illumina")
-
 pathviewwrap <- function( ref.dir = NA, phenofile= NA, outdir="results",  entity="Mus musculus",
                          corenum = 2,  compare="unpaired",diff.tool = "DESeq2", seq_tech="Illumina", keep_tmp = FALSE,rerun = FALSE, cacheDir = NULL , aligner){
 
@@ -56,11 +54,11 @@ pathviewwrap <- function( ref.dir = NA, phenofile= NA, outdir="results",  entity
   # } else if(dim(filenames)[2] == 2){
   #   endness <- "PE"
   #   fq.dir <- dirname(filenames$FileName1[1])
-  # 
+  #
   # }
 
   #run the fastqc
- 
+
 
   if (!file.exists(phenofile)){ ###TO DO make sure reference is first aplhanumerically#
     print("Please provide phenofile with Class information")
@@ -80,7 +78,7 @@ pathviewwrap <- function( ref.dir = NA, phenofile= NA, outdir="results",  entity
     endness <- "PE"
     fq.dir <- dirname(filenames$FileName1[1])
   }
-  
+
   if (!file.exists(file.path(qc.dir,"qc_heatmap.tiff"))){
     print("STEP 1 ; running fastqc")
     print("this is qc.dir")
@@ -99,7 +97,7 @@ pathviewwrap <- function( ref.dir = NA, phenofile= NA, outdir="results",  entity
   } else{
     write.table(file=sampleFile,sep = "\t", as.data.frame( cbind(FileName[,1], FileName[,2], SampleName)), col.names = c("FileName1","FileName2", "SampleName"), quote =F ,  row.names=F)
   }
-  
+
   #just in case there is random component in run_fastp
   RNGkind("L'Ecuyer-CMRG")
   set.seed(1)
@@ -110,7 +108,7 @@ pathviewwrap <- function( ref.dir = NA, phenofile= NA, outdir="results",  entity
   parSapply(cl , SampleName  ,run_fastp )
   print("the trim run is complete")
   stopCluster(cl)
-  
+
   #to check if all the nodes run fine
  # bad <- sapply(r, inherits, what = "try-error") # r<- mclappy()
 
@@ -133,7 +131,7 @@ pathviewwrap <- function( ref.dir = NA, phenofile= NA, outdir="results",  entity
 
   if(!file.exists(file.path(outdir, "combinedcount.trimmed.RDS")  ))  {
     print("STEP 4: counting aligned sequences")
-    cnts <-run_qCount(genomeFile, geneAnnotation, aligned_proj, corenum, outdir, txdb, entity)
+    cnts <-run_qCount( aligned_proj, corenum, outdir, txdb, entity)
     } else{
     cnts <- as.data.frame(readRDS(file.path(outdir, "combinedcount.trimmed.RDS") ))
     }
@@ -161,7 +159,6 @@ pathviewwrap <- function( ref.dir = NA, phenofile= NA, outdir="results",  entity
   if(!file.exists(paste0(deseq2.dir, "/Volcano_deseq2.tiff"))){
     print("STEP 5a ; running differential analysis using DESeq2")
     exp.fcncnts.deseq2 <- run_deseq2(cnts,grp.idx, deseq2.dir)
-    print(head(exp.fcncnts.deseq2))
   }    else{
     deseq2.res.df  <- read.table(file.path(deseq2.dir, "DESEQ2_logfoldchange.txt"), header = T, sep = "\t", row.names = 1) #works with gage
     exp.fcncnts.deseq2 <- deseq2.res.df  $log2FoldChange

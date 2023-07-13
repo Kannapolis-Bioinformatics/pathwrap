@@ -2,20 +2,21 @@
 
 #' Title
 #'
-#' @param entity
-#' @param exp.fc
-#' @param compare
-#' @param gage.dir
-#' @param cnts
-#' @param grp.idx
-#'
+#' @param entity : scientific name of the species
+#' @param exp.fc : log fold expression values
+#' @param compare : how the comparision is done for GAGE, see gage for details
+#' @param gage.dir : directory in which GAGE will be run
+#' @param cnts : counts of genes to use in pathview
+#' @param grp.idx : index of the reference and sample for differential analysis
+
+#' @import stats
+#' @import utils
 #' @import gage
 #' @import pathview
 #'
-#' @return
 #' @export
 #'
-#' @examples
+
 run_pathway <- function(entity, exp.fc, compare, gage.dir, cnts, grp.idx){
  library(pathview)
   library(gage)

@@ -4,10 +4,17 @@
 \alias{run_edgeR}
 \title{Title}
 \usage{
-run_edgeR(cnts, grp.idx, edgeR.dir)
+run_edgeR(cnts, grp.idx, edger.dir)
 }
 \arguments{
-\item{edgeR.dir}{}
+\item{cnts}{: counts of genes}
+
+\item{grp.idx}{: index of the reference and sample for differential analysis}
+
+\item{edgeR.dir}{: the directory in which edgeR results will be stored}
+}
+\value{
+exp.fc : log fold expression values
 }
 \description{
 Title

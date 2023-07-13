@@ -1,12 +1,12 @@
 #run fastp
 #' to run trimming
 #'
-#' @param sampleName
+#' @param sampleName : name of the sample
 #'
-#' @return
+
 #' @export
 #'
-#' @examples
+
 run_fastp <-function(sampleName){
   intformatch <- grep(sampleName, FileName[,1], value = F, fixed = T) #integer
   trimmedoutfile <-  FileName[intformatch,] #trimmedoutfile$FileName1 , trimmedoutfile$Filename2

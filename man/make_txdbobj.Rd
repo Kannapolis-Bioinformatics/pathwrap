@@ -4,10 +4,21 @@
 \alias{make_txdbobj}
 \title{Title}
 \usage{
-make_txdbobj(geneAnnotation, corenum, genomeFile, entity)
+make_txdbobj(geneAnnotation, corenum, genomeFile, entity, outdir)
 }
 \arguments{
-\item{entity}{}
+\item{geneAnnotation}{: annotation file or package}
+
+\item{corenum}{: the number of cores}
+
+\item{genomeFile}{: genomeFile or package}
+
+\item{entity}{: the scientific name of the organism}
+
+\item{outdir}{: the directory in which output is stored, Results is default}
+}
+\value{
+txdb : txdb object that is returned
 }
 \description{
 Title

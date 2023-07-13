@@ -4,20 +4,20 @@
 \alias{sanity_check}
 \title{Title}
 \usage{
-sanity_check(
-  fq.dir,
-  ref.dir,
-  phenofile,
-  outdir,
-  endness,
-  entity,
-  corenum,
-  diff.tool,
-  compare
-)
+sanity_check(ref.dir, outdir, entity, corenum, compare, rerun)
 }
 \arguments{
-\item{compare}{}
+\item{ref.dir}{: directory for reference files}
+
+\item{outdir}{: directory for result}
+
+\item{entity}{: scientific name of species of interest}
+
+\item{corenum}{: number of cores}
+
+\item{compare}{: comparision to make for gage}
+
+\item{rerun}{if FALSE the previously complete step will not be rerunned, if TRUE analysis starts from first step}
 }
 \description{
 Title

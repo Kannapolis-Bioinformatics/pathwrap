@@ -4,10 +4,21 @@
 \alias{run_qCount}
 \title{Title}
 \usage{
-run_qCount(genomeFile, geneAnnotation, aligned_proj, corenum, result.dir, txdb)
+run_qCount(aligned_proj, corenum, result.dir, txdb, entity)
 }
 \arguments{
-\item{txdb}{}
+\item{aligned_proj}{: the name of R object saved or generated during alignment}
+
+\item{corenum}{: the number of cores used for alignment}
+
+\item{result.dir}{: the directory in which result is stored}
+
+\item{txdb}{: the txdb object which is used for counting}
+
+\item{entity}{: the scientific name of the species of interest}
+}
+\value{
+cnts : count of genes
 }
 \description{
 Title
