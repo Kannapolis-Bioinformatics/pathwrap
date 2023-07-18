@@ -9,14 +9,15 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 Imports: 
+    methods,
     DESeq2,
+    BiocManager,
     EnhancedVolcano,
     edgeR,
     fastqcr,
     gage,
     GenomicFeatures,
     ggplot2,
-    gplots,
     parallel,
     pathview,
     QuasR,
@@ -24,7 +25,9 @@ Imports:
     Rhisat2,
     AnnotationDbi,
     GenomeInfoDb,
-    stringr
+    stringr,
+    BiocGenerics,
+    S4Vectors
 Depends: 
     R (>= 2.10)
 LazyData: true
