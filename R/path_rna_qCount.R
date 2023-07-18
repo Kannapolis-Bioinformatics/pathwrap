@@ -30,7 +30,7 @@ run_qCount <- function( aligned_proj,corenum, result.dir, txdb, entity){
   cnts <- geneLevels[,-1]
   kegg.gs.species <- kegg.gsets(entity)
   orgcode<- kegg.species.code(entity)
-  data(bods,envir = environment())
+  data(bods,package = "gage",envir = environment())
   #if(!all(rownames(cnts)%in% unlist(unname(kegg.gs.species$kg.sets)))){ #check if the use of "all" is appropriate
   if(sum(rownames(cnts)%in% unlist(unname(kegg.gs.species$kg.sets)) ) < 10){
     rownames(cnts)<- str_remove(rownames(cnts),"\\.[0-9]+$" )
