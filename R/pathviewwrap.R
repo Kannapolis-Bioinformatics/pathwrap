@@ -23,6 +23,7 @@ pathviewwrap <- function( ref.dir = NA, phenofile= NA, outdir="results",  entity
                          corenum = 2,  compare="unpaired",diff.tool = "DESeq2", seq_tech="Illumina", keep_tmp = FALSE,rerun = FALSE, cacheDir = NULL , aligner){
 
   on.exit(closeAllConnections())
+  aligned_bam <- NA
    dirlist <- sanity_check( ref.dir ,  outdir,  entity , corenum , compare, rerun)
    qc.dir <- dirlist[1]
    trim.dir <- dirlist[2]
@@ -88,7 +89,6 @@ pathviewwrap <- function( ref.dir = NA, phenofile= NA, outdir="results",  entity
 
   sampleFile <- file.path(outdir, "sampleFile.txt")
   rawfileName <- as.data.frame(sapply(filenames, function(x) basename(x)))
-  library(stringr)
   fastp_files_name <- as.data.frame(sapply(rawfileName, function(x) str_replace_all(x, ".fastq.gz$" ,"_trimmed.fastq.gz" )))
   FileName <- sapply(fastp_files_name, function(x) file.path(trim.dir , x))
 
@@ -102,7 +102,6 @@ pathviewwrap <- function( ref.dir = NA, phenofile= NA, outdir="results",  entity
   RNGkind("L'Ecuyer-CMRG")
   set.seed(1)
 
-  library(parallel)
   cl <- makeCluster(corenum)
   clusterExport(cl,c("seq_tech","endness", "FileName" ,"filenames", "trim.dir"), envir = environment())#.GlobalEnv) ??
   parSapply(cl , SampleName  ,run_fastp )

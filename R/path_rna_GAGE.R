@@ -8,7 +8,7 @@
 #' @param gage.dir : directory in which GAGE will be run
 #' @param cnts : counts of genes to use in pathview
 #' @param grp.idx : index of the reference and sample for differential analysis
-
+#'
 #' @import stats
 #' @import utils
 #' @import gage
@@ -18,8 +18,6 @@
 #'
 
 run_pathway <- function(entity, exp.fc, compare, gage.dir, cnts, grp.idx){
- library(pathview)
-  library(gage)
   ref <- which(grp.idx == "reference")
   samp <- which(grp.idx == "sample")
 

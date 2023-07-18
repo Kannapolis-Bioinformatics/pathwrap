@@ -2,7 +2,7 @@
 #'
 #' @param cnts : counts of genes
 #' @param grp.idx : index of the reference and sample for differential analysis
-#' @param edgeR.dir : the directory in which edgeR results will be stored
+#' @param edger.dir : the directory in which edgeR results will be stored
 #'
 #' @import edgeR
 #'
@@ -11,7 +11,6 @@
 #'
 
 run_edgeR <- function(cnts,grp.idx, edger.dir){
-    library(edgeR)
     dgel <- edgeR::DGEList(counts=cnts, group=factor(grp.idx))
     dgel <- edgeR::calcNormFactors(dgel)
     dgel <- edgeR::estimateCommonDisp(dgel)

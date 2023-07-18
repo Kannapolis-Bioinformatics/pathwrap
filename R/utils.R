@@ -8,14 +8,13 @@
 #' @param compare : comparision to make for gage
 #' @param rerun if FALSE the previously complete step will not be rerunned, if TRUE analysis starts from first step
 #' @importFrom stringr str_replace_all
-#'
-
-#'
+#' @import BiocManager 
+#' @import Rsamtools
+#' @importFrom methods is
 #' @export
 #'
 
 sanity_check <- function( ref.dir , outdir,  entity , corenum , compare, rerun){
-  library(stringr)
   if (file.exists(outdir) & rerun == F){
     unlink(outdir, recursive = T)
   }
@@ -33,7 +32,8 @@ sanity_check <- function( ref.dir , outdir,  entity , corenum , compare, rerun){
     if(!file.exists(file.path(parentname, dirname))) {
       dir.create(file.path(parentname, dirname))
     }
-    assign(dirname,value = file.path(parentname, dirname), envir = .GlobalEnv)
+  assign(dirname,value = file.path(parentname, dirname), envir =  environment()) 
+  #assign(dirname,value = file.path(parentname, dirname), envir = .GlobalEnv)
   }
 
   folder_to_create<- list("fastqc_results", "fastp_results","gage_results", "differential_analysis","aligned_bam","pathway_analysis" )
@@ -65,7 +65,7 @@ sanity_check <- function( ref.dir , outdir,  entity , corenum , compare, rerun){
   #References
   #if only species name is given and both geneAnnotation and genome is NULL
   if( is.na(ref.dir)){
-    data(anntpkglist, package = "pathviewwrap")
+    data(anntpkglist, package = "pathviewwrap",envir = environment())
     ref_info <- anntpkglist
 
     species_no <- which(ref_info$species==entity)
@@ -85,12 +85,12 @@ sanity_check <- function( ref.dir , outdir,  entity , corenum , compare, rerun){
     }
 
     #annotation pkg installation
-    pkg.on = require(annotate_pkg, character.only = TRUE, lib.loc = .libPaths()[1])
+    pkg.on = requireNamespace(annotate_pkg, character.only = TRUE, lib.loc = .libPaths()[1])
     if (!pkg.on) {
       if (!requireNamespace("BiocManager", quietly=TRUE))
         install.packages("BiocManager")
       BiocManager::install(annotate_pkg,force = T, suppressUpdates =TRUE, lib.loc = .libPaths()[1] )
-      pkg.on = require(annotate_pkg, character.only = TRUE, lib.loc = .libPaths()[1])
+      pkg.on = requireNamespace(annotate_pkg, character.only = TRUE, lib.loc = .libPaths()[1])
       if (!pkg.on)
         stop(paste("Fail to install/load gene annotation package ",annotate_pkg, "!", sep = ""))
     }
@@ -98,14 +98,13 @@ sanity_check <- function( ref.dir , outdir,  entity , corenum , compare, rerun){
 
     #genome file installation
     genomeFile <- genome_pkg
-    pkg.on = require(genome_pkg, character.only = TRUE, lib.loc = .libPaths()[1])
+    pkg.on = requireNamespace(genome_pkg, character.only = TRUE, lib.loc = .libPaths()[1])
     if (!pkg.on) {
       BiocManager::install(genome_pkg,force = T, suppressUpdates =TRUE, lib.loc = .libPaths()[1] )
     }
   } else {
     genomeFile <- list.files(ref.dir, ".fa$|.fna$|.fa.gz", full.names= T)[1]
     #unzipping .gz file because both scanFaIndex and qAlign do not work with gzip' ed file, require bgzip file
-    library(Rsamtools)
     if(summary( file(genomeFile) )$class ==  "gzfile"){
       system(paste0('gunzip -k ' , genomeFile ))
       genomeFile <- str_remove(pattern = ".gz$", genomeFile)

@@ -14,6 +14,7 @@
 #' @param  aligner : weather Rhisat2 or Rbowtie should be used for alignment
 #'
 #' @importFrom QuasR qAlign
+#' @import Rhisat2
 #'
 #' @return aligned_proj : the R object generated from the alignment step
 #' @export

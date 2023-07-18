@@ -5,14 +5,14 @@
 #' @param deseq2.dir : directory to store results of deseq2
 #'
 #' @import EnhancedVolcano EnhancedVolcano
+#' @importFrom DESeq2 DESeqDataSetFromMatrix
 #' @import DESeq2
-#'
-#' @return exp.fc : fold change values
+#' @importFrom S4Vectors DataFrame
+#' @return fold change values
 #' @export
 #'
 
 run_deseq2 <- function(cnts,grp.idx, deseq2.dir){
-  library(DESeq2)
   coldat=DataFrame(grp=factor(grp.idx))
   dds <- DESeqDataSetFromMatrix(cnts, colData=coldat, design =~ grp)
   dds <- DESeq(dds)

@@ -9,8 +9,10 @@
 #' @import GenomicFeatures
 #' @import Rsamtools
 #' @importFrom AnnotationDbi loadDb
-#' @importFrom GenomeInfoDb seqinfo
-#'
+#' @importFrom GenomeInfoDb seqlevels
+#' @importFrom GenomeInfoDb renameSeqlevels
+#' @importFrom GenomeInfoDb seqnames
+#' @importFrom BiocGenerics width
 #' @return txdb : txdb object that is returned
 #'
 #' @export
@@ -19,7 +21,8 @@
 make_txdbobj <- function(geneAnnotation, corenum, genomeFile, entity, outdir){
 txdb <- try(loadDb(geneAnnotation), silent = T)
 cl2 <- makeCluster(corenum)
-if (class(txdb)==  "TxDb"){
+#if (class(txdb)==  "TxDb"){
+if (is(txdb, "TxDb")){
   if(!grepl("chr", seqlevels(txdb)[1])){ #check if this is necessary
     newSeqNames <- paste('Chr', seqlevels(txdb), sep = '')
     names(newSeqNames) <- seqlevels(txdb)
@@ -28,8 +31,6 @@ if (class(txdb)==  "TxDb"){
   }
   closeAllConnections()
 }else{
-  library(GenomicFeatures)
-  library(Rsamtools)
   chrLen <- Rsamtools::scanFaIndex(genomeFile)
   chrominfo <- data.frame(chrom = as.character(seqnames(chrLen)),
                           length = width(chrLen),
