@@ -32,7 +32,7 @@ sanity_check <- function( ref.dir , outdir,  entity , corenum , compare, rerun){
     if(!file.exists(file.path(parentname, dirname))) {
       dir.create(file.path(parentname, dirname))
     }
-  assign(dirname,value = file.path(parentname, dirname), envir =  environment()) 
+  assign(dirname,value = file.path(parentname, dirname), envir =  .GlobalEnv)#environment()) 
   #assign(dirname,value = file.path(parentname, dirname), envir = .GlobalEnv)
   }
 
