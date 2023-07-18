@@ -138,8 +138,8 @@ pathviewwrap <- function( ref.dir = NA, phenofile= NA, outdir="results",  entity
   #print(coldata$SampleName)
   cnts <- cnts[, coldata$SampleName]
   if(  all(coldata$SampleName == colnames(cnts)) ){#if this then proceed
-    ref <- which(coldata$Class ==  levels(coldata$Class)[1])
-    samp <- which(coldata$Class ==  levels(coldata$Class)[2])
+    ref <- which(coldata$Class ==  levels(as.factor(coldata$Class))[1])
+    samp <- which(coldata$Class ==  levels(as.factor(coldata$Class))[2])
     grp.idx <-NULL
     grp.idx[ref] <- "reference"
     grp.idx[samp] <- "sample"
