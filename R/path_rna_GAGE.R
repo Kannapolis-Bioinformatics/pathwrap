@@ -58,6 +58,7 @@ run_pathway <- function(entity, exp.fc, compare, gage.dir, cnts, grp.idx){
   ############################################################################################
 
   keggcode_sel <- unname(korg[which(korg[,4]==entity),3])
+  data(bods, package = "gage", envir = environment() )
   common_name_species <- bods[,2][which(bods[,3]==keggcode_sel)]
 
   go.gs <- go.gsets(common_name_species)
