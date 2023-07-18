@@ -4,3 +4,4 @@ Pathwrap is a RNASeq analysis tool that provides a wrapper for the processing of
 In order to install pathwrap
 BiocManager::install("raw-lab/pathwrap", ref="rnaseqwrap", force = T) #make sure BiocManager is already installed within the R 
 
+raw3
