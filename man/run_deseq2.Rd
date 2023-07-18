@@ -14,7 +14,7 @@ run_deseq2(cnts, grp.idx, deseq2.dir)
 \item{deseq2.dir}{: directory to store results of deseq2}
 }
 \value{
-exp.fc : fold change values
+fold change values
 }
 \description{
 Title

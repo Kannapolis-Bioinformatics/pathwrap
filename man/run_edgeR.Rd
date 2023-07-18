@@ -11,7 +11,7 @@ run_edgeR(cnts, grp.idx, edger.dir)
 
 \item{grp.idx}{: index of the reference and sample for differential analysis}
 
-\item{edgeR.dir}{: the directory in which edgeR results will be stored}
+\item{edger.dir}{: the directory in which edgeR results will be stored}
 }
 \value{
 exp.fc : log fold expression values

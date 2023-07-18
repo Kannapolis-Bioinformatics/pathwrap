@@ -2,7 +2,7 @@
 % Please edit documentation in R/path_rna_qCount.R
 \name{run_qCount}
 \alias{run_qCount}
-\title{Title}
+\title{Count the number of genes expression and store count in RDS file}
 \usage{
 run_qCount(aligned_proj, corenum, result.dir, txdb, entity)
 }
@@ -21,5 +21,5 @@ run_qCount(aligned_proj, corenum, result.dir, txdb, entity)
 cnts : count of genes
 }
 \description{
-Title
+Count the number of genes expression and store count in RDS file
 }
