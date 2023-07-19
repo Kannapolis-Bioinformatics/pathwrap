@@ -33,7 +33,7 @@ sanity_check <- function( ref.dir , outdir, pos =1, entity , corenum , compare, 
     if(!file.exists(file.path(parentname, dirname))) {
       dir.create(file.path(parentname, dirname))
     }
-  assign(dirname,value = file.path(parentname, dirname), envir =  envir = as.environment(pos))# .GlobalEnv)#environment()) 
+  assign(dirname,value = file.path(parentname, dirname), envir =  as.environment(pos))# .GlobalEnv)#environment()) 
   }
 
   folder_to_create<- list("fastqc_results", "fastp_results","gage_results", "differential_analysis","aligned_bam","pathway_analysis" )
