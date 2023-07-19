@@ -6,6 +6,7 @@
 #' @param entity : scientific name of species of interest
 #' @param corenum : number of cores
 #' @param compare : comparision to make for gage
+#' @param pos : environment specifier
 #' @param rerun if FALSE the previously complete step will not be rerunned, if TRUE analysis starts from first step
 #' @importFrom stringr str_replace_all
 #' @import BiocManager 
