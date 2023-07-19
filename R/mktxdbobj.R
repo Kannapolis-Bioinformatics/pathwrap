@@ -19,6 +19,7 @@
 #'
 
 make_txdbobj <- function(geneAnnotation, corenum, genomeFile, entity, outdir){
+options(cache_size = NULL, synchronous = NULL )
 txdb <- try(loadDb(geneAnnotation), silent = T)
 cl2 <- makeCluster(corenum)
 #if (class(txdb)==  "TxDb"){
