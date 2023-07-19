@@ -24,7 +24,7 @@ pathviewwrap <- function( ref.dir = NA, phenofile= NA, outdir="results",  entity
 
   on.exit(closeAllConnections())
   aligned_bam <- NA
-   dirlist <- sanity_check( ref.dir ,  outdir,  entity , corenum , compare, rerun)
+   dirlist <- sanity_check( ref.dir , pos= 1, outdir,  entity , corenum , compare, rerun)
    qc.dir <- dirlist[1]
    trim.dir <- dirlist[2]
    genomeFile <- dirlist[3]
