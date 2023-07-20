@@ -2,7 +2,9 @@
 % Please edit documentation in R/pathviewwrap.R
 \name{pathviewwrap}
 \alias{pathviewwrap}
-\title{Title}
+\title{Pathviewwrap is a wrapper for RNASeq data analysis that does quality control analysis of raw files, performs adapter and quality trimming, builds genome index and does alignemnet , counts genes
+perfoms differential gene expression analysis, does gene enrichment test using GAGE and visualize the enriched pathways using pathview all using one wrapper function. It has the ability to
+continue the analysis if it is halted at any stage and generate quality pictures and generate comprehensive analysis of the data.}
 \usage{
 pathviewwrap(
   ref.dir = NA,
@@ -45,5 +47,7 @@ pathviewwrap(
 \item{aligner}{: One of "Rhisat2" or "Rbowtie2"; Rbowtie2 can be very slow for human and eukaryotic species}
 }
 \description{
-Title
+Pathviewwrap is a wrapper for RNASeq data analysis that does quality control analysis of raw files, performs adapter and quality trimming, builds genome index and does alignemnet , counts genes
+perfoms differential gene expression analysis, does gene enrichment test using GAGE and visualize the enriched pathways using pathview all using one wrapper function. It has the ability to
+continue the analysis if it is halted at any stage and generate quality pictures and generate comprehensive analysis of the data.
 }

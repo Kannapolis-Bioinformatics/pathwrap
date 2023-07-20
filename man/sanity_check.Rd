@@ -4,12 +4,14 @@
 \alias{sanity_check}
 \title{Title}
 \usage{
-sanity_check(ref.dir, outdir, entity, corenum, compare, rerun)
+sanity_check(ref.dir, outdir, pos = 1, entity, corenum, compare, rerun)
 }
 \arguments{
 \item{ref.dir}{: directory for reference files}
 
 \item{outdir}{: directory for result}
+
+\item{pos}{: environment specifier}
 
 \item{entity}{: scientific name of species of interest}
 
