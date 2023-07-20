@@ -18,6 +18,8 @@
 #' @importFrom QuasR qAlign
 #  @importFrom QuasR alignmentStats
 #' @import Rhisat2
+#' @importFrom grDevices tiff
+#' @import ggplot2 
 #'
 #' @return aligned_proj : the R object generated from the alignment step
 #' @export
