@@ -4,6 +4,7 @@
 #' It saves the alignment object in RDS file which can be loaded in R for further analysis.
 #' If the reference index is not found in the reference directory, it creates reference index before running alignment.
 #' If the refernece genome is a package the reference index is created as R package.
+#' It generates the barplot of mapped and unmapped sequence reads. 
 #'
 #' @param corenum : the number of cores used during alignment
 #' @param endness : weather its paired end or single end
@@ -48,10 +49,21 @@ run_qAlign <- function(corenum, endness, sampleFile, genomeFile,geneAnnotation, 
     aligned_proj <- QuasR::qAlign(sampleFile,paired ="fr", clObj=cl2, alignmentsDir =aligned_bam , genome=genomeFile, geneAnnotation=geneAnnotation, splicedAlignment =TRUE, aligner =aligner ,cacheDir=cacheDir)
   } else {
 
-    aligned_proj <- QuasR::qAlign(sampleFile,paired ="no", clObj=cl2, alignmentsDir =aligned_bam ,  genome=genomeFile,geneAnnotation=geneAnnotation, splicedAlignment =TRUE, aligner =aligner,cacheDir =cacheDir)
+  aligned_proj <- QuasR::qAlign(sampleFile,paired ="no", clObj=cl2, alignmentsDir =aligned_bam ,  genome=genomeFile,geneAnnotation=geneAnnotation, splicedAlignment =TRUE, aligner =aligner,cacheDir =cacheDir)
   print("done")
     }
   saveRDS(aligned_proj, file.path(aligned_bam , "alltrimmedalignedobj.RDS"))
   stopCluster(cl2)
+    #Plot the alignment mapping statistics
+  aligned_stat_my<- alignmentStats(align_obj)
+  typesofdata <- c(rep("mapped", dim(aligned_stat_my)[1]), rep("unmapped",dim(aligned_stat_my)[1]))
+  genomeofsamples <- c(rep(rownames(aligned_stat_my), 2))
+  value <- c(aligned_stat_my[,2], aligned_stat_my[,3])
+  data <- data.frame(genomeofsamples, typesofdata, value)
+  tiff(file.path(aligned_bam,"mapping_stats.tiff"), units="in" , width=15, height=15, res=300)
+  g<- ggplot(data, aes(fill = typesofdata, y = value, x =stringr::str_remove_all( genomeofsamples, ":genome"))) + geom_bar(position = "fill", stat = "identity") +ylab("Proportion")+
+  xlab("samples")+theme(legend.title=element_blank())+theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
+  plot(g)
+  dev.off()
   return(aligned_proj)
 }
