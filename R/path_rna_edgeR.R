@@ -1,4 +1,9 @@
-#' Title
+#' Run standard edgeR2 for differential gene expression analysis and plot volcano plots
+#'
+#' run_edgeR takes counts and the list indicating reference and samples and the directory where the results are stored and performs the edgeR analysis 
+#' The output is result table with columns of genes and logFC from result of edgeR analysis and a volcanoplot.
+#' It returns the logFC to be used by GAGE for gene set analysis.
+#'
 #'
 #' @param cnts : counts of genes
 #' @param grp.idx : index of the reference and sample for differential analysis
