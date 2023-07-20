@@ -39,7 +39,3 @@ After the differential gene analysis the wrapper runs generally applicable gene 
 STEP 7: visualizing the pathway using Pathview
 Finally the top enriched pathways with  "q.val" < 0.1 are visualized using pathview.
 
-
-
-![image](https://github.com/Kannapolis-Bioinformatics/pathwrap/assets/32403146/4c3d771a-c0d2-401f-a9b0-1a794efa42c4)
-
