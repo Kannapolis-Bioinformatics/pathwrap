@@ -15,8 +15,8 @@
 #' @param cacheDir : directory where temporary files genrated during alignment are store
 #' @param  aligner : weather Rhisat2 or Rbowtie should be used for alignment
 #'
+#' @import QuasR
 #' @importFrom QuasR qAlign
-#  @importFrom QuasR alignmentStats
 #' @import Rhisat2
 #' @importFrom grDevices tiff
 #' @import ggplot2 
@@ -34,10 +34,10 @@ run_qAlign <- function(corenum, endness, sampleFile, genomeFile,geneAnnotation, 
     write.table(sampleFiletmp, sep=  "\t", col.names = T, row.names = F, file = sampleFiletmp_name)
     cl2 <- makeCluster(corenum)
     if(endness == "SE"){
-      aligned_proj <-  QuasR::qAlign(sampleFiletmp_name, paired ="no", clObj=cl2, alignmentsDir =aligned_bam ,
+      aligned_proj <-  qAlign(sampleFiletmp_name, paired ="no", clObj=cl2, alignmentsDir =aligned_bam ,
                                      genome=genomeFile,geneAnnotation=geneAnnotation, splicedAlignment =TRUE, aligner =aligner,cacheDir= cacheDir)
     }else{
-      aligned_proj <-  QuasR::qAlign(sampleFiletmp_name, paired ="fr", clObj=cl2, alignmentsDir =aligned_bam ,
+      aligned_proj <- qAlign(sampleFiletmp_name, paired ="fr", clObj=cl2, alignmentsDir =aligned_bam ,
                                      genome=genomeFile,geneAnnotation=geneAnnotation, splicedAlignment =TRUE, aligner =aligner ,cacheDir=cacheDir)
     }# this will form the reference index
 
@@ -49,10 +49,10 @@ run_qAlign <- function(corenum, endness, sampleFile, genomeFile,geneAnnotation, 
   cl2 <- makeCluster(corenum)
   print("Alignment is running")
   if (endness=="PE"){
-    aligned_proj <- QuasR::qAlign(sampleFile,paired ="fr", clObj=cl2, alignmentsDir =aligned_bam , genome=genomeFile, geneAnnotation=geneAnnotation, splicedAlignment =TRUE, aligner =aligner ,cacheDir=cacheDir)
+    aligned_proj <- qAlign(sampleFile,paired ="fr", clObj=cl2, alignmentsDir =aligned_bam , genome=genomeFile, geneAnnotation=geneAnnotation, splicedAlignment =TRUE, aligner =aligner ,cacheDir=cacheDir)
   } else {
 
-  aligned_proj <- QuasR::qAlign(sampleFile,paired ="no", clObj=cl2, alignmentsDir =aligned_bam ,  genome=genomeFile,geneAnnotation=geneAnnotation, splicedAlignment =TRUE, aligner =aligner,cacheDir =cacheDir)
+  aligned_proj <-qAlign(sampleFile,paired ="no", clObj=cl2, alignmentsDir =aligned_bam ,  genome=genomeFile,geneAnnotation=geneAnnotation, splicedAlignment =TRUE, aligner =aligner,cacheDir =cacheDir)
   print("done")
     }
   saveRDS(aligned_proj, file.path(aligned_bam , "alltrimmedalignedobj.RDS"))
