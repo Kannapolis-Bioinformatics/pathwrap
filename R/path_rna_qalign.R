@@ -16,6 +16,7 @@
 #' @param  aligner : weather Rhisat2 or Rbowtie should be used for alignment
 #'
 #' @importFrom QuasR qAlign
+#  @importFrom QuasR alignmentStats
 #' @import Rhisat2
 #'
 #' @return aligned_proj : the R object generated from the alignment step
@@ -55,7 +56,7 @@ run_qAlign <- function(corenum, endness, sampleFile, genomeFile,geneAnnotation, 
   saveRDS(aligned_proj, file.path(aligned_bam , "alltrimmedalignedobj.RDS"))
   stopCluster(cl2)
     #Plot the alignment mapping statistics
-  aligned_stat_my<- alignmentStats(align_obj)
+  aligned_stat_my<- alignmentStats(aligned_proj)
   typesofdata <- c(rep("mapped", dim(aligned_stat_my)[1]), rep("unmapped",dim(aligned_stat_my)[1]))
   genomeofsamples <- c(rep(rownames(aligned_stat_my), 2))
   value <- c(aligned_stat_my[,2], aligned_stat_my[,3])
