@@ -1,4 +1,7 @@
-#' Title
+#' Make TxDb object either from annnotation file or by loading from the annotation package
+#'
+#' Make_txdbobj uses the makeTxDbFromGFF to make TxDb object from transcript annotations available
+#' in gtf file in ref.dir or if ref.dir is NA, it makes txdb object fromt the annotaion package
 #'
 #' @param geneAnnotation : annotation file or package
 #' @param corenum : the number of cores
