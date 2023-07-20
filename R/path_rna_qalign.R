@@ -1,8 +1,9 @@
-#############################################################################
-#2. RUN THE ANALYSIS # Alignmnet and counting
-#############################################################################
-
-#' Title
+#' 2.  RUN THE ANALYSIS # Alignmnet and counting
+#'
+#' this function runs the Rhisat2 or Rbowtie for alignment on paired or single end mode. 
+#' It saves the alignment object in RDS file which can be loaded in R for further analysis.
+#' If the reference index is not found in the reference directory, it creates reference index before running alignment.
+#' If the refernece genome is a package the reference index is created as R package.
 #'
 #' @param corenum : the number of cores used during alignment
 #' @param endness : weather its paired end or single end
