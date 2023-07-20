@@ -2,7 +2,9 @@
 % Please edit documentation in R/path_rna_qalign.R
 \name{run_qAlign}
 \alias{run_qAlign}
-\title{Title}
+\title{\enumerate{
+\item RUN THE ANALYSIS # Alignmnet and counting
+}}
 \usage{
 run_qAlign(
   corenum,
@@ -36,5 +38,9 @@ run_qAlign(
 aligned_proj : the R object generated from the alignment step
 }
 \description{
-Title
+this function runs the Rhisat2 or Rbowtie for alignment on paired or single end mode.
+It saves the alignment object in RDS file which can be loaded in R for further analysis.
+If the reference index is not found in the reference directory, it creates reference index before running alignment.
+If the refernece genome is a package the reference index is created as R package.
+It generates the barplot of mapped and unmapped sequence reads.
 }
