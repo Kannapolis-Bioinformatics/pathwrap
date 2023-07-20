@@ -1,5 +1,8 @@
 #' Count the number of genes expression and store count in RDS file
 #'
+#' generate the count of gene and if gene id is ensembl, it converts it to entrez to match with genes names for gene set analysis.
+#' the generated table with genes in row and counts in columns are stored as a RDS file that can be loaded into R for future analysis.
+#'
 #' @param aligned_proj : the name of R object saved or generated during alignment
 #' @param corenum : the number of cores used for alignment
 #' @param result.dir : the directory in which result is stored
