@@ -1,6 +1,10 @@
-#RUN GAGE
-
-#' Title
+#' Run GAGE and Pathview
+#'
+#' This function runs generally applicable gene set enrichment for pathway analysis :
+#' GAGE based upon the user supplied comparision method for the species specified.
+#' The biological process, cellular component and molecular function analysis for GO terms are done seperately.
+#' Also, KEGG disease and KEGG signalling and metabolism pathways are analysed seperately. 
+#' Finally the top enriched pathways with  "q.val" < 0.1 are visualized using pathview.
 #'
 #' @param entity : scientific name of the species
 #' @param exp.fc : log fold expression values
