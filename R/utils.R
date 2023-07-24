@@ -26,7 +26,7 @@ sanity_check <- function(ref.dir, outdir, pos = 1, entity, corenum, compare, rer
     }
     result.dir <- outdir
     message(paste0("The results will be organized in ", result.dir))
-    #setwd(outdir)
+    # setwd(outdir)
 
     # check and create dir for organizing results
     checkcretdir <- function(parentname, dirname) {
@@ -85,7 +85,7 @@ sanity_check <- function(ref.dir, outdir, pos = 1, entity, corenum, compare, rer
         }
 
         # annotation pkg installation
-        pkg.on <- requireNamespace(annotate_pkg,  lib.loc = .libPaths()[1])
+        pkg.on <- requireNamespace(annotate_pkg, lib.loc = .libPaths()[1])
         if (!pkg.on) {
             message(paste0(' if (!requireNamespace("BiocManager", quietly=TRUE))
         install.packages("BiocManager")
@@ -99,7 +99,7 @@ sanity_check <- function(ref.dir, outdir, pos = 1, entity, corenum, compare, rer
 
         # genome file installation
         genomeFile <- genome_pkg
-        pkg.on <- requireNamespace(genome_pkg,  lib.loc = .libPaths()[1])
+        pkg.on <- requireNamespace(genome_pkg, lib.loc = .libPaths()[1])
         if (!pkg.on) {
             message(paste0("  BiocManager::install(", genome_pkg, ",force = T, suppressUpdates =TRUE, lib.loc = .libPaths()[1] )"))
         }

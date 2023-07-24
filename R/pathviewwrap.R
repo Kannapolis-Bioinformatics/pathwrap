@@ -30,10 +30,10 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results", entit
     on.exit(closeAllConnections())
     aligned_bam <- NA
     dirlist <- sanity_check(ref.dir, pos = 1, outdir, entity, corenum, compare, rerun)
-    if (is.null(dirlist)){
-	message("Please install the reference package")
-	return("Please rerun analysis with rerun = T")
-	}
+    if (is.null(dirlist)) {
+        message("Please install the reference package")
+        return("Please rerun analysis with rerun = T")
+    }
     qc.dir <- dirlist[1]
     trim.dir <- dirlist[2]
     genomeFile <- dirlist[3]
@@ -134,7 +134,7 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results", entit
     }
 
     if (!file.exists(file.path(aligned_bam, "alltrimmedalignedobj.RDS"))) {
-        #setwd(outdir) # make sure you delete this file before rerunning can be better
+        # setwd(outdir) # make sure you delete this file before rerunning can be better
         message("STEP 3 : aligning the sequence")
         aligned_proj <- run_qAlign(corenum, endness, sampleFile, genomeFile, geneAnnotation, ref.dir, cacheDir, aligner) # can be better??
     } else {
@@ -184,7 +184,7 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results", entit
         names(exp.fcncnts.deseq2) <- rownames(edger.res.df)
     }
 
-    #setwd(gage.dir)
+    # setwd(gage.dir)
     # chosing to use deseq2 result or edger result for gage
     if (diff.tool == "DESeq2") {
         exp.fc <- exp.fcncnts.deseq2
