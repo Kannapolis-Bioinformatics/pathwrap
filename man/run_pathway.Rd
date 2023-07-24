@@ -2,7 +2,7 @@
 % Please edit documentation in R/path_rna_GAGE.R
 \name{run_pathway}
 \alias{run_pathway}
-\title{Title}
+\title{Run GAGE and Pathview}
 \usage{
 run_pathway(entity, exp.fc, compare, gage.dir, cnts, grp.idx)
 }
@@ -20,5 +20,9 @@ run_pathway(entity, exp.fc, compare, gage.dir, cnts, grp.idx)
 \item{grp.idx}{: index of the reference and sample for differential analysis}
 }
 \description{
-Title
+This function runs generally applicable gene set enrichment for pathway analysis :
+GAGE based upon the user supplied comparision method for the species specified.
+The biological process, cellular component and molecular function analysis for GO terms are done seperately.
+Also, KEGG disease and KEGG signalling and metabolism pathways are analysed seperately.
+Finally the top enriched pathways with  "q.val" < 0.1 are visualized using pathview.
 }

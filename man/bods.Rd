@@ -5,9 +5,9 @@
 \alias{bods}
 \title{Dataset from gage package}
 \format{
-\subsection{\code{bods} A dataframe with x rows and y columns;}{
+\subsection{\code{bods}}{
 
-rows describe different species
+A dataframe with x rows and y columns;
 \describe{
 \item{genome}{Name of the genome package}
 \item{species}{Scientific names of species}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/path_rna_fastp.R
 \name{run_fastp}
 \alias{run_fastp}
-\title{to run trimming}
+\title{Runs fastp for quality and adapter trimming}
 \usage{
 run_fastp(sampleName)
 }
@@ -10,5 +10,6 @@ run_fastp(sampleName)
 \item{sampleName}{: name of the sample}
 }
 \description{
-to run trimming
+This function takes name of the samples and for each sample does the quality and adapter
+trimming for Illumina and long read sequencing. It works for both PE and SE data
 }

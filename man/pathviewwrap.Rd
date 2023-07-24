@@ -44,8 +44,28 @@ pathviewwrap(
 
 \item{aligner}{: One of "Rhisat2" or "Rbowtie2"; Rbowtie2 can be very slow for human and eukaryotic species}
 }
+\value{
+the analysis status message
+}
 \description{
-Pathviewwrap that does quality control analysis of raw files, performs adapter and quality trimming, builds genome index and does alignemnet , counts genes
+wrapper that does quality control analysis of raw files, performs adapter and quality trimming, builds genome index and does alignemnet , counts genes
 perfoms differential gene expression analysis, does gene enrichment test using GAGE and visualize the enriched pathways using pathview all using one wrapper function. It has the ability to
 continue the analysis if it is halted at any stage and generate quality pictures and generate comprehensive analysis of the data.
+}
+\examples{
+#here write the code to run for the test of mouse , use this file and the 
+#phenofile in the package
+#BiocManager::install("Kannapolis-Bioinformatics/pathwrap", force  = T)
+Results <-tempdir() 
+library(pathviewwrap)
+system.time({
+  pathviewwrap(ref.dir = NA , 
+               phenofile= system.file(package= "pathviewwrap",
+                                      "extdata/phenotest_ungz.txt") ,
+               outdir=Results, entity="Mus musculus", corenum = 16, 
+               compare = "as.group", seq_tech="Illumina",keep_tmp = TRUE, 
+               rerun = FALSE, diff.tool = "DESeq2", aligner = "Rhisat2")
+})
+
+
 }

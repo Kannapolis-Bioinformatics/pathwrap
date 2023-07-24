@@ -2,7 +2,7 @@
 % Please edit documentation in R/mktxdbobj.R
 \name{make_txdbobj}
 \alias{make_txdbobj}
-\title{Title}
+\title{Make TxDb object either from annnotation file or by loading from the annotation package}
 \usage{
 make_txdbobj(geneAnnotation, corenum, genomeFile, entity, outdir)
 }
@@ -21,5 +21,6 @@ make_txdbobj(geneAnnotation, corenum, genomeFile, entity, outdir)
 txdb : txdb object that is returned
 }
 \description{
-Title
+Make_txdbobj uses the makeTxDbFromGFF to make TxDb object from transcript annotations available
+in gtf file in ref.dir or if ref.dir is NA, it makes txdb object fromt the annotaion package
 }
