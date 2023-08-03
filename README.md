@@ -72,9 +72,9 @@ After the txdb object is formed, the wrapper runs the Rhisat2 or Rbowtie for ali
 
 After aligning the reads to reference genome, the wrapper generates the count of gene and store it in a table with genes in row and counts in columns. The table is stored as a RDS file that can be loaded into R for future analysis and if gene id is ensembl, the wrapper converts it to entrez to match with genes names for gene set analysis. 
 
-## Differential gene analysis
+# Differential gene analysis
 
-# STEP 5a ; running differential gene analysis using DESeq2
+## STEP 5a ; running differential gene analysis using DESeq2
 
 Then the wrapper runs standard DESeq2 for differential gene expression analysis and plots volcano plots. The function run_deseq2 takes counts and the list indicating reference and samples and the directory where the results are stored and performs the deseq2 analysis. The output is result table with columns of genes and log2FoldChange from result of deseq2 analysis and a volcanoplot.
 
