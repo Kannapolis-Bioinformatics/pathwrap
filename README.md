@@ -1,16 +1,18 @@
-**pathwrap, wrapper for pathview**
+# pathwrap, wrapper for pathview**
 
-**Overview**
+## Overview
+
 Pathwrap is a RNASeq analysis tool that provides a wrapper for the processing of RNAseq datasets from quality control of raw reads to the visualization of enriched pathwys obtained from processing the datasets. This tool runs all the essential steps of RNAseq processing from quality control, filtering out low quality reads, trimming adapters, sequence alignemnt, alignment count, differential analysis, enrichemnt analysis and pathway visualization. It is the first tool that combines all essential steps of RNSeq analysis till pathway visualization. It has the ability to continue the analysis if it is halted at any stage and generate quality pictures and generate comprehensive analysis of the data. 
 
-**Installation**
+## Installation**
 In order to install pathwrap, open R (version "4.3") and write
 
 if (!require("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 BiocManager::install("raw-lab/pathwrap", ref="rnaseqwrap", force = TRUE)
 
-**Quick start with demo data 
+## Quick start with demo data 
+``` r
 Results <- tempdir()
 library(pathviewwrap)
 system.time({
@@ -25,7 +27,9 @@ system.time({
         rerun = FALSE, diff.tool = "DESeq2", aligner = "Rhisat2"
     )
 })
+```
 
+## Steps run by the wrapper 
 The steps run by the wrapper are as follows:
 
 #test
