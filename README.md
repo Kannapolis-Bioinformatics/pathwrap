@@ -7,11 +7,25 @@ Pathwrap is a RNASeq analysis tool that provides a wrapper for the processing of
 ## Installation**
 In order to install pathwrap, open R (version "4.3") and write
 
+```r
 if (!require("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 BiocManager::install("raw-lab/pathwrap", ref="rnaseqwrap", force = TRUE)
+```
+
+Also you can find the latest annotation and genome package useful for analysis by running following code.
+
+```r 
+library(pathviewwrap)
+genomepkg <- anntpkglist$gneome[which(anntpkglist$species=="Homo sapiens")]
+anntpkg <- anntpkglist$gneome[which(anntpkglist$species=="Homo sapiens")]
+BiocManager::install(genomepkg)
+BiocManager::install(anntpkg)
+```
 
 ## Quick start with demo data 
+Just run the pathwrap function with as much argument as possible for compelte analysis.
+
 ``` r
 Results <- tempdir()
 library(pathviewwrap)
