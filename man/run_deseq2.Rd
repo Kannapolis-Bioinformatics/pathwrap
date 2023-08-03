@@ -2,7 +2,8 @@
 % Please edit documentation in R/path_rna_deseq2.R
 \name{run_deseq2}
 \alias{run_deseq2}
-\title{Run standard DESeq2 for differential gene expression analysis and plot volcano plots}
+\title{Run standard DESeq2 for differential gene expression analysis and plot
+volcano plots}
 \usage{
 run_deseq2(cnts, grp.idx, deseq2.dir)
 }
@@ -17,7 +18,9 @@ run_deseq2(cnts, grp.idx, deseq2.dir)
 fold change values
 }
 \description{
-run_deseq2 takes counts and the list indicating reference and samples and the directory where the results are stored and performs the deseq2 analysis
-The output is result table with columns of genes and log2FoldChange from result of deseq2 analysis and a volcanoplot.
+run_deseq2 takes counts and the list indicating reference and samples and the
+directory where the results are stored and performs the deseq2 analysis
+The output is result table with columns of genes and log2FoldChange from
+result of deseq2 analysis and a volcanoplot.
 It returns the log2foldChange to be used by GAGE for gene set analysis.
 }

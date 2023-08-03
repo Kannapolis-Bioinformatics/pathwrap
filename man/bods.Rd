@@ -22,6 +22,9 @@ gage
 \usage{
 bods
 }
+\value{
+the data frame GAGE with information about species
+}
 \description{
 Chart for latest genome and annotation package for few selected species that
 are downloaded when no reference is provided by user

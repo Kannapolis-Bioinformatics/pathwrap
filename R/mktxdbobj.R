@@ -1,13 +1,16 @@
-#' Make TxDb object either from annnotation file or by loading from the annotation package
+#' Make TxDb object either from annotation file or
+#' by loading from the annotation package
 #'
-#' Make_txdbobj uses the makeTxDbFromGFF to make TxDb object from transcript annotations available
-#' in gtf file in ref.dir or if ref.dir is NA, it makes txdb object fromt the annotaion package
+#' Make_txdbobj uses the makeTxDbFromGFF to make
+#' TxDb object from transcript annotations
+#' available in gtf file in ref.dir or if ref.dir is NA
+#' It makes txdb object fromt the annotaion package
 #'
 #' @param geneAnnotation : annotation file or package
 #' @param corenum : the number of cores
 #' @param genomeFile : genomeFile or package
 #' @param entity  : the scientific name of the organism
-#' @param outdir : the directory in which output is stored, Results is default
+#' @param outdir : directory to store output, Results is default
 #'
 #' @import GenomicFeatures
 #' @import Rsamtools
@@ -16,12 +19,12 @@
 #' @importFrom GenomeInfoDb renameSeqlevels
 #' @importFrom GenomeInfoDb seqnames
 #' @importFrom BiocGenerics width
-#' @return txdb : txdb object that is returned
+#' @return txdb object that is returned
 #'
 
 make_txdbobj <- function(geneAnnotation, corenum, genomeFile, entity, outdir) {
     options(cache_size = NULL, synchronous = NULL)
-    txdb <- try(loadDb(geneAnnotation), silent = T)
+    txdb <- try(loadDb(geneAnnotation), silent = TRUE)
     cl2 <- makeCluster(corenum)
     # if (class(txdb)==  "TxDb"){
     if (is(txdb, "TxDb")) {
@@ -46,6 +49,8 @@ make_txdbobj <- function(geneAnnotation, corenum, genomeFile, entity, outdir) {
             organism = entity
         )
     }
-    AnnotationDbi::saveDb(txdb, file = paste0(outdir, "/", gsub(" ", "", entity), "_txdbobj")) ## why is this not saved
+    AnnotationDbi::saveDb(txdb,
+        file = paste0(outdir, "/", gsub(" ", "", entity), "_txdbobj")
+    )
     return(txdb)
 }

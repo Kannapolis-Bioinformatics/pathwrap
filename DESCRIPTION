@@ -2,10 +2,20 @@ Package: pathviewwrap
 Title: Wrapper for RNASeq Data analysis and pathway visualization
 Version: 0.99.0
 Authors@R:
-    person("Eliza", "Dhungel","", "elidhungel@gmail.com", role = c("aut", "cre"),
-           comment = c(ORCID = "0000-0002-7246-9452"))
+    person("Eliza", "Dhungel","", "elidhungel@gmail.com", 
+    role = c("aut", "cre"),
+    comment = c(ORCID = "0000-0002-7246-9452"))
 Description:
-	Pathviewwrap is a RNASeq analysis tool that provides a wrapper for the processing of RNASeq datasets from quality control of raw reads to the visualization of enriched pathways obtained from processing the datasets. This tool runs all the essential steps of RNASeq processing from quality control, filtering out low quality reads, trimming adapters, sequence alignment, alignment count, differential analysis, enrichment analysis and pathway visualization. It is the first tool that combines all essential steps of RNASeq analysis till pathway visualization. It has the ability to continue the analysis if it is halted at any stage and generate quality pictures and generate comprehensive analysis of the data.
+    Pathviewwrap is a RNASeq analysis tool that provides a wrapper
+    for the processing of RNASeq datasets from quality control of raw
+    reads to the visualization of enriched pathways obtained from processing 
+    the datasets. This tool runs all the essential steps of RNASeq processing
+    from quality control, filtering out low quality reads, trimming adapters,
+    sequence alignment, alignment count, differential analysis, enrichment 
+    analysis and pathway visualization. It is the first tool that combines 
+    all essential steps of RNASeq analysis till pathway visualization. It has
+    the ability to continue the analysis if it is halted at any stage and 
+    generate quality pictures and generate comprehensive analysis of the data.
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
@@ -35,10 +45,18 @@ Imports:
 Depends: 
     R (>= 4.3.0)
 License: MIT + file LICENSE
-biocViews: Alignment, Pathways, QualityControl, Sequencing, RNASeq, ChIPSeq, GeneExpression, Transcription
-Suggests: 
+biocViews: 
+    Alignment,
+    Pathways,
+    QualityControl, 
+    Sequencing, 
+    RNASeq,
+    ChIPSeq,
+    GeneExpression, 
+    Transcription
+Suggests:
+    BiocStyle, 
     knitr,
     rmarkdown
-LazyData: true
 VignetteBuilder: knitr
 VignetteEngine: knitr, rmarkdown

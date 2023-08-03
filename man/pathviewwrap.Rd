@@ -20,52 +20,67 @@ pathviewwrap(
 )
 }
 \arguments{
-\item{ref.dir}{: path to reference directory which contain reference file(\emph{.fa) and annotation file(}.gtf), can be NULL}
+\item{ref.dir}{: path to reference directory which contain
+reference file(\emph{.fa) and annotation file(}.gtf), can be NULL}
 
-\item{phenofile}{: path to phenofile ; see note on test data to see the format of phenofile}
+\item{phenofile}{: path to phenofile ; see note on test data to
+see the format of phenofile}
 
-\item{outdir}{: give the name of parent result dir , this can be existing or not , rest of directory will be formed by program for organization}
+\item{outdir}{: give the name of parent result dir , this can be existing or
+not , rest of directory will be formed by program for organization}
 
 \item{entity}{: Scientific name of species whose RNA is being analyzed}
 
 \item{corenum}{: number of cores available for analysis #defaut 2}
 
-\item{compare}{: what is sample/experimental design you have, paired or unpaired, as.group}
+\item{compare}{: what is sample/experimental design you have,
+paired or unpaired, as.group}
 
-\item{diff.tool}{:  what differential tool to to use, “DESEQ2” or “edgeR” available}
+\item{diff.tool}{:  what differential tool to to use,
+“DESEQ2” or “edgeR” available}
 
 \item{seq_tech}{: Illumina, pacbio or nanopore}
 
-\item{keep_tmp}{: set TRUE if keeping the aligned bam files, if set FALSE, bam files are deleted}
+\item{keep_tmp}{: set TRUE if keeping the aligned bam files, if set FALSE,
+bam files are deleted}
 
-\item{rerun}{: if FALSE the previously complete step will not be rerunned, if TRUE analysis starts from first step}
+\item{rerun}{: if FALSE the previously complete step will not be rerunned,
+if TRUE analysis starts from first step}
 
-\item{cacheDir}{: directory where temporary files created during alignment are stored}
+\item{cacheDir}{: directory where temporary files created during alignment
+are stored}
 
-\item{aligner}{: One of "Rhisat2" or "Rbowtie2"; Rbowtie2 can be very slow for human and eukaryotic species}
+\item{aligner}{: One of "Rhisat2" or "Rbowtie2"; Rbowtie2 can be very slow
+for human and eukaryotic species}
 }
 \value{
 the analysis status message
 }
 \description{
-wrapper that does quality control analysis of raw files, performs adapter and quality trimming, builds genome index and does alignemnet , counts genes
-perfoms differential gene expression analysis, does gene enrichment test using GAGE and visualize the enriched pathways using pathview all using one wrapper function. It has the ability to
-continue the analysis if it is halted at any stage and generate quality pictures and generate comprehensive analysis of the data.
+wrapper that does quality control analysis of raw files, performs adapter and
+quality trimming, builds genome index and does alignment , counts genes
+perfoms differential gene expression analysis,does gene enrichment test using
+GAGE and visualize the enriched pathways using pathview all using one
+wrapper function. It has the ability to continue the analysis if it is
+halted at any stage and generate quality pictures and generate comprehensive
+analysis of the data.
 }
 \examples{
-#here write the code to run for the test of mouse , use this file and the 
-#phenofile in the package
-#BiocManager::install("Kannapolis-Bioinformatics/pathwrap", force  = T)
-Results <-tempdir() 
+# here write the code to run for the test of mouse , use this file and the
+# phenofile in the package
+# BiocManager::install("Kannapolis-Bioinformatics/pathwrap", force  = T)
+Results <- tempdir()
 library(pathviewwrap)
 system.time({
-  pathviewwrap(ref.dir = NA , 
-               phenofile= system.file(package= "pathviewwrap",
-                                      "extdata/phenotest_ungz.txt") ,
-               outdir=Results, entity="Mus musculus", corenum = 16, 
-               compare = "as.group", seq_tech="Illumina",keep_tmp = TRUE, 
-               rerun = FALSE, diff.tool = "DESeq2", aligner = "Rhisat2")
+    pathviewwrap(
+        ref.dir = NA,
+        phenofile = system.file(
+            package = "pathviewwrap",
+            "extdata/phenotest_ungz.txt"
+        ),
+        outdir = Results, entity = "Mus musculus", corenum = 16,
+        compare = "as.group", seq_tech = "Illumina", keep_tmp = TRUE,
+        rerun = FALSE, diff.tool = "DESeq2", aligner = "Rhisat2"
+    )
 })
-
-
 }

@@ -17,7 +17,9 @@ run_qc(fq.dir, qc.dir, corenum)
 message of fastqc
 }
 \description{
-runs fastqc analysis in R using fastqcr. If fastqc is not available in system to run by R,
-this function is capable of downloading the fastqc tools before running the quality check.
-The results of quality check is aggregated and barplot of the total sequence and heatmap of the status of the qc check is produced.
+runs fastqc analysis in R using fastqcr. If fastqc is not available in system
+to run by R. this function is capable of downloading the fastqc tools before
+running the quality check. The results of quality check is aggregated and
+barplot of the total sequence and heatmap of the status of the qc check is
+produced.
 }

@@ -7,7 +7,7 @@
 run_qCount(aligned_proj, corenum, result.dir, txdb, entity)
 }
 \arguments{
-\item{aligned_proj}{: the name of R object saved or generated during alignment}
+\item{aligned_proj}{:the name of R object saved or generated during alignment}
 
 \item{corenum}{: the number of cores used for alignment}
 
@@ -18,9 +18,11 @@ run_qCount(aligned_proj, corenum, result.dir, txdb, entity)
 \item{entity}{: the scientific name of the species of interest}
 }
 \value{
-cnts : count of genes
+count of genes
 }
 \description{
-generate the count of gene and if gene id is ensembl, it converts it to entrez to match with genes names for gene set analysis.
-the generated table with genes in row and counts in columns are stored as a RDS file that can be loaded into R for future analysis.
+generate the count of gene and if gene id is ensembl, it converts it to
+entrez to match with genes names for gene set analysis.
+the generated table with genes in row and counts in columns are stored as a
+RDS file that can be loaded into R for future analysis.
 }

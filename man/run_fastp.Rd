@@ -9,7 +9,11 @@ run_fastp(sampleName)
 \arguments{
 \item{sampleName}{: name of the sample}
 }
+\value{
+no value returned
+}
 \description{
-This function takes name of the samples and for each sample does the quality and adapter
-trimming for Illumina and long read sequencing. It works for both PE and SE data
+This function takes name of the samples and for each sample does the quality
+and adapter trimming for Illumina and long read sequencing. It works for both
+PE and SE data
 }

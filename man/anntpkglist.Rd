@@ -22,6 +22,9 @@ rows describe different species
 \usage{
 anntpkglist
 }
+\value{
+the data frame with packages to install before analysis
+}
 \description{
 Chart for latest genome and annotation package for few selected species that
 are downloaded when no reference is provided by user

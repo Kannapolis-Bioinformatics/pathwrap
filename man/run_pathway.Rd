@@ -11,7 +11,7 @@ run_pathway(entity, exp.fc, compare, gage.dir, cnts, grp.idx)
 
 \item{exp.fc}{: log fold expression values}
 
-\item{compare}{: how the comparision is done for GAGE, see gage for details}
+\item{compare}{: how the comparison is done for GAGE, see gage for details}
 
 \item{gage.dir}{: directory in which GAGE will be run}
 
@@ -19,10 +19,17 @@ run_pathway(entity, exp.fc, compare, gage.dir, cnts, grp.idx)
 
 \item{grp.idx}{: index of the reference and sample for differential analysis}
 }
+\value{
+nothing returned
+}
 \description{
-This function runs generally applicable gene set enrichment for pathway analysis :
-GAGE based upon the user supplied comparision method for the species specified.
-The biological process, cellular component and molecular function analysis for GO terms are done seperately.
-Also, KEGG disease and KEGG signalling and metabolism pathways are analysed seperately.
-Finally the top enriched pathways with  "q.val" < 0.1 are visualized using pathview.
+\code{run_pathway} runs GAGE for pathway analysis
+GAGE is based upon the user supplied comparision
+method for the species specified.
+The biological process, cellular component and
+molecular function analysis for GO terms are done separately.
+}
+\details{
+KEGG disease, KEGG signalling and metabolism pathways are analysed separately
+Top enriched pathways with  "q.val" < 0.1 are visualized using pathview.
 }

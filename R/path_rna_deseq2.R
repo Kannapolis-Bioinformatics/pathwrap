@@ -1,7 +1,10 @@
-#' Run standard DESeq2 for differential gene expression analysis and plot volcano plots
+#' Run standard DESeq2 for differential gene expression analysis and plot
+#' volcano plots
 #'
-#' run_deseq2 takes counts and the list indicating reference and samples and the directory where the results are stored and performs the deseq2 analysis
-#' The output is result table with columns of genes and log2FoldChange from result of deseq2 analysis and a volcanoplot.
+#' run_deseq2 takes counts and the list indicating reference and samples and the
+#'  directory where the results are stored and performs the deseq2 analysis
+#' The output is result table with columns of genes and log2FoldChange from
+#' result of deseq2 analysis and a volcanoplot.
 #' It returns the log2foldChange to be used by GAGE for gene set analysis.
 #'
 #' @param cnts :counts of gene
@@ -26,9 +29,17 @@ run_deseq2 <- function(cnts, grp.idx, deseq2.dir) {
     names(deseq2.fc) <- rownames(deseq2.res)
     exp.fc <- deseq2.fc
     table(is.na(deseq2.res$padj))
-    write.table(deseq2.res, file.path(deseq2.dir, "DESEQ2_logfoldchange.txt"), sep = "\t", col.names = NA, row.names = TRUE, quote = FALSE)
-    tiff(file.path(deseq2.dir, "Volcano_deseq2.tiff"), units = "in", width = 15, height = 15, res = 300)
-    plot(EnhancedVolcano::EnhancedVolcano(deseq2.res, x = "log2FoldChange", y = "pvalue", lab = rownames(deseq2.res)))
+    write.table(deseq2.res, file.path(deseq2.dir, "DESEQ2_logfoldchange.txt"),
+        sep = "\t", col.names = NA, row.names = TRUE, quote = FALSE
+    )
+    tiff(file.path(deseq2.dir, "Volcano_deseq2.tiff"),
+        units = "in", width = 15,
+        height = 15, res = 300
+    )
+    plot(EnhancedVolcano::EnhancedVolcano(deseq2.res,
+        x = "log2FoldChange",
+        y = "pvalue", lab = rownames(deseq2.res)
+    ))
     dev.off()
     return(exp.fc)
 }

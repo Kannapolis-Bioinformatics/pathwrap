@@ -1,8 +1,10 @@
 #' Run fastqc analysis in R
 #'
-#' runs fastqc analysis in R using fastqcr. If fastqc is not available in system to run by R,
-#' this function is capable of downloading the fastqc tools before running the quality check.
-#' The results of quality check is aggregated and barplot of the total sequence and heatmap of the status of the qc check is produced.
+#' runs fastqc analysis in R using fastqcr. If fastqc is not available in system
+#' to run by R. this function is capable of downloading the fastqc tools before
+#' running the quality check. The results of quality check is aggregated and
+#' barplot of the total sequence and heatmap of the status of the qc check is
+#' produced.
 #'
 #' @param fq.dir : the directory in which raw RNAseq files are stored
 #' @param qc.dir : the directory in which results of quality check are stored
@@ -18,32 +20,41 @@
 
 run_qc <- function(fq.dir, qc.dir, corenum) {
     on.exit(closeAllConnections())
-    # install fastqc if system( "which fastqc", intern = T) fails
-    if (Sys.which("fastqc") == "" & !file.exists(paste0(qc.dir, "/FastQC/fastqc"))) {
+    # install fastqc if system( "which fastqc", intern = TRUE) fails
+    if (Sys.which("fastqc") == "" &
+        !file.exists(file.path(qc.dir, "/FastQC/fastqc"))) {
         ## work here
-        message("Please install fastqc using  fastqcr::fastqc_install(dest.dir = qc.dir)")
-        fastqc.path <- paste0(qc.dir, "/FastQC/fastqc")
-        return()
+        message("Please install fastqc using
+                fastqcr::fastqc_install(dest.dir = qc.dir)")
+        fastqc.path <- file.path(qc.dir, "/FastQC/fastqc")
+        return(invisible(NULL))
     } else {
         fastqc.path <- Sys.which("fastqc")
     }
     message("This is the fastqc tool we will run")
     message(fastqc.path)
-    # message(paste0(fq.dir))
-    #     , " ", qc.dir , " " ,unname(fastqc.path), "This is what i am checking " ))
-    fastqcr::fastqc(fq.dir, qc.dir, fastqc.path = unname(fastqc.path), threads = corenum) # what if threads is removed
+    # check use of threadnum
+    fastqcr::fastqc(fq.dir, qc.dir,
+        fastqc.path = unname(fastqc.path), threads = corenum
+    )
     message("Complete running fastqc")
     qc <- qc_aggregate(qc.dir)
     message(" plotting total sequence and status of qc check in tiff files")
-    # pdf(file.path(qc.dir,"total_seq.pdf"))# ,units="in", width=15, height=15, res=300)
-    tiff(file.path(qc.dir, "total_seq.tiff"), units = "in", width = 15, height = 15, res = 300)
+
+    tiff(file.path(qc.dir, "total_seq.tiff"),
+        units = "in",
+        width = 15, height = 15, res = 300
+    )
     g <- ggplot(qc, aes(x = sample, y = tot.seq)) +
         geom_bar(stat = "identity", position = "dodge") +
         theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
     plot(g)
     dev.off()
     # # pdf(file.path(qc.dir,"qc_heatmap.pdf"), width=15, height=15, res=300)
-    tiff(file.path(qc.dir, "qc_heatmap.tiff"), units = "in", width = 15, height = 15, res = 300)
+    tiff(file.path(qc.dir, "qc_heatmap.tiff"),
+        units = "in", width = 15,
+        height = 15, res = 300
+    )
     g <- ggplot(qc, aes(x = module, y = sample, fill = status)) +
         geom_tile() +
         theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))

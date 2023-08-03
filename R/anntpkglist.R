@@ -2,7 +2,7 @@
 #'
 #' Chart for latest genome and annotation package for few selected species that
 #' are downloaded when no reference is provided by user
-#'
+#' @return the data frame with packages to install before analysis
 #' @format ## `anntpkglist` A dataframe with 32 rows and three columns;
 #' rows describe different species
 #' \describe{

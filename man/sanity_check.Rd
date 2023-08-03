@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{sanity_check}
 \alias{sanity_check}
-\title{Title}
+\title{function to make sure things are good}
 \usage{
 sanity_check(ref.dir, outdir, pos = 1, entity, corenum, compare, rerun)
 }
@@ -19,11 +19,12 @@ sanity_check(ref.dir, outdir, pos = 1, entity, corenum, compare, rerun)
 
 \item{compare}{: comparision to make for gage}
 
-\item{rerun}{if FALSE the previously complete step will not be rerunned, if TRUE analysis starts from first step}
+\item{rerun}{if FALSE the previously complete step will not be rerunned, if
+TRUE analysis starts from first step}
 }
 \value{
 list of different paths for result files
 }
 \description{
-Title
+function to make sure things are good
 }

@@ -1,7 +1,10 @@
-#' Run standard edgeR2 for differential gene expression analysis and plot volcano plots
+#' Run standard edgeR2 for differential gene expression analysis and
+#' plot volcano plots
 #'
-#' run_edgeR takes counts and the list indicating reference and samples and the directory where the results are stored and performs the edgeR analysis
-#' The output is result table with columns of genes and logFC from result of edgeR analysis and a volcanoplot.
+#' run_edgeR takes counts and the list indicating reference and samples and
+#' the directory where the results are stored and performs the edgeR analysis
+#' The output is result table with columns of genes and logFC from result of
+#' edgeR analysis and a volcanoplot.
 #' It returns the logFC to be used by GAGE for gene set analysis.
 #'
 #'
@@ -11,7 +14,7 @@
 #'
 #' @import edgeR
 #'
-#' @return exp.fc : log fold expression values
+#' @return log fold expression values
 #'
 
 run_edgeR <- function(cnts, grp.idx, edger.dir) {
@@ -23,9 +26,18 @@ run_edgeR <- function(cnts, grp.idx, edger.dir) {
     edger.fc <- et$table$logFC
     names(edger.fc) <- rownames(et$table)
     exp.fc <- edger.fc
-    write.table(et, file.path(edger.dir, "edgeR_logfoldchange.txt"), sep = "\t", col.names = TRUE, row.names = TRUE, quote = FALSE)
-    tiff(paste0(edger.dir, "/Volcano_edgeR.tiff"), units = "in", width = 15, height = 15, res = 300)
-    plot(EnhancedVolcano::EnhancedVolcano(et$table, x = "logFC", y = "PValue", lab = rownames(et$table)))
+    write.table(et, file.path(edger.dir, "edgeR_logfoldchange.txt"),
+        sep = "\t",
+        col.names = TRUE, row.names = TRUE, quote = FALSE
+    )
+    tiff(paste0(edger.dir, "/Volcano_edgeR.tiff"),
+        units = "in", width = 15,
+        height = 15, res = 300
+    )
+    plot(EnhancedVolcano::EnhancedVolcano(et$table,
+        x = "logFC", y = "PValue",
+        lab = rownames(et$table)
+    ))
     dev.off()
     return(exp.fc)
 
