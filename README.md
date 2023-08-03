@@ -93,6 +93,8 @@ Finally the top enriched pathways with  "q.val" < 0.1 are visualized using pathv
 
 ## More information
 Please watch out for paper in making. 
+https://docs.google.com/document/d/1pfMI-umnS7GCW9aoAqEm0tZv9g6eVKSA/edit
+
 
 Thank you for your interest.
 
