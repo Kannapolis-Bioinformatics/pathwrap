@@ -1,4 +1,4 @@
-# pathwrap, wrapper for pathview**
+# pathwrap, wrapper for pathview
 
 ## Overview
 
