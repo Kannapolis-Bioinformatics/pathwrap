@@ -182,7 +182,7 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
 
     # make txdb from annotation
     txdbfilename <- paste0(gsub(" ", "", entity), "_txdbobj")
-    if (!file.exists(file.patj(outdir, txdbfilename))) {
+    if (!file.exists(file.path(outdir, txdbfilename))) {
         message("STEP 2; making txdb obj")
         txdb <- make_txdbobj(
             geneAnnotation, corenum,
