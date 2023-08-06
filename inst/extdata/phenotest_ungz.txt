@@ -1,5 +1,0 @@
-SampleName	FileName	Class
-sample1	system.file(package,"pathviewwrap","extdata/sample1_sub.fastq.gz")	A
-sample6	system.file(package,"pathviewwrap","extdata/sample6_sub.fastq.gz")	B
-sample3	system.file(package,"pathviewwrap","extdata/sample3_sub.fastq.gz")	A
-sample5	system.file(package,"pathviewwrap","extdata/sample5_sub.fastq.gz")	B
