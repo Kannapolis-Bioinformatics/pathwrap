@@ -1,10 +1,14 @@
-# here write the code to run for the test of mouse , use this file and the
-# phenofile in the package
-# BiocManager::install("Kannapolis-Bioinformatics/pathwrap", force  = T)
+# This code creates the phenofile and runs the pathviewrap
+
+#install pathwrap from github or bioconductor and load library
+#BiocManager::install("Kannapolis-Bioinformatics/pathwrap", force  = T)
+library(pathviewwrap)
+#create directory to store results
 Results <- tempdir()
 phenofile <-"hellotmpphenofile.txt"
-library(pathviewwrap)
 
+#create columns for phenofile, this is for SE data
+#Table col.names should be SampleName, FileName and Class
 library(stringr)
 FileName <- list.files(file.path(system.file(
     package = "pathviewwrap"), "extdata"), full.names = T)
