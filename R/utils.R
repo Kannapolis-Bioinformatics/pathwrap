@@ -145,9 +145,9 @@ sanity_check <- function(ref.dir, outdir, pos = 1, entity, corenum, compare,
         if (!pkg.on) {
             message(paste0("
         Intall the required package with the following command,
-        >BiocManager::install(", annotate_pkg, "
-                        ,force = TRUE, suppressUpdates =TRUE,
-                        lib.loc = .libPaths()[1] ) )"))
+        > BiocManager::install('", annotate_pkg, "'
+                        ,force = TRUE, 
+                        lib.loc = .libPaths()[1]  )"))
             return(invisible(NULL)) # needs reevaluation
             # pkg.on = requireNamespace(annotate_pkg,  lib.loc = .libPaths()[1])
             # if (!pkg.on)
@@ -165,10 +165,10 @@ sanity_check <- function(ref.dir, outdir, pos = 1, entity, corenum, compare,
             lib.loc = .libPaths()[1],
             quietly = TRUE)
         if (!pkg.on) {
-            message(paste0(
-                "  BiocManager::install(",
-                genome_pkg, ",force = TRUE,
-                        suppressUpdates =TRUE,
+            message(paste0("
+        Intall the required package with the following command,
+        >  BiocManager::install('",
+                genome_pkg, "',force = TRUE,
                         lib.loc = .libPaths()[1] )"
             ))
           return(invisible(NULL))
