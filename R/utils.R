@@ -139,7 +139,9 @@ sanity_check <- function(ref.dir, outdir, pos = 1, entity, corenum, compare,
         }
 
         # annotation pkg installation
-        pkg.on <- requireNamespace(annotate_pkg, lib.loc = .libPaths()[1])
+        pkg.on <- requireNamespace(annotate_pkg,
+            lib.loc = .libPaths()[1],
+            quietly = TRUE)
         if (!pkg.on) {
             message(paste0("
         Intall the required package with the following command,
@@ -159,7 +161,9 @@ sanity_check <- function(ref.dir, outdir, pos = 1, entity, corenum, compare,
 
         # genome file installation
         genomeFile <- genome_pkg
-        pkg.on <- requireNamespace(genome_pkg, lib.loc = .libPaths()[1])
+        pkg.on <- requireNamespace(genome_pkg,
+            lib.loc = .libPaths()[1],
+            quietly = TRUE)
         if (!pkg.on) {
             message(paste0(
                 "  BiocManager::install(",
