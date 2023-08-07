@@ -8,7 +8,7 @@ output:
     toc : true
     fig_width: 5
 vignette: >
-    %\VignetteIndexEntry{Latest Tutorial for RNASeq analysis using pathviewwrap }
+    %\VignetteIndexEntry{Latest Tutorial for RNASeq analysis using pathviewwrap}
     %\VignetteEngine{knitr::knitr} 
     %\VignetteEncoding{UTF-8}
 ---
@@ -37,8 +37,8 @@ annotation and genome package. For example, for human species
 ```{r installation, eval = FALSE}
 library(pathviewwrap)
 data(anntpkglist, package = "pathviewwrap")
-genomepkg <- anntpkglist$gneome[which(anntpkglist$species=="Homo sapiens")]
-anntpkg <- anntpkglist$gneome[which(anntpkglist$species=="Homo sapiens")]
+genomepkg <- anntpkglist$genome[which(anntpkglist$species=="Homo sapiens")]
+anntpkg <- anntpkglist$annotate[which(anntpkglist$species=="Homo sapiens")]
 BiocManager::install(genomepkg)
 BiocManager::install(anntpkg)
 ```
