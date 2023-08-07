@@ -171,6 +171,7 @@ sanity_check <- function(ref.dir, outdir, pos = 1, entity, corenum, compare,
                         suppressUpdates =TRUE,
                         lib.loc = .libPaths()[1] )"
             ))
+          return(invisible(NULL))
         }
     } else {
         genomeFile <- list.files(ref.dir, ".fa$|.fna$|.fa.gz",
