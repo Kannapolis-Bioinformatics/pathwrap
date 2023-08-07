@@ -80,7 +80,7 @@ run_pathway <- function(entity, exp.fc, compare, gage.dir, cnts, grp.idx) {
                     pathview(
                         gene.data = exp.fc, pathway.id = pid,
                         species = entity, out.suffix = paste0(entity, pid)
-                    )
+                    )[1]
                 },   data.frame(length(na.omit(path.ids[seq_len(6)])))
             )
         }
