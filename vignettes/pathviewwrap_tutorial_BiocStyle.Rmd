@@ -1,5 +1,5 @@
 ---
-title: "Latest Tutorial for RNASeq analysis using pathviewwrap package"
+title: "Tutorial for RNASeq analysis using pathviewwrap package"
 author: "Eliza Dhungel"
 package: pathviewwrap
 output: 
@@ -8,7 +8,7 @@ output:
     toc : true
     fig_width: 5
 vignette: >
-    %\VignetteIndexEntry{Latest Tutorial for RNASeq analysis using pathviewwrap}
+    %\VignetteIndexEntry{Tutorial for RNASeq analysis using pathviewwrap}
     %\VignetteEngine{knitr::knitr} 
     %\VignetteEncoding{UTF-8}
 ---
@@ -21,14 +21,12 @@ knitr::opts_chunk$set(
 ```
 
 ## Installation
-
 To install pathviewwrap package, start R(version "4.3") and enter:
 
 ```{r setup, eval = FALSE}
-
 if (!require("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
-BiocManager::install(pathviewwrap)
+BiocManager::install("pathviewwrap")
 ```
 
 Based on the species you want to analyse, you can install the bioconductor 
@@ -44,23 +42,43 @@ BiocManager::install(anntpkg)
 ```
 
 ## Documentation
+To view this documentation
+```{r documentation, eval = FALSE}
 browseVignettes("pathviewwrap")
+```
+
 
 ## Usage
+Simply create a phenofile with information about the location of raw files and
+class and run the wrapper function pathviewwrap 
 ```{r wrapper, eval = FALSE}
 library(pathviewwrap)
+#create directory to store results
 Results <- tempdir()
-library(pathviewwrap)
+phenofile <-"hellotmpphenofile.txt"
+
+#create columns for phenofile, this is for SE data
+#Table col.names should be SampleName, FileName and Class
+library(stringr)
+FileName <- list.files(file.path(system.file(
+    package = "pathviewwrap"), "extdata"), full.names = T)
+
+patternmy <- c(dirname( FileName[1]) , "_sub.fastq.gz")
+SampleName <- str_replace_all(
+    pattern = paste0(dirname(FileName)[1], "/|_sub.fastq.gz" ),
+    string =  list.files(file.path(
+    system.file(package = "pathviewwrap"), "extdata"), 
+    full.names = T) , "")
+Class <- c("A", "B", "A", "B")
+write.table(as.data.frame(cbind(SampleName, FileName, Class)), 
+            file = phenofile, sep = "\t", row.names = F, 
+            col.names = T, quote = F)
 system.time({
     pathviewwrap(
-    ref.dir = NA,
-    phenofile = system.file(
-    package = "pathviewwrap",
-    "extdata/phenotest_ungz.txt"
-    ),
-outdir = Results, entity = "Mus musculus", corenum = 16,
-    compare = "as.group", seq_tech = "Illumina", keep_tmp = TRUE,
-    rerun = FALSE, diff.tool = "DESeq2", aligner = "Rhisat2"
+        ref.dir = NA, phenofile = phenofile,
+        outdir = Results, entity = "Mus musculus", corenum = 16,
+        compare = "as.group", seq_tech = "Illumina", keep_tmp = TRUE,
+        rerun = FALSE, diff.tool = "DESeq2", aligner = "Rhisat2"
     )
 })
 ```
@@ -80,14 +98,14 @@ With one wrapper function, it runs all the steps listed below.
 
 **STEP 1 : Quality control**
 
-**STEP 1a: running fastqc**
+**STEP 1a: Running fastqc**
 
 It runs fastqc analysis in R using fastqcr. If fastqc is not available in system
 to run by R, this function is capable of downloading the fastqc tools before 
 running the quality check. The results are standard html files where the 
 quality of each fastq files can be examined.
 
-**STEP 1b : running fastp**
+**STEP 1b : Running fastp**
 
 After running fastqc, it runs fastp. The function takes name of the samples and
 for each sample does the quality and adapter trimming for Illumina and long read
@@ -95,7 +113,7 @@ sequencing. It works for both PE and SE data. HTML files are generated for each
 fastq files that has information/figures of quality control before and after 
 quality trimming.
 
-**STEP 2: making txdb obj**
+**STEP 2: Making txdb obj**
 
 The wrapper then makes TxDb object either from annnotation file or by loading 
 from the annotation package. Make_txdbobj uses the makeTxDbFromGFF to make TxDb 
@@ -112,7 +130,7 @@ index before running alignment. If the refernece genome is a package the
 reference index is created as R package. It generates the barplot of mapped 
 and unmapped sequence reads.
 
-**STEP 4: counting aligned sequences**
+**STEP 4: Counting aligned sequences**
 
 After aligning the reads to reference genome, the wrapper generates the count of
 gene and store it in a table with genes in row and counts in columns. The table 
@@ -120,7 +138,7 @@ is stored as a RDS file that can be loaded into R for future analysis and if
 gene id is ensembl, the wrapper converts it to entrez to match with genes names 
 for gene set analysis.
 
-**STEP 5a ; running differential gene analysis using DESeq2**
+**STEP 5a: Running differential gene analysis using DESeq2**
 
 Then the wrapper runs standard DESeq2 for differential gene expression analysis
 and plots volcano plots. The function run_deseq2 takes counts and the list 
@@ -128,7 +146,7 @@ indicating reference and samples and the directory where the results are stored
 and performs the deseq2 analysis. The output is result table with columns of 
 genes and log2FoldChange from result of deseq2 analysis and a volcanoplot.
 
-**STEP 5b ; running differential gene analysis using edgeR**
+**STEP 5b: Running differential gene analysis using edgeR**
 
 Then the wrapper runs standard edgeR for differential gene expression analysis 
 and plots volcano plots. The function run_deseq2 takes counts and the list 
@@ -136,7 +154,7 @@ indicating reference and samples and the directory where the results are stored
 and performs the deseq2 analysis. The output is result table with columns of 
 genes and log2FoldChange from result of deseq2 analysis and a volcanoplot.
 
-**STEP 6 : running pathway analysis using GAGE**
+**STEP 6 : Running pathway analysis using GAGE**
 
 After the differential gene analysis the wrapper runs generally applicable gene 
 set enrichment for pathway analysis, GAGE based upon the user supplied 
@@ -145,32 +163,31 @@ component and molecular function analysis for GO terms are done separately.
 Also, KEGG disease and KEGG signalling and metabolism pathways are analysed 
 separately.
 
-**STEP 7: visualizing the pathway using Pathview**
+**STEP 7: Visualizing the pathway using Pathview**
 
 Finally the top enriched pathways with "q.val" < 0.1 are visualized using 
 pathview.
 
 
 ## Acknowledgements
+This wrapper would not have been successful without the help of Steven Blanchard
 
 
 ## References
 
 * Luo W, Brouwer C. Pathview: an R/Biocondutor package for pathway-based data 
 integration and visualization. Bioinformatics, 2013, 29(14):1830-1831, 
-doi: 10.1093/bioinformatics/btt285
+doi:10.1093/bioinformatics/btt285
 
 * Luo, W., Friedman, M.S., Shedden, K. et al. GAGE: generally applicable gene 
 set enrichment for pathway analysis. BMC Bioinformatics 10, 161 (2009).
 https://doi.org/10.1186/1471-2105-10-161
 
-
-
+## Funding
+This project has been funded by NSF grant 1565030.
 
 
 # Session info
 ```{r sessionInfo}
 sessionInfo()
 ``` 
-
-
