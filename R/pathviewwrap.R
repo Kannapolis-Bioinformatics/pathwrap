@@ -122,25 +122,16 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
         }
     }
 
-    sampleFile <- file.path(outdir, "sampleFile.txt")
-    rawfileName <- as.data.frame(sapply(filenames, function(x) basename(x)))
-    #rawfileName <- vapply(filenames, function(x) basename(x), data.frame(1))
+    rawfileName <- as.data.frame(vapply(filenames, function(x) basename(x), 
+                character(dim(filenames)[1])))
 
-    fastp_files_name <- as.data.frame(sapply(rawfileName,
-            function(x) str_replace_all(x, ".fastq.gz$", "_trimmed.fastq.gz")))
-    FileName <- sapply(fastp_files_name, function(x) file.path(trim.dir , x))
 
-    #fastp_files_name <- vapply(
-    #   rawfileName,
-    #   function(x) str_replace_all(x, ".fastq.gz$", "_trimmed.fastq.gz"),
-    #   data.frame(1)
-    #)
-                                                
-    #FileName <- vapply(
-    #   fastp_files_name, function(x) file.path(trim.dir, x),
-    #    character
-    #)
-                       
+    fastp_files_name <- as.data.frame(vapply(as.list(rawfileName),
+            function(x) str_replace_all(x, ".fastq.gz$", "_trimmed.fastq.gz"),
+            character(dim(filenames)[1])))
+    FileName <- vapply(as.list(fastp_files_name),function(x) file.path(trim.dir, x),
+                   character(dim(filenames)[1]) )
+  
     if (endness == "SE") {
         write.table(
             file = sampleFile, sep = "\t",
