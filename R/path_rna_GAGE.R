@@ -81,7 +81,7 @@ run_pathway <- function(entity, exp.fc, compare, gage.dir, cnts, grp.idx) {
                         gene.data = exp.fc, pathway.id = pid,
                         species = entity, out.suffix = paste0(entity, pid)
                     )
-                }, numeric(0)
+                },   data.frame(length(na.omit(path.ids[seq_len(6)])))
             )
         }
         kegg.sig <- sigGeneSet(fc.kegg.p,
