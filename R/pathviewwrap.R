@@ -121,7 +121,7 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
                    accessible to R")
         }
     }
-
+    sampleFile <- file.path(outdir, "sampleFile.txt")
     rawfileName <- as.data.frame(vapply(filenames, function(x) basename(x), 
                 character(dim(filenames)[1])))
 
