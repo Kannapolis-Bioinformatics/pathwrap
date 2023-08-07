@@ -189,13 +189,13 @@ sanity_check <- function(ref.dir, outdir, pos = 1, entity, corenum, compare,
     }
     message(paste0(
         "this is directory lists,
-        qc.dir :", qc.dir,
-        "trim.dir :", trim.dir,
-        "genomeFile :", genomeFile,
-        "geneAnnotation :", geneAnnotation,
-        "deseq2.dir :", deseq2.dir,
-        "edger.dir :", edger.dir,
-        "gage.dir : ", gage.dir
+        qc.dir :", qc.dir, "\n", 
+        "trim.dir :", trim.dir, "\n", 
+        "genomeFile :", genomeFile, "\n", 
+        "geneAnnotation :", geneAnnotation, "\n", 
+        "deseq2.dir :", deseq2.dir, "\n", 
+        "edger.dir :", edger.dir, "\n", 
+        "gage.dir : ", gage.dir, "\n"
     ))
 
     return(c(
