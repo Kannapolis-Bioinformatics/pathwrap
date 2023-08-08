@@ -32,6 +32,7 @@ run_deseq2 <- function(cnts, grp.idx, deseq2.dir) {
     write.table(deseq2.res, file.path(deseq2.dir, "DESEQ2_logfoldchange.txt"),
         sep = "\t", col.names = NA, row.names = TRUE, quote = FALSE
     )
+    plot.new()
     tiff(file.path(deseq2.dir, "Volcano_deseq2.tiff"),
         units = "in", width = 15,
         height = 15, res = 300
@@ -41,6 +42,14 @@ run_deseq2 <- function(cnts, grp.idx, deseq2.dir) {
         y = "pvalue", lab = rownames(deseq2.res)
     ))
     dev.off()
+    #####################################
+    sigs <- na.omit(res)
+    df <- as.data.frame(sigs)
+    
+    df.top <- df[ (df$padj < 0.05) & (abs(df$log2FoldChange) > 2),]
+    df.top <- na.omit(
+        df.top[order(df.top$log2FoldChange, decreasing = TRUE)[1:20],])
+    ######################################
     message("Principle Componenet Analysis using VST from DESeq2")
     out <- tryCatch(
         {
@@ -52,13 +61,26 @@ run_deseq2 <- function(cnts, grp.idx, deseq2.dir) {
             vsd <- varianceStabilizingTransformation(dds, blind=TRUE)
         },
         finally={
-            message("Now we are plotting")
+            mat <-assay(vsd)[rownames(df.top), coldata$SampleName] 
+            
+            message("Now we are plotting PCA")
             plot.new()
             tiff(file.path(aligned_bam, "PCA_vst.tiff"),
                  units = "in", width = 15,
                  height = 15, res = 300
             )
             g<- plotPCA(vsd, intgroup=c("grp"))
+            plot(g)
+            dev.off()
+            plot.new()
+            
+            message("Also plotting heatmap of vst count of top 20 genes with 
+                  LFC more than 2 and padj less than 0.05")
+            tiff(file.path(aligned_bam, "heatmap_vst.tiff"),
+                 units = "in", width = 15,
+                 height = 15, res = 300
+            )
+            g <- pheatmap(mat,scale = "row")
             plot(g)
             dev.off()
         }
