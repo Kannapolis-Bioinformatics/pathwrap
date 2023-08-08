@@ -41,5 +41,27 @@ run_deseq2 <- function(cnts, grp.idx, deseq2.dir) {
         y = "pvalue", lab = rownames(deseq2.res)
     ))
     dev.off()
+    message("Principle Componenet Analysis using VST from DESeq2")
+    out <- tryCatch(
+        {
+            vsd <- vst(dds, blind = TRUE)
+            message("This is the 'try' part")
+        },
+        error=function(cond) {
+            message("transformation using varianceStabilizingTransformation")
+            vsd <- varianceStabilizingTransformation(dds, blind=TRUE)
+        },
+        finally={
+            message("Now we are plotting")
+            plot.new()
+            tiff(file.path(aligned_bam, "PCA_vst.tiff"),
+                 units = "in", width = 15,
+                 height = 15, res = 300
+            )
+            g<- plotPCA(vsd, intgroup=c("grp"))
+            plot(g)
+            dev.off()
+        }
+    )
     return(exp.fc)
 }
