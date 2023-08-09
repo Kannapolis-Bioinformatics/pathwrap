@@ -10,7 +10,7 @@ In order to install pathwrap, open R (version "4.3") and write
 ```r
 if (!require("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
-BiocManager::install("Kannapolis-Bioinformatics/pathwrap", force  = T)
+BiocManager::install("Kannapolis-Bioinformatics/pathwrap", force  = T, build_vignette = TRUE)
 ```
 
 Also you can find the latest annotation and genome package useful for analysis by running following code.
