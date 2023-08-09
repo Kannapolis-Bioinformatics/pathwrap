@@ -69,7 +69,7 @@ SampleName <- str_replace_all(
     pattern = paste0(dirname(FileName)[1], "/|_sub.fastq.gz" ),
     string =  list.files(file.path(
     system.file(package = "pathviewwrap"), "extdata"), 
-    full.names = T) , "")
+    full.names = T, pattern = "fastq.gz") , "")
 Class <- c("A", "B", "A", "B")
 write.table(as.data.frame(cbind(SampleName, FileName, Class)), 
             file = phenofile, sep = "\t", row.names = F, 
