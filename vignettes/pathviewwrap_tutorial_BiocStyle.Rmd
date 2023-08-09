@@ -112,7 +112,13 @@ pathviewwrap(
     )
 ```
 
+When ref.dir = NA, it uses the reference annotation and genome package provided 
+by bioconductor and installed in the system. When reference files are provided the
+location to the directory where files are stored should be provided.
 
+*NOTES:* Please make sure that any path does not have trailing “/” at the end. For example:
+ref=”~/Reference/mouse/” #Wrong 
+ref=”~/Reference/mouse” #Right 
 
 
 ## Overview
