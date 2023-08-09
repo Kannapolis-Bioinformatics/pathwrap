@@ -48,11 +48,12 @@ browseVignettes("pathviewwrap")
 ```
 
 
-## Usage
+## Phenofile structure
 Simply create a phenofile with information about the location of raw files and
-class and run the wrapper function pathviewwrap 
-```{r wrapper, eval = FALSE}
-library(pathviewwrap)
+class and run the wrapper function pathviewwrap. An example of how phenofile can
+be created is as below.
+```{r wrapper, eval =TRUE}
+#library(pathviewwrap)
 #create directory to store results
 Results <- tempdir()
 phenofile <-"hellotmpphenofile.txt"
@@ -73,15 +74,48 @@ Class <- c("A", "B", "A", "B")
 write.table(as.data.frame(cbind(SampleName, FileName, Class)), 
             file = phenofile, sep = "\t", row.names = F, 
             col.names = T, quote = F)
-system.time({
-    pathviewwrap(
+```
+
+
+The phenofile should be tab delimited file with information about the path of
+raw files and class to which each sample belong to. The phenofile for paired end
+data should be of 4 columns and for single end data should be of three columns 
+like follows:
+
+<pre>
+```{r sampleFileSingle, echo=FALSE, results="asis"}
+cat(paste(readLines(system.file(package = "pathviewwrap",
+                                "extdata", "phenofile_SE.txt")),
+          collapse = "\n"))
+```
+
+</pre>
+<!--
+----------- | ----------------------------------------------------------------------------------------------------------------- | ------
+SampleName  |  `FileName`                                                                                                       | `Class`
+`sample1`   | `/Library/Frameworks/R.framework/Versions/4.3-x86_64/Resources/library/pathviewwrap/extdata/sample1_sub.fastq.gz` | `A`
+`sample3`   | `/Library/Frameworks/R.framework/Versions/4.3-x86_64/Resources/library/pathviewwrap/extdata/sample3_sub.fastq.gz` | `B`
+`sample5`   | `/Library/Frameworks/R.framework/Versions/4.3-x86_64/Resources/library/pathviewwrap/extdata/sample5_sub.fastq.gz` | `A`
+`sample6`   | /Library/Frameworks/R.framework/Versions/4.3-x86_64/Resources/library/pathviewwrap/extdata/sample6_sub.fastq.gz`  | `B`
+-->
+
+
+
+
+
+
+## Demo run
+To run
+```{r demorun, eval = FALSE}
+pathviewwrap(
         ref.dir = NA, phenofile = phenofile,
         outdir = Results, entity = "Mus musculus", corenum = 16,
         compare = "as.group", seq_tech = "Illumina", keep_tmp = TRUE,
         rerun = FALSE, diff.tool = "DESeq2", aligner = "Rhisat2"
     )
-})
 ```
+
+
 
 
 ## Overview
