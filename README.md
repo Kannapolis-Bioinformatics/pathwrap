@@ -10,15 +10,13 @@ In order to install pathwrap, open R (version "4.3") and write
 ```r
 if (!require("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
-BiocManager::install("Kannapolis-Bioinformatics/pathwrap", force  = T, build_vignette = TRUE)
+BiocManager::install("Kannapolis-Bioinformatics/pathwrap", force = TRUE, build_vignette = TRUE)
 ```
 
 Also you can find the latest annotation and genome package useful for analysis by running following code.
 
 ```r 
 library(pathviewwrap)
-#replace "Homo sapiens" with the scientific name of the species of interest
-# ex: "Mus musculus" for house moouse
 genomepkg <- anntpkglist$gneome[which(anntpkglist$species=="Homo sapiens")]
 anntpkg <- anntpkglist$gneome[which(anntpkglist$species=="Homo sapiens")]
 BiocManager::install(genomepkg)
@@ -26,7 +24,7 @@ BiocManager::install(anntpkg)
 ```
 
 ## Quick start with demo data 
-The wrapper can be run with pathwrap function giving as much as argument as possible for compelte analysis. You will need phenofile which has information about the path in which the raw files are stored and the class or category each sample belong to.
+Just run the pathwrap function with as much argument as possible for compelte analysis. You will need phenofile which has information about the path in which the raw files are stored and the class or category each sample belong to.
 
 ``` r
 # This code creates the phenofile and runs the pathviewrap
@@ -34,29 +32,29 @@ The wrapper can be run with pathwrap function giving as much as argument as poss
 
 #create directory to store results
 Results <- tempdir()
-phenofile <-"hellotmpphenofile.txt"
+phenofile <-tmpfile("hellotmpphenofile.txt")
 
 #create columns for phenofile, this is for SE data
 #col.names should be SampleName, FileName and Class for SE data
 library(stringr)
 FileName <- list.files(file.path(system.file(
-    package = "pathviewwrap"), "extdata"), full.names = T)
+    package = "pathviewwrap"), "extdata"), full.names = TRUE)
 
 patternmy <- c(dirname( FileName[1]) , "_sub.fastq.gz")
 SampleName <- str_replace_all(
     pattern = paste0(dirname(FileName)[1], "/|_sub.fastq.gz" ),
-    string =  list.files(file.path(
+    string = list.files(file.path(
     system.file(package = "pathviewwrap"), "extdata"), 
-    full.names = T) , "")
+    full.names = TRUE) , "")
 
 
 Class <- c("A", "B", "A", "B")
 write.table(as.data.frame(cbind(SampleName, FileName, Class)), 
-            file = phenofile, sep = "\t", row.names = F, 
-            col.names = T, quote = F)
+            file = phenofile, sep = "\t", row.names = FALSE, 
+            col.names = TRUE, quote = FALSE)
 
 
-# run the wrapper and time it
+message("this is the phenofile ", phenofile )
 system.time({
     pathviewwrap(
         ref.dir = NA, phenofile = phenofile,
@@ -70,6 +68,8 @@ system.time({
 
 ## Steps run by the wrapper 
 The steps run by the wrapper are as follows:
+
+#test
 
 With one wrapper function, it runs all the steps listed below. 
 
@@ -112,15 +112,10 @@ After the differential gene analysis the wrapper runs generally applicable gene 
 
 ## STEP 7: visualizing the pathway using Pathview
 
-Finally the top enriched pathways with  "q.val" < 0.1 are visualized using pathview.
+Finally the top enriched pathways with "q.val" < 0.1 are visualized using pathview.
 
 ## More information
- More information about the usage of package can be found using 
-
-``` r
-browseVignette("pathviewwrap")
-```
-Also please look into for paper in making.
+Please watch out for paper in making. 
 https://docs.google.com/document/d/1pfMI-umnS7GCW9aoAqEm0tZv9g6eVKSA/edit
 
 

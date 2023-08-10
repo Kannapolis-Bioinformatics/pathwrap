@@ -41,7 +41,10 @@ Imports:
     GenomeInfoDb,
     stringr,
     BiocGenerics,
-    S4Vectors
+    S4Vectors,
+    ComplexHeatmap,
+    graphics,
+    SummarizedExperiment
 Depends: 
     R (>= 4.3.0)
 License: MIT + file LICENSE
@@ -55,6 +58,8 @@ biocViews:
     GeneExpression, 
     Transcription
 Suggests:
+    RUnit,
+    BiocGenerics,
     BiocStyle, 
     knitr,
     rmarkdown

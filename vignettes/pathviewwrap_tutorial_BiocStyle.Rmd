@@ -60,18 +60,19 @@ phenofile <- tempfile("hellotmpphenofile.txt")
 #col.names should be SampleName, FileName and Class for SE data
 library(stringr)
 FileName <- list.files(file.path(system.file(
-    package = "pathviewwrap"), "extdata"), full.names = T, pattern = "fastq.gz")
+    package = "pathviewwrap"), "extdata"), full.names = TRUE, 
+    pattern = "fastq.gz")
 patternmy <- c(dirname( FileName[1]) , "_sub.fastq.gz")
 SampleName <- str_replace_all(
     pattern = paste0(dirname(FileName)[1], "/|_sub.fastq.gz" ),
-    string =  list.files(file.path(
+    string = list.files(file.path(
     system.file(package = "pathviewwrap"), "extdata"), 
-    full.names = T, pattern = "fastq.gz") , "")
+    full.names = TRUE, pattern = "fastq.gz") , "")
 Class <- c("A", "B", "A", "B")
 #write the columns in the phenofile
 write.table(as.data.frame(cbind(SampleName, FileName, Class)), 
-            file = phenofile, sep = "\t", row.names = F, 
-            col.names = T, quote = F)
+            file = phenofile, sep = "\t", row.names = FALSE, 
+            col.names = TRUE, quote = FALSE)
 ```
 
 
@@ -86,16 +87,16 @@ For single end experiment;
 ```{r sampleFileSingle, echo=FALSE, results="asis"}
 cat(paste(readLines(system.file(package = "pathviewwrap",
                                 "extdata", "phenofile_SE.txt")),
-          collapse = "\n"))
+        collapse = "\n"))
 ```
  </pre>
-  
+
 For paired end experiment;
 <pre>
 ```{r sampleFilePaired, echo=FALSE, results="asis"}
 cat(paste(readLines(system.file(package = "pathviewwrap",
                                 "extdata", "phenofile_PE.txt")),
-          collapse = "\n"))
+        collapse = "\n"))
 ```
  </pre>
 
@@ -104,11 +105,12 @@ To run you can create a results folder and give that as argument in the function
 If argument to outdir is not given, a result directory is created in the present
 working directory of R. 
 
-Also, when ref.dir = NA, it uses the reference annotation and genome package provided 
-by bioconductor and installed in the system. When reference files are provided the
-location to the directory where files are stored should be provided.
-
-*NOTES:* Please make sure that any path does not have trailing “/” at the end. For example:
+Also, when ref.dir = NA, it uses the reference annotation and genome package 
+provided by bioconductor and installed in the system. To provide reference files
+the location to the directory where files are stored should be provided.
+*NOTES:*
+Please make sure that any path does not have trailing “/” at the end.
+For example:
 ref=”~/Reference/mouse/” #Wrong 
 ref=”~/Reference/mouse” #Right 
 
@@ -132,7 +134,7 @@ It does quality control analysis of raw files, performs adapter and quality
 trimming, builds genome index and does alignemnet , counts genes perfoms 
 differential gene expression analysis, does gene enrichment test using GAGE and
 visualize the enriched pathways using pathview all using one wrapper function.
-It has the ability to  continue the analysis if it is halted at any stage and 
+It has the ability to continue the analysis if it is halted at any stage and 
 generate quality pictures and generate comprehensive analysis of the data.
 
 With one wrapper function, it runs all the steps listed below.

@@ -42,8 +42,7 @@ sanity_check <- function(ref.dir, outdir, pos = 1, entity, corenum, compare,
 
     folder_to_create <- list(
         "fastqc_results", "fastp_results", "gage_results",
-        "differential_analysis", "aligned_bam",
-        "pathway_analysis"
+        "differential_analysis", "aligned_bam"
     )
     trim_dir <- list("fastp_log", "unpaired")
     diff_dir <- list("DESeq2", "edgeR")
@@ -81,7 +80,6 @@ sanity_check <- function(ref.dir, outdir, pos = 1, entity, corenum, compare,
     trim.dir <- fastp_results
     gage.dir <- gage_results
     trim.log <- fastp_log
-    pathway.dir <- pathway_analysis
     edger.dir <- edgeR
     message(edger.dir)
     deseq2.dir <- DESeq2

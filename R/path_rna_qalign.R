@@ -1,4 +1,4 @@
-#' 2.  RUN THE ANALYSIS # Alignment and counting
+#' 2. RUN THE ANALYSIS # Alignment and counting
 #'
 #' this function runs the Rhisat2 or Rbowtie for alignment on paired or
 #' single end mode. It saves the alignment object in RDS file which can
@@ -13,13 +13,13 @@
 #' @param sampleFile : the file where information about location of sample is
 #' stored, see qAlign for more
 #' @param genomeFile : the genome file used for alignment or bioconductor genome
-#'  package
+#' package
 #' @param geneAnnotation : gene annnotaion file used for gene counting or
 #' bioconductor annotation package
 #' @param ref.dir : directory in which genomeFile and genomeAnnotaion are stored
 #' @param cacheDir : directory where temporary files generated during alignment
 #' are store
-#' @param  aligner : weather Rhisat2 or Rbowtie should be used for alignment
+#' @param aligner : weather Rhisat2 or Rbowtie should be used for alignment
 #'
 #' @import QuasR
 #' @importFrom QuasR qAlign

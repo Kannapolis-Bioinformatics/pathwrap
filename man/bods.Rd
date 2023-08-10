@@ -20,7 +20,7 @@ A dataframe with x rows and y columns;
 gage
 }
 \usage{
-bods
+data(bods)
 }
 \value{
 the data frame GAGE with information about species

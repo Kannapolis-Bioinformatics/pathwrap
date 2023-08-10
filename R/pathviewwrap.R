@@ -1,4 +1,4 @@
-#'  Wrapper for RNASeq data analysis from raw reads to pathway visualization
+#' Wrapper for RNASeq data analysis from raw reads to pathway visualization
 #'
 #' wrapper that does quality control analysis of raw files, performs adapter and
 #' quality trimming, builds genome index and does alignment , counts genes
@@ -12,19 +12,19 @@
 #' reference file(*.fa) and annotation file(*.gtf), can be NULL
 #' @param phenofile : path to phenofile ; see note on test data to
 #' see the format of phenofile
-#' @param outdir  : give the name of parent result dir , this can be existing or
+#' @param outdir : give the name of parent result dir , this can be existing or
 #' not , rest of directory will be formed by program for organization
-#' @param entity  : Scientific name of species whose RNA is being analyzed
+#' @param entity : Scientific name of species whose RNA is being analyzed
 #' @param corenum : number of cores available for analysis #defaut 2
-#' @param diff.tool :  what differential tool to to use,
+#' @param diff.tool : what differential tool to to use,
 #' “DESEQ2” or “edgeR” available
 #' @param compare : what is sample/experimental design you have,
-#'  paired or unpaired, as.group
+#'    paired or unpaired, as.group
 #' @param seq_tech : Illumina, pacbio or nanopore
 #' @param aligner : One of "Rhisat2" or "Rbowtie2"; Rbowtie2 can be very slow
-#'  for human and eukaryotic species
+#'    for human and eukaryotic species
 #' @param keep_tmp : set TRUE if keeping the aligned bam files, if set FALSE,
-#'  bam files are deleted
+#'    bam files are deleted
 #' @param rerun : if FALSE the previously complete step will not be rerunned,
 #' if TRUE analysis starts from first step
 #' @param cacheDir : directory where temporary files created during alignment
@@ -118,7 +118,7 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
         res.fastqc <- run_qc(fq.dir, qc.dir, corenum)
         if (is.null(res.fastqc)) {
             return("Please make sure fastqc is available in system and
-                   accessible to R")
+                accessible to R")
         }
     }
     sampleFile <- file.path(outdir, "sampleFile.txt")
@@ -129,8 +129,9 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
     fastp_files_name <- as.data.frame(vapply(as.list(rawfileName),
             function(x) str_replace_all(x, ".fastq.gz$", "_trimmed.fastq.gz"),
             character(dim(filenames)[1])))
-    FileName <- vapply(as.list(fastp_files_name),function(x) file.path(trim.dir, x),
-                   character(dim(filenames)[1]) )
+    FileName <- vapply(as.list(fastp_files_name),
+                    function(x) file.path(trim.dir, x),
+                character(dim(filenames)[1]) )
   
     if (endness == "SE") {
         write.table(

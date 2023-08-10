@@ -20,7 +20,7 @@ rows describe different species
 \url{https://www.bioconductor.org/packages/release/data/annotation/}
 }
 \usage{
-anntpkglist
+data(anntpkglist)
 }
 \value{
 the data frame with packages to install before analysis

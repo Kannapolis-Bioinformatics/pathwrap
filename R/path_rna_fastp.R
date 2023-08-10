@@ -2,7 +2,7 @@
 #'
 #' This function takes name of the samples and for each sample does the quality
 #' and adapter trimming for Illumina and long read sequencing. It works for both
-#'  PE and SE data
+#' PE and SE data
 #'
 #' @param sampleName : name of the sample
 #' @return no value returned

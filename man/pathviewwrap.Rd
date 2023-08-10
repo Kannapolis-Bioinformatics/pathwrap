@@ -5,18 +5,18 @@
 \title{Wrapper for RNASeq data analysis from raw reads to pathway visualization}
 \usage{
 pathviewwrap(
-  ref.dir = NA,
-  phenofile = NA,
-  outdir = "results",
-  entity = "Mus musculus",
-  corenum = 2,
-  compare = "unpaired",
-  diff.tool = "DESeq2",
-  seq_tech = "Illumina",
-  keep_tmp = FALSE,
-  rerun = FALSE,
-  cacheDir = NULL,
-  aligner
+    ref.dir = NA,
+    phenofile = NA,
+    outdir = "results",
+    entity = "Mus musculus",
+    corenum = 2,
+    compare = "unpaired",
+    diff.tool = "DESeq2",
+    seq_tech = "Illumina",
+    keep_tmp = FALSE,
+    rerun = FALSE,
+    cacheDir = NULL,
+    aligner
 )
 }
 \arguments{
@@ -66,18 +66,40 @@ halted at any stage and generate quality pictures and generate comprehensive
 analysis of the data.
 }
 \examples{
-# here write the code to run for the test of mouse , use this file and the
-# phenofile in the package
-# BiocManager::install("Kannapolis-Bioinformatics/pathwrap", force  = T)
-Results <- tempdir()
+# This code creates the phenofile and runs the pathviewrap
+
+#install pathwrap from github or bioconductor and load library
+#BiocManager::install("Kannapolis-Bioinformatics/pathwrap", force  = T)
 library(pathviewwrap)
+#create directory to store results
+Results <- tempdir()
+phenofile <-tempfile("hellotmpphenofile.txt")
+
+#create columns for phenofile, this is for SE data
+#Table col.names should be SampleName, FileName and Class
+library(stringr)
+FileName <- list.files(file.path(system.file(
+    package = "pathviewwrap"), "extdata"), full.names = TRUE, 
+    pattern = "fastq.gz")
+
+patternmy <- c(dirname( FileName[1]) , "_sub.fastq.gz")
+SampleName <- str_replace_all(
+    pattern = paste0(dirname(FileName)[1], "/|_sub.fastq.gz" ),
+    string =  list.files(file.path(
+    system.file(package = "pathviewwrap"), "extdata"), 
+    full.names = TRUE,pattern = "fastq.gz") , "")
+
+
+Class <- c("A", "B", "A", "B")
+write.table(as.data.frame(cbind(SampleName, FileName, Class)), 
+            file = phenofile, sep = "\t", row.names = FALSE, 
+            col.names = TRUE, quote = FALSE)
+
+
+message("this is the phenofile ", phenofile )
 system.time({
     pathviewwrap(
-        ref.dir = NA,
-        phenofile = system.file(
-            package = "pathviewwrap",
-            "extdata/phenotest_ungz.txt"
-        ),
+        ref.dir = NA, phenofile = phenofile,
         outdir = Results, entity = "Mus musculus", corenum = 16,
         compare = "as.group", seq_tech = "Illumina", keep_tmp = TRUE,
         rerun = FALSE, diff.tool = "DESeq2", aligner = "Rhisat2"
