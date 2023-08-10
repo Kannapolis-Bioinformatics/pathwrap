@@ -17,6 +17,8 @@ Also you can find the latest annotation and genome package useful for analysis b
 
 ```r 
 library(pathviewwrap)
+#replace "Homo sapiens" with the scientific name of the species of interest
+# ex: "Mus musculus" for house moouse
 genomepkg <- anntpkglist$gneome[which(anntpkglist$species=="Homo sapiens")]
 anntpkg <- anntpkglist$gneome[which(anntpkglist$species=="Homo sapiens")]
 BiocManager::install(genomepkg)
@@ -24,7 +26,7 @@ BiocManager::install(anntpkg)
 ```
 
 ## Quick start with demo data 
-Just run the pathwrap function with as much argument as possible for compelte analysis. You will need phenofile which has information about the path in which the raw files are stored and the class or category each sample belong to.
+The wrapper can be run with pathwrap function giving as much as argument as possible for compelte analysis. You will need phenofile which has information about the path in which the raw files are stored and the class or category each sample belong to.
 
 ``` r
 # This code creates the phenofile and runs the pathviewrap
