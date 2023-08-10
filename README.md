@@ -56,7 +56,7 @@ write.table(as.data.frame(cbind(SampleName, FileName, Class)),
             col.names = T, quote = F)
 
 
-message("this is the phenofile ", phenofile )
+# run the wrapper and time it
 system.time({
     pathviewwrap(
         ref.dir = NA, phenofile = phenofile,
@@ -70,8 +70,6 @@ system.time({
 
 ## Steps run by the wrapper 
 The steps run by the wrapper are as follows:
-
-#test
 
 With one wrapper function, it runs all the steps listed below. 
 
@@ -117,7 +115,12 @@ After the differential gene analysis the wrapper runs generally applicable gene 
 Finally the top enriched pathways with  "q.val" < 0.1 are visualized using pathview.
 
 ## More information
-Please watch out for paper in making. 
+ More information about the usage of package can be found using 
+
+``` r
+browseVignette("pathviewwrap")
+```
+Also please look into for paper in making.
 https://docs.google.com/document/d/1pfMI-umnS7GCW9aoAqEm0tZv9g6eVKSA/edit
 
 
