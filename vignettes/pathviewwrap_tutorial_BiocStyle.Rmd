@@ -35,6 +35,7 @@ annotation and genome package. For example, for human species
 ```{r installation, eval = FALSE}
 library(pathviewwrap)
 data(anntpkglist, package = "pathviewwrap")
+#replace Homo sapiens with scientific name of mouse, Mus musculus for mouse data
 genomepkg <- anntpkglist$genome[which(anntpkglist$species=="Homo sapiens")]
 anntpkg <- anntpkglist$annotate[which(anntpkglist$species=="Homo sapiens")]
 BiocManager::install(genomepkg)
@@ -42,28 +43,24 @@ BiocManager::install(anntpkg)
 ```
 
 ## Documentation
-To view this documentation
+To view this documentation, run following command in R.
 ```{r documentation, eval = FALSE}
 browseVignettes("pathviewwrap")
 ```
 
 
 ## Phenofile structure
-Simply create a phenofile with information about the location of raw files and
-class and run the wrapper function pathviewwrap. An example of how phenofile can
-be created is as below.
+Pathviewwrap requires an argument that denotes path to a phenofile that has 
+information about the path of raw files and the class each sample belong to.
+An example of how phenofile can be created is as below.
 ```{r wrapper, eval =TRUE}
-#library(pathviewwrap)
-#create directory to store results
-Results <- tempdir()
+#create a phenofile
 phenofile <-"hellotmpphenofile.txt"
-
 #create columns for phenofile, this is for SE data
-#Table col.names should be SampleName, FileName and Class
+#col.names should be SampleName, FileName and Class for SE data
 library(stringr)
 FileName <- list.files(file.path(system.file(
     package = "pathviewwrap"), "extdata"), full.names = T, pattern = "fastq.gz")
-
 patternmy <- c(dirname( FileName[1]) , "_sub.fastq.gz")
 SampleName <- str_replace_all(
     pattern = paste0(dirname(FileName)[1], "/|_sub.fastq.gz" ),
@@ -71,6 +68,7 @@ SampleName <- str_replace_all(
     system.file(package = "pathviewwrap"), "extdata"), 
     full.names = T, pattern = "fastq.gz") , "")
 Class <- c("A", "B", "A", "B")
+#write the columns in the phenofile
 write.table(as.data.frame(cbind(SampleName, FileName, Class)), 
             file = phenofile, sep = "\t", row.names = F, 
             col.names = T, quote = F)
@@ -102,8 +100,22 @@ cat(paste(readLines(system.file(package = "pathviewwrap",
  </pre>
 
 ## Demo run
-To run
+To run you can create a results folder and give that as argument in the function
+If argument to outdir is not given, a result directory is created in the present
+working directory of R. 
+
+Also, when ref.dir = NA, it uses the reference annotation and genome package provided 
+by bioconductor and installed in the system. When reference files are provided the
+location to the directory where files are stored should be provided.
+
+*NOTES:* Please make sure that any path does not have trailing “/” at the end. For example:
+ref=”~/Reference/mouse/” #Wrong 
+ref=”~/Reference/mouse” #Right 
+
+To run the wrapper, 
 ```{r demorun, eval = FALSE}
+#create directory to store results
+Results <- tempdir()
 pathviewwrap(
         ref.dir = NA, phenofile = phenofile,
         outdir = Results, entity = "Mus musculus", corenum = 16,
@@ -111,14 +123,6 @@ pathviewwrap(
         rerun = FALSE, diff.tool = "DESeq2", aligner = "Rhisat2"
     )
 ```
-
-When ref.dir = NA, it uses the reference annotation and genome package provided 
-by bioconductor and installed in the system. When reference files are provided the
-location to the directory where files are stored should be provided.
-
-*NOTES:* Please make sure that any path does not have trailing “/” at the end. For example:
-ref=”~/Reference/mouse/” #Wrong 
-ref=”~/Reference/mouse” #Right 
 
 
 ## Overview
