@@ -1,10 +1,11 @@
 Package: pathviewwrap
 Title: Wrapper for RNASeq Data analysis and pathway visualization
 Version: 0.99.0
-Authors@R:
+Author:
     person("Eliza", "Dhungel","", "elidhungel@gmail.com", 
     role = c("aut", "cre"),
     comment = c(ORCID = "0000-0002-7246-9452"))
+Maintainer: Eliza Dhungel <elidhungel@gmail.com>
 Description:
     Pathviewwrap is a RNASeq analysis tool that provides a wrapper
     for the processing of RNASeq datasets from quality control of raw
@@ -25,7 +26,6 @@ Imports:
     grDevices, 
     methods,
     DESeq2,
-    BiocManager,
     EnhancedVolcano,
     edgeR,
     fastqcr,
@@ -40,11 +40,11 @@ Imports:
     AnnotationDbi,
     GenomeInfoDb,
     stringr,
-    BiocGenerics,
     S4Vectors,
     ComplexHeatmap,
     graphics,
-    SummarizedExperiment
+    SummarizedExperiment,
+    BiocGenerics
 Depends: 
     R (>= 4.3.0)
 License: MIT + file LICENSE
@@ -59,7 +59,7 @@ biocViews:
     Transcription
 Suggests:
     RUnit,
-    BiocGenerics,
+    BiocManager,
     BiocStyle, 
     knitr,
     rmarkdown
