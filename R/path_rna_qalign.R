@@ -34,7 +34,8 @@ run_qAlign <- function(corenum, endness, sampleFile, genomeFile, geneAnnotation,
                     ref.dir, cacheDir, aligner) {
     # does ref.dir also have ref index, if not make indexes
     if (!is.na(ref.dir)) {
-        if (length(list.files(ref.dir, ".Rhisat2$", full.names = TRUE)) != 1) {
+        apattern <- paste0(".", aligner, "$")
+        if (length(list.files(ref.dir, apattern, full.names = TRUE)) != 1) {
             sampleFiletmp <- read.table(sampleFile, "\t", header = TRUE)[1, ]
             sampleFiletmp_name <- paste0(gsub(
                 "sampleFile.txt",
