@@ -6,9 +6,9 @@
 #' available in gtf file in ref.dir or if ref.dir is NA
 #' It makes txdb object fromt the annotaion package
 #'
-#' @param geneAnnotation : annotation file or package
+#' @param geneAnnotation : annotation file or if using package, path to sqlite file in package
 #' @param corenum : the number of cores
-#' @param genomeFile : genomeFile or package
+#' @param genomeFile : genomeFile or when using package, genomeFile is not used, pkg name can be given
 #' @param entity  : the scientific name of the organism
 #' @param outdir : directory to store output, Results is default
 #'
