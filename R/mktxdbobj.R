@@ -42,12 +42,13 @@ make_txdbobj <- function(geneAnnotation, corenum, genomeFile, entity, outdir) {
             length = width(chrLen),
             is_circular = rep(FALSE, length(chrLen))
         )
-        txdb <- makeTxDbFromGFF(
+        txdb <-suppressWarnings({ makeTxDbFromGFF(
             file = geneAnnotation, format = "gtf",
             chrominfo = chrominfo,
             dataSource = "Ensembl",
             organism = entity
         )
+                                 })
     }
     AnnotationDbi::saveDb(txdb,
         file = paste0(outdir, "/", gsub(" ", "", entity), "_txdbobj")
