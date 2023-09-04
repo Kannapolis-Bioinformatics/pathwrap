@@ -6,8 +6,7 @@
 library(pathviewwrap)
 #create directory to store results
 Results <- tempdir()
-phenofile <-"hellotmpphenofile.txt"
-
+phenofile <- tempfile()
 #create columns for phenofile, this is for SE data
 #Table col.names should be SampleName, FileName and Class
 library(stringr)
