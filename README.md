@@ -39,7 +39,8 @@ phenofile <-tempfile("hellotmpphenofile.txt")
 #col.names should be SampleName, FileName and Class for SE data
 library(stringr)
 FileName <- list.files(file.path(system.file(
-    package = "pathviewwrap"), "extdata"), full.names = TRUE)
+    package = "pathviewwrap"), "extdata"), pattern = "fastq.gz",
+    full.names = TRUE)
 
 patternmy <- c(dirname( FileName[1]) , "_sub.fastq.gz")
 SampleName <- str_replace_all(
