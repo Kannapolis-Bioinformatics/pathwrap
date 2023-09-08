@@ -45,50 +45,23 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
                         keep_tmp = FALSE, rerun = FALSE, cacheDir = NULL,
                         aligner) {
     on.exit(closeAllConnections())
+    dirlist <- createdir(pos =1, outdir, entity, rerun, keep_tmp)
     aligned_bam <- NA
-    dirlist <- sanity_check(ref.dir,
-        pos = 1, outdir, entity, corenum, compare, rerun
-    )
-    if (is.null(dirlist)) {
+    reference_paths <- sanity_check(ref.dir,
+        pos = 1, outdir, entity, corenum, compare )
+    genomeFile <- reference_paths[1]
+    message("this is genome File")
+    message(genomeFile)
+    geneAnnotation <- reference_paths[2]
+    if (is.null(reference_paths)) {
         message("Please install the reference package")
         return("Please rerun analysis with rerun = TRUE")
     }
     qc.dir <- dirlist[1]
     trim.dir <- dirlist[2]
-    genomeFile <- dirlist[3]
-    message("this is genome File")
-    message(genomeFile)
-    geneAnnotation <- dirlist[4]
-    message("this is geneAnnotation")
-    message(geneAnnotation)
-    deseq2.dir <- dirlist[5]
-    edger.dir <- dirlist[6]
-    gage.dir <- dirlist[7]
-
-    # duplicated codes
-    # if (!file.exists(phenofile)){ ###TO DO make sure reference is first ANume
-    #   message("Please provide phenofile with Class information")
-    # }
-    # coldata <- read.table(phenofile, sep = "\t", header = TRUE)
-    # if(colnames(coldata)[ncol(coldata)]!="Class"){
-    #   message("Please make sure class information is in last column with
-    # colname 'Class' . ")
-    # }
-    # coldata$Class <- as.factor(coldata$Class)
-    # SampleName <- coldata$Sample
-    # filenames <- coldata[,-c(1,ncol(coldata))]
-
-    # if(is.null(dim(filenames))){
-    #   endness <- "SE"
-    #   fq.dir <-  dirname(filenames[1])
-    # } else if(dim(filenames)[2] == 2){
-    #   endness <- "PE"
-    #   fq.dir <- dirname(filenames$FileName1[1])
-    #
-    # }
-
-    # run the fastqc
-
+    deseq2.dir <- dirlist[3]
+    edger.dir <- dirlist[4]
+    gage.dir <- dirlist[5]
 
     if (!file.exists(phenofile)) { ### TO DO make sure reference is first ANum
         message("Please provide phenofile with Class information")
@@ -109,7 +82,6 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
         endness <- "PE"
         fq.dir <- dirname(filenames$FileName1[1])
     }
-
     if (!file.exists(file.path(qc.dir, "qc_heatmap.tiff"))) {
         message("STEP 1 ; running fastqc")
         message("this is qc.dir")
@@ -120,63 +92,13 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
                 accessible to R")
         }
     }
-    sampleFile <- file.path(outdir, "sampleFile.txt")
-    rawfileName <- as.data.frame(vapply(
-        filenames, function(x) basename(x),
-        character(dim(filenames)[1])
-    ))
-
-
-    fastp_files_name <- as.data.frame(vapply(
-        as.list(rawfileName),
-        function(x) str_replace_all(x, ".fastq.gz$", "_trimmed.fastq.gz"),
-        character(dim(filenames)[1])
-    ))
-    FileName <- vapply(
-        as.list(fastp_files_name),
-        function(x) file.path(trim.dir, x),
-        character(dim(filenames)[1])
-    )
-
-    if (endness == "SE") {
-        write.table(
-            file = sampleFile, sep = "\t",
-            as.data.frame(cbind(FileName, SampleName)),
-            col.names = c("FileName", "SampleName"),
-            quote = FALSE, row.names = FALSE
-        )
-    } else {
-        write.table(
-            file = sampleFile, sep = "\t",
-            as.data.frame(cbind(
-                FileName[, 1],
-                FileName[, 2], SampleName
-            )),
-            col.names = c("FileName1", "FileName2", "SampleName"),
-            quote = FALSE, row.names = FALSE
-        )
-    }
-
     # just in case there is random component in run_fastp
     RNGkind("L'Ecuyer-CMRG")
-    if (Sys.which("fastp") == "") {
-        return("Please make sure fastp is available for R to use")
+    
+    for (idx in 1:length(SampleName)){
+        run_fastp(SampleName[idx])
     }
-
-    cl <- makeCluster(corenum)
-    clusterExport(cl, c(
-        "seq_tech", "endness", "FileName", "filenames",
-        "trim.dir"
-    ),
-    envir = environment()
-    ) # .GlobalEnv) ??
-    parSapply(cl, SampleName, run_fastp)
-    message("the trim run is complete")
-    stopCluster(cl)
-
-    # to check if all the nodes run fine
-    # bad <- sapply(r, inherits, what = "try-error") # r<- mclappy()
-
+    messageabtsampfile <- writesampleFile(outdir, filenames)
     # make txdb from annotation
     txdbfilename <- paste0(gsub(" ", "", entity), "_txdbobj", collapse = "")
     if (!file.exists(file.path(outdir, txdbfilename))) {
@@ -191,9 +113,7 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
             "_txdbobj" , collapse = ""
         ))
     }
-
     if (!file.exists(file.path(aligned_bam, "alltrimmedalignedobj.RDS"))) {
-        # setwd(outdir)
         message("STEP 3 : aligning the sequence")
         aligned_proj <- run_qAlign(
             corenum, endness, sampleFile, genomeFile,
@@ -201,11 +121,9 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
         )
     } else {
         aligned_proj <- readRDS(file.path(
-            aligned_bam,
-            "alltrimmedalignedobj.RDS"
+            aligned_bam, "alltrimmedalignedobj.RDS"
         ))
     }
-
     if (!file.exists(file.path(outdir, "combinedcount.trimmed.RDS"))) {
         message("STEP 4: counting aligned sequences")
         cnts <- run_qCount(aligned_proj, corenum, outdir, txdb, entity)
@@ -214,8 +132,6 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
             outdir, "combinedcount.trimmed.RDS"
         )))
     }
-    # message("these are samplename for cnts , cnts[, coldata$SampleName] ")
-    # message(coldata$SampleName)
     cnts <- cnts[, coldata$SampleName]
     if (all(coldata$SampleName == colnames(cnts))) { # if this then proceed
         ref <- which(coldata$Class == levels(as.factor(coldata$Class))[1])
@@ -226,28 +142,16 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
     } else {
         message("make sure pheno file have only samples analysed")
     }
-
-
-    if (keep_tmp == FALSE) {
-        message("deleting aligned bam files, bam file index and log files")
-        # unlink(file.path(outdir, "aligned_bam", "*bam*"))
-        unlink(list.files(file.path(outdir, "aligned_bam"),
-            pattern = ".bam$|.bai$", full.names = TRUE
-        ))
-    }
-    deseq_volcano_plot <- paste0(deseq2.dir, "/Volcano_deseq2.tiff",
-                                    collapse = "")
+    
+    deseq_volcano_plot <- paste0(deseq2.dir, "/Volcano_deseq2.tiff", 
+                                 collapse = "")
     if (!file.exists(deseq_volcano_plot)) {
         message("STEP 5a ; running differential analysis using DESeq2")
         exp.fcncnts.deseq2 <- run_deseq2(cnts, grp.idx, deseq2.dir)
     } else {
         deseq2.res.df <- read.table(
-            file.path(
-                deseq2.dir,
-                "DESEQ2_logfoldchange.txt"
-            ),
-            header = TRUE, sep = "\t", row.names = 1
-        )
+            file.path(deseq2.dir, "DESEQ2_logfoldchange.txt" ),
+            header = TRUE, sep = "\t", row.names = 1 )
         # works with gage
         exp.fcncnts.deseq2 <- deseq2.res.df$log2FoldChange
         names(exp.fcncnts.deseq2) <- rownames(deseq2.res.df)
@@ -258,18 +162,12 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
         exp.fcncnts.edger <- run_edgeR(cnts, grp.idx, edger.dir)
     } else {
         edger.res.df <- read.table(
-            file.path(
-                edger.dir, "edgeR_logfoldchange.txt"
-            ),
-            header = TRUE, sep = "\t", row.names = 1
-        )
+            file.path( edger.dir, "edgeR_logfoldchange.txt" ),
+            header = TRUE, sep = "\t", row.names = 1 )
         # works with gage
         exp.fcncnts.deseq2 <- edger.res.df$log2FC
         names(exp.fcncnts.deseq2) <- rownames(edger.res.df)
     }
-
-    # setwd(gage.dir)
-    # chosing to use deseq2 result or edger result for gage
     if (diff.tool == "DESeq2") {
         exp.fc <- exp.fcncnts.deseq2
     } else {
@@ -277,13 +175,8 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
     }
     if (!file.exists("*.txt")) {
         message("STEP 6 : running pathway analysis using GAGE")
-        message(paste0(compare, "this is from pathviewwrap", collapse = "|"))
+        message(paste0(compare, "this is from pathviewwrap"))
         run_pathway(entity, exp.fc, compare, gage.dir, cnts, grp.idx)
     }
     return("The analysis is complete")
 }
-
-# when loading pathview??
-##### Loading required namespace: org.Mm.eg.db
-# Installing package(s) 'org.Mm.eg.db'
-# installing the source package ‘org.Mm.eg.db’
