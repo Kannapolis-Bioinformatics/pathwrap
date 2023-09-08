@@ -100,7 +100,7 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
     for (idxval in 1:length(SampleName)){
         run_fastp(SampleName[idxval], filenames, seq_tech, endness)
     }
-    messageabtsampfile <- writesampleFile(outdir, filenames)
+    messageabtsampfile <- writesampleFile(outdir, filenames, trim.dir)
     # make txdb from annotation
     txdbfilename <- paste0(gsub(" ", "", entity), "_txdbobj", collapse = "")
     if (!file.exists(file.path(outdir, txdbfilename))) {
