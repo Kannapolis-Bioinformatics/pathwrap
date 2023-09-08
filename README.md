@@ -59,6 +59,7 @@ write.table(as.data.frame(cbind(SampleName, FileName, Class)),
 
 
 message("this is the phenofile ", phenofile )
+library(pathviewwrap)
 system.time({
     pathviewwrap(
         ref.dir = NA, phenofile = phenofile,
