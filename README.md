@@ -17,8 +17,9 @@ Also you can find the latest annotation and genome package useful for analysis b
 
 ```r 
 library(pathviewwrap)
-genomepkg <- anntpkglist$gneome[which(anntpkglist$species=="Homo sapiens")]
-anntpkg <- anntpkglist$gneome[which(anntpkglist$species=="Homo sapiens")]
+data(anntpkglist)
+genomepkg <- anntpkglist$genome[which(anntpkglist$species=="Homo sapiens")]
+anntpkg <- anntpkglist$annotation[which(anntpkglist$species=="Homo sapiens")]
 BiocManager::install(genomepkg)
 BiocManager::install(anntpkg)
 ```
