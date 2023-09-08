@@ -47,7 +47,8 @@ SampleName <- str_replace_all(
     pattern = paste0(dirname(FileName)[1], "/|_sub.fastq.gz" ),
     string = list.files(file.path(
     system.file(package = "pathviewwrap"), "extdata"), 
-    full.names = TRUE) , "")
+    full.names = TRUE,
+    pattern = "fastq.gz" ) , "" )
 
 
 Class <- c("A", "B", "A", "B")
