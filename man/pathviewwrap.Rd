@@ -36,7 +36,7 @@ not , rest of directory will be formed by program for organization}
 \item{compare}{: what is sample/experimental design you have,
 paired or unpaired, as.group}
 
-\item{diff.tool}{:  what differential tool to to use,
+\item{diff.tool}{: what differential tool to to use,
 “DESEQ2” or “edgeR” available}
 
 \item{seq_tech}{: Illumina, pacbio or nanopore}
@@ -68,41 +68,47 @@ analysis of the data.
 \examples{
 # This code creates the phenofile and runs the pathviewrap
 
-#install pathwrap from github or bioconductor and load library
-#BiocManager::install("Kannapolis-Bioinformatics/pathwrap", force  = T)
+# install pathwrap from github or bioconductor and load library
+# BiocManager::install("Kannapolis-Bioinformatics/pathwrap",
+# force  = TRUE)
 library(pathviewwrap)
-#create directory to store results
+# create directory to store results
 Results <- tempdir()
-phenofile <-tempfile("hellotmpphenofile.txt")
+phenofile <- tempfile()
 
-#create columns for phenofile, this is for SE data
-#Table col.names should be SampleName, FileName and Class
+# create columns for phenofile, this is for SE data
+# Table col.names should be SampleName, FileName and Class
 library(stringr)
-FileName <- list.files(file.path(system.file(
-    package = "pathviewwrap"), "extdata"), full.names = TRUE, 
-    pattern = "fastq.gz")
+FileName <- list.files(
+    file.path(system.file(package = "pathviewwrap"),
+    "extdata"),full.names = TRUE, pattern = "fastq.gz")
 
-patternmy <- c(dirname( FileName[1]) , "_sub.fastq.gz")
+patternmy <- c(dirname(FileName[1]), "_sub.fastq.gz")
 SampleName <- str_replace_all(
-    pattern = paste0(dirname(FileName)[1], "/|_sub.fastq.gz" ),
-    string =  list.files(file.path(
-    system.file(package = "pathviewwrap"), "extdata"), 
-    full.names = TRUE,pattern = "fastq.gz") , "")
+    pattern = paste0(dirname(FileName)[1], "/|_sub.fastq.gz"),
+    string = list.files(
+    file.path(
+        system.file(package = "pathviewwrap"), "extdata"
+    ),
+    full.names = TRUE, pattern = "fastq.gz"
+    ), ""
+)
 
 
 Class <- c("A", "B", "A", "B")
-write.table(as.data.frame(cbind(SampleName, FileName, Class)), 
-            file = phenofile, sep = "\t", row.names = FALSE, 
-            col.names = TRUE, quote = FALSE)
+write.table(as.data.frame(cbind(SampleName, FileName, Class)),
+    file = phenofile, sep = "\t", row.names = FALSE,
+    col.names = TRUE, quote = FALSE
+)
 
 
-message("this is the phenofile ", phenofile )
+message("this is the phenofile ", phenofile)
 system.time({
     pathviewwrap(
-        ref.dir = NA, phenofile = phenofile,
-        outdir = Results, entity = "Mus musculus", corenum = 16,
-        compare = "as.group", seq_tech = "Illumina", keep_tmp = TRUE,
-        rerun = FALSE, diff.tool = "DESeq2", aligner = "Rhisat2"
+    ref.dir = NA, phenofile = phenofile,
+    outdir = Results, entity = "Mus musculus", corenum = 16,
+    compare = "as.group", seq_tech = "Illumina", keep_tmp = TRUE,
+    rerun = FALSE, diff.tool = "DESeq2", aligner = "Rhisat2"
     )
 })
 }

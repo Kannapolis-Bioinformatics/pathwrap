@@ -8,11 +8,13 @@ by loading from the annotation package}
 make_txdbobj(geneAnnotation, corenum, genomeFile, entity, outdir)
 }
 \arguments{
-\item{geneAnnotation}{: annotation file or package}
+\item{geneAnnotation}{: annotation file or if using package, path to sqlite
+file in package}
 
 \item{corenum}{: the number of cores}
 
-\item{genomeFile}{: genomeFile or package}
+\item{genomeFile}{: genomeFile or when using package, genomeFile is not used,
+pkg name can be given}
 
 \item{entity}{: the scientific name of the organism}
 
