@@ -4,7 +4,7 @@
 #' @param outdir :  path to result dir where the file is written
 #' @param filenames : list of filenames extracted from phenofile
 #' @return statement about the function run
-writesampleFile <- function(outdir, filenames, SampleName){
+writesampleFile <- function(outdir, filenames, SampleName, trim.dir){
     sampleFile <- file.path(outdir, "sampleFile.txt")
     rawfileName <- as.data.frame(vapply(
         filenames, function(x) basename(x),
