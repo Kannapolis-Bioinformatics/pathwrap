@@ -92,11 +92,13 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
                 accessible to R")
         }
     }
+    
+    print(filenames)
     # just in case there is random component in run_fastp
     RNGkind("L'Ecuyer-CMRG")
     
-    for (idx in 1:length(SampleName)){
-        run_fastp(SampleName[idx])
+    for (idxval in 1:length(SampleName)){
+        run_fastp(SampleName[idxval], filenames, seq_tech, endness)
     }
     messageabtsampfile <- writesampleFile(outdir, filenames)
     # make txdb from annotation
