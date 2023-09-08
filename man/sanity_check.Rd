@@ -4,7 +4,7 @@
 \alias{sanity_check}
 \title{function to make sure things are good}
 \usage{
-sanity_check(ref.dir, outdir, pos = 1, entity, corenum, compare, rerun)
+sanity_check(ref.dir, outdir, pos = 1, entity, corenum, compare)
 }
 \arguments{
 \item{ref.dir}{: directory for reference files}
