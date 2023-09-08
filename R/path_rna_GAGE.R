@@ -46,6 +46,7 @@ run_pathway <- function(entity, exp.fc, compare, gage.dir, cnts, grp.idx) {
         anla_type <- "KEGG"
         if (same.dir == TRUE) {
             anla_type <- "GO"
+            gage.dir <- file.path(gage.dir , "GO")
             sel.l <- fc.kegg.p$less[, "q.val"] < 0.1 & !is.na(
                 fc.kegg.p$less[, "q.val"]
             )
@@ -73,6 +74,7 @@ run_pathway <- function(entity, exp.fc, compare, gage.dir, cnts, grp.idx) {
         # visualize top 3 pathways
         # run pathview only for KEGG pathways
         if (same.dir == FALSE) {
+            gage.dir <- file.path(gage.dir , "KEGG")
             message(paste0("STEP 7: visualizing the pathway", " in ", entity,
                             collapse=""))
             pv.out.list <- vapply(

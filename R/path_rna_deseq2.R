@@ -62,51 +62,56 @@ run_deseq2 <- function(cnts, grp.idx, deseq2.dir) {
     df <- as.data.frame(sigs)
 
     df.top <- df[(df$padj < 0.05) & (abs(df$log2FoldChange) > 2), ]
-    df.top <- na.omit(df.top[order(df.top$log2FoldChange,
-        decreasing = TRUE
-    )[seq_len(20)], ])
-    ######################################
-    message("Principle Componenet Analysis using VST from DESeq2")
-    out <- tryCatch(
-        {
-            vsd <- vst(dds, blind = TRUE)
-        },
-        error = function(cond) {
-            message("transformation using varianceStabilizingTransformation")
-            vsd <- varianceStabilizingTransformation(dds, blind = TRUE)
-        },
-        finally = {
-            mat <- assay(vsd)[rownames(df.top), colnames(cnts)]
-
-            message("Now we are plotting PCA")
-            plot.new()
-            tiff(
-                file.path(aligned_bam, "PCA_vst.tiff"),
-                units = "in",
-                width = 15,
-                height = 15,
-                res = 300
-            )
-            g <- plotPCA(vsd, intgroup = c("grp"))
-            plot(g)
-            dev.off()
-            plot.new()
-
-            message(
-                "Also plotting heatmap of vst count of top 20 genes with
-                LFC more than 2 and padj less than 0.05"
-            )
-            tiff(
-                file.path(aligned_bam, "heatmap_vst.tiff"),
-                units = "in",
-                width = 15,
-                height = 15,
-                res = 300
-            )
-            g <- pheatmap(mat, scale = "row")
-            plot(g)
-            dev.off()
-        }
+    if(dim(df.top)[1] > 19){
+        
+    
+        df.top <- na.omit(df.top[order(df.top$log2FoldChange,
+            decreasing = TRUE
+        )[seq_len(20)], ])
+        ######################################
+        message("Principle Componenet Analysis using VST from DESeq2")
+        out <- tryCatch(
+            {
+                vsd <- vst(dds, blind = TRUE)
+            },
+            error = function(cond) {
+                message("transformation using varianceStabilizingTransformation")
+                vsd <- varianceStabilizingTransformation(dds, blind = TRUE)
+            },
+            finally = {
+                mat <- assay(vsd)[rownames(df.top), colnames(cnts)]
+    
+                message("Now we are plotting PCA")
+                plot.new()
+                tiff(
+                    file.path(aligned_bam, "PCA_vst.tiff"),
+                    units = "in",
+                    width = 15,
+                    height = 15,
+                    res = 300
+                )
+                g <- plotPCA(vsd, intgroup = c("grp"))
+                plot(g)
+                dev.off()
+                plot.new()
+    
+                message(
+                    "Also plotting heatmap of vst count of top 20 genes with
+                    LFC more than 2 and padj less than 0.05"
+                )
+                tiff(
+                    file.path(aligned_bam, "heatmap_vst.tiff"),
+                    units = "in",
+                    width = 15,
+                    height = 15,
+                    res = 300
+                )
+                g <- pheatmap(mat, scale = "row")
+                plot(g)
+                dev.off()
+            }
+    
     )
+    }
     return(exp.fc)
 }

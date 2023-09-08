@@ -95,7 +95,6 @@ sanity_check <- function(ref.dir, outdir, pos = 1, entity, corenum, compare){
         geneAnnotation <- list.files(ref.dir, ".gtf$|.gff$", full.names = TRUE)
         ## could be changed to include gtf, gff etc,check with quasR package
         message(geneAnnotation)
-        
-        return(c(genomeFile, geneAnnotation))
     }
+    return(c(genomeFile, geneAnnotation))
 }

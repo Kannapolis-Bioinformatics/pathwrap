@@ -31,6 +31,7 @@ make_txdbobj <-
             entity,
             outdir) {
         options(cache_size = NULL, synchronous = NULL)
+        print(geneAnnotation)
         txdb <- try(loadDb(geneAnnotation), silent = TRUE)
         cl2 <- makeCluster(corenum)
         # if (class(txdb)==  "TxDb"){

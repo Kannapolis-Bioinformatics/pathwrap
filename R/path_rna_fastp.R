@@ -8,14 +8,18 @@
 #' @param sampleName : name of the sample
 #' @return no value returned
 
-run_fastp <- function(sampleName, FileName, seq_tech, endness) {
+run_fastp <- function(sampleName, FileName, seq_tech, endness,
+                      trim.dir, corenum) {
     print(str(FileName))
+    print(FileName)
     # integer
-    intformatch <- grep(sampleName, FileName[, 1], value = FALSE, fixed = TRUE)
+    #intformatch <- grep(sampleName, FileName, value = FALSE, fixed = TRUE)
     # trimmedoutfile$FileName1 , trimmedoutfile$Filename2
     # infile$FileName1 , infile$FileName2 #infile for SE
-    trimmedoutfile <- str_remove(FileName[intformatch, 1], ".fastq.gz")
-    infile <- FileName[intformatch, ]
+    trimmedoutfile <- file.path(paste0(trim.dir, "/",
+                                     basename(str_remove(FileName, 
+                                          ".fastq.gz")[1]), collapse = "|"))
+    infile <- FileName
 
 
     # actual command
@@ -34,8 +38,10 @@ run_fastp <- function(sampleName, FileName, seq_tech, endness) {
     } else {
         adapterFasta <- ""
     }
-
+    print("this is trimoutfile")
+    print(trimmedoutfile)
     message("STEP 1b : running fastp")
+    print(infile)
     if (endness == "PE") {
         checkcondition <- !file.exists(trimmedoutfile["FileName1"]) &
             !file.exists(trimmedoutfile["FileName2"])

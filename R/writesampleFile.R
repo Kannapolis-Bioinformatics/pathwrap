@@ -4,7 +4,7 @@
 #' @param outdir :  path to result dir where the file is written
 #' @param filenames : list of filenames extracted from phenofile
 #' @return statement about the function run
-writesampleFile <- function(outdir, filenames, SampleName, trim.dir){
+writesampleFile <- function(outdir, filenames, SampleName, trim.dir, endness){
     sampleFile <- file.path(outdir, "sampleFile.txt")
     rawfileName <- as.data.frame(vapply(
         filenames, function(x) basename(x),
@@ -12,7 +12,7 @@ writesampleFile <- function(outdir, filenames, SampleName, trim.dir){
     ))
     fastp_files_name <- as.data.frame(vapply(
         as.list(rawfileName),
-        function(x) str_replace_all(x, ".fastq.gz$", "_trimmed.fastq.gz"),
+        function(x) str_replace_all(x, ".fastq.gz$", "_R1.fastq.gz"),
         character(dim(filenames)[1])
     ))
     FileName <- vapply(
@@ -38,5 +38,5 @@ writesampleFile <- function(outdir, filenames, SampleName, trim.dir){
             quote = FALSE, row.names = FALSE
         )
     }
-    return("the sampleFile is written")
+    return(sampleFile)
 }
