@@ -10,7 +10,6 @@
 #' TRUE analysis starts from first step
 #' @return list of different paths for result files
 #' @importFrom stringr str_replace_all
-#' @import BiocManager
 #' @import Rsamtools
 #' @importFrom methods is
 #'
@@ -26,7 +25,8 @@ sanity_check <- function(ref.dir, outdir, pos = 1, entity, corenum, compare,
         dir.create(outdir)
     }
     result.dir <- outdir
-    message(paste0("The results will be organized in ", result.dir))
+    message(paste0("The results will be organized in ", result.dir, 
+            collapse = "|"))
     # setwd(outdir)
 
     # check and create dir for organizing results
@@ -139,13 +139,14 @@ sanity_check <- function(ref.dir, outdir, pos = 1, entity, corenum, compare,
         # annotation pkg installation
         pkg.on <- requireNamespace(annotate_pkg,
             lib.loc = .libPaths()[1],
-            quietly = TRUE)
+            quietly = TRUE
+        )
         if (!pkg.on) {
             message(paste0("
         Intall the required package with the following command,
         > BiocManager::install('", annotate_pkg, "'
-                        ,force = TRUE, 
-                        lib.loc = .libPaths()[1]  )"))
+                        ,force = TRUE,
+                        lib.loc = .libPaths()[1]  )", collapse = "|"))
             return(invisible(NULL)) # needs reevaluation
             # pkg.on = requireNamespace(annotate_pkg,  lib.loc = .libPaths()[1])
             # if (!pkg.on)
@@ -161,15 +162,17 @@ sanity_check <- function(ref.dir, outdir, pos = 1, entity, corenum, compare,
         genomeFile <- genome_pkg
         pkg.on <- requireNamespace(genome_pkg,
             lib.loc = .libPaths()[1],
-            quietly = TRUE)
+            quietly = TRUE
+        )
         if (!pkg.on) {
-            message(paste0("
+            message(paste0(
+                "
         Intall the required package with the following command,
         >  BiocManager::install('",
                 genome_pkg, "',force = TRUE,
-                        lib.loc = .libPaths()[1] )"
+                        lib.loc = .libPaths()[1] )", collapse = "|"
             ))
-          return(invisible(NULL))
+            return(invisible(NULL))
         }
     } else {
         genomeFile <- list.files(ref.dir, ".fa$|.fna$|.fa.gz",
@@ -187,13 +190,13 @@ sanity_check <- function(ref.dir, outdir, pos = 1, entity, corenum, compare,
     }
     message(paste0(
         "this is directory lists,
-        qc.dir :", qc.dir, "\n", 
-        "trim.dir :", trim.dir, "\n", 
-        "genomeFile :", genomeFile, "\n", 
-        "geneAnnotation :", geneAnnotation, "\n", 
-        "deseq2.dir :", deseq2.dir, "\n", 
-        "edger.dir :", edger.dir, "\n", 
-        "gage.dir : ", gage.dir, "\n"
+        qc.dir :", qc.dir, "\n",
+        "trim.dir :", trim.dir, "\n",
+        "genomeFile :", genomeFile, "\n",
+        "geneAnnotation :", geneAnnotation, "\n",
+        "deseq2.dir :", deseq2.dir, "\n",
+        "edger.dir :", edger.dir, "\n",
+        "gage.dir : ", gage.dir, "\n", collapse = "|"
     ))
 
     return(c(

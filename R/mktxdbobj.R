@@ -6,9 +6,11 @@
 #' available in gtf file in ref.dir or if ref.dir is NA
 #' It makes txdb object fromt the annotaion package
 #'
-#' @param geneAnnotation : annotation file or if using package, path to sqlite file in package
+#' @param geneAnnotation : annotation file or if using package, path to sqlite
+#' file in package
 #' @param corenum : the number of cores
-#' @param genomeFile : genomeFile or when using package, genomeFile is not used, pkg name can be given
+#' @param genomeFile : genomeFile or when using package, genomeFile is not used,
+#'  pkg name can be given
 #' @param entity  : the scientific name of the organism
 #' @param outdir : directory to store output, Results is default
 #'
@@ -22,36 +24,43 @@
 #' @return txdb object that is returned
 #'
 
-make_txdbobj <- function(geneAnnotation, corenum, genomeFile, entity, outdir) {
-    options(cache_size = NULL, synchronous = NULL)
-    txdb <- try(loadDb(geneAnnotation), silent = TRUE)
-    cl2 <- makeCluster(corenum)
-    # if (class(txdb)==  "TxDb"){
-    if (is(txdb, "TxDb")) {
-        if (!grepl("chr", seqlevels(txdb)[1])) { # check if this is necessary
-            newSeqNames <- paste("Chr", seqlevels(txdb), sep = "")
-            names(newSeqNames) <- seqlevels(txdb)
-            txdb <- renameSeqlevels(txdb, newSeqNames)
-            # seqlevels(txdb)
+make_txdbobj <-
+    function(geneAnnotation,
+            corenum,
+            genomeFile,
+            entity,
+            outdir) {
+        options(cache_size = NULL, synchronous = NULL)
+        txdb <- try(loadDb(geneAnnotation), silent = TRUE)
+        cl2 <- makeCluster(corenum)
+        # if (class(txdb)==  "TxDb"){
+        if (is(txdb, "TxDb")) {
+            if (!grepl("chr", seqlevels(txdb)[1])) {
+                # check if this is necessary
+                newSeqNames <- paste("Chr", seqlevels(txdb), sep = "")
+                names(newSeqNames) <- seqlevels(txdb)
+                txdb <- renameSeqlevels(txdb, newSeqNames)
+                # seqlevels(txdb)
+            }
+            closeAllConnections()
+        } else {
+            chrLen <- Rsamtools::scanFaIndex(genomeFile)
+            chrominfo <- data.frame(
+                chrom = as.character(seqnames(chrLen)),
+                length = width(chrLen),
+                is_circular = rep(FALSE, length(chrLen))
+            )
+            txdb <-
+                makeTxDbFromGFF(
+                    file = geneAnnotation,
+                    format = "gtf",
+                    chrominfo = chrominfo,
+                    dataSource = "Ensembl",
+                    organism = entity
+                )
         }
-        closeAllConnections()
-    } else {
-        chrLen <- Rsamtools::scanFaIndex(genomeFile)
-        chrominfo <- data.frame(
-            chrom = as.character(seqnames(chrLen)),
-            length = width(chrLen),
-            is_circular = rep(FALSE, length(chrLen))
+        AnnotationDbi::saveDb(txdb,
+            file = paste0(outdir, "/", gsub(" ", "", entity), "_txdbobj")
         )
-        txdb <-suppressWarnings({ makeTxDbFromGFF(
-            file = geneAnnotation, format = "gtf",
-            chrominfo = chrominfo,
-            dataSource = "Ensembl",
-            organism = entity
-        )
-                                 })
+        return(txdb)
     }
-    AnnotationDbi::saveDb(txdb,
-        file = paste0(outdir, "/", gsub(" ", "", entity), "_txdbobj")
-    )
-    return(txdb)
-}

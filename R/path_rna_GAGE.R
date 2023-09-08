@@ -29,7 +29,7 @@ run_pathway <- function(entity, exp.fc, compare, gage.dir, cnts, grp.idx) {
 
     kegg.gs <- kegg.gsets(entity)
     run_gset_analysis <- function(gsets, work.dir, same.dir,
-            compare = compare) {
+                                compare = compare) {
         # setwd(work.dir)
         fc.kegg.p <- gage(
             exp.fc,
@@ -73,15 +73,16 @@ run_pathway <- function(entity, exp.fc, compare, gage.dir, cnts, grp.idx) {
         # visualize top 3 pathways
         # run pathview only for KEGG pathways
         if (same.dir == FALSE) {
-            message(paste0("STEP 7: visualizing the pathway", " in ", entity))
+            message(paste0("STEP 7: visualizing the pathway", " in ", entity,
+                            collapse=""))
             pv.out.list <- vapply(
                 na.omit(path.ids[seq_len(6)]),
                 function(pid) {
-                    pathview(
+                    pathview(kegg.dir = work.dir,
                         gene.data = exp.fc, pathway.id = pid,
                         species = entity, out.suffix = paste0(entity, pid)
                     )[1]
-                },   data.frame(length(na.omit(path.ids[seq_len(6)])))
+                }, data.frame(length(na.omit(path.ids[seq_len(6)])))
             )
         }
         kegg.sig <- sigGeneSet(fc.kegg.p,
