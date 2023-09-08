@@ -8,13 +8,14 @@
 #' @param sampleName : name of the sample
 #' @return no value returned
 
-run_fastp <- function(sampleName) {
+run_fastp <- function(sampleName, FileName, seq_tech, endness) {
+    print(str(FileName))
     # integer
     intformatch <- grep(sampleName, FileName[, 1], value = FALSE, fixed = TRUE)
     # trimmedoutfile$FileName1 , trimmedoutfile$Filename2
     # infile$FileName1 , infile$FileName2 #infile for SE
     trimmedoutfile <- str_remove(FileName[intformatch, 1], ".fastq.gz")
-    infile <- filenames[intformatch, ]
+    infile <- FileName[intformatch, ]
 
 
     # actual command
