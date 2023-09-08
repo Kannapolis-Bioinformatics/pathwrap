@@ -33,7 +33,7 @@ Just run the pathwrap function with as much argument as possible for compelte an
 
 #create directory to store results
 Results <- tempdir()
-phenofile <-tmpfile("hellotmpphenofile.txt")
+phenofile <-tempfile("hellotmpphenofile.txt")
 
 #create columns for phenofile, this is for SE data
 #col.names should be SampleName, FileName and Class for SE data
