@@ -53,7 +53,7 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
     message("this is genome File")
     message(genomeFile)
     geneAnnotation <- reference_paths[2]
-    if (is.null(reference_paths)) {
+    if (!is.null(reference_paths)) {
         message("Please install the reference package")
         return("Please rerun analysis with rerun = TRUE")
     }
