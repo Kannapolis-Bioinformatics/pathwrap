@@ -60,7 +60,7 @@ sanity_check <- function(ref.dir, outdir, pos = 1, entity, corenum, compare){
         > BiocManager::install('", annotate_pkg, "'
                         ,force = TRUE,
                         lib.loc = .libPaths()[1]  )"))
-            #return(invisible(NULL)) # needs reevaluation
+            return(invisible(NULL)) # needs reevaluation
         }
         geneAnnotation <- file.path(
             .libPaths()[1], annotate_pkg,
@@ -80,7 +80,7 @@ sanity_check <- function(ref.dir, outdir, pos = 1, entity, corenum, compare){
                 genome_pkg, "',force = TRUE,
                         lib.loc = .libPaths()[1] )"
             ))
-           # return(invisible(NULL))
+            return(invisible(NULL))
         }
     } else {
         genomeFile <- list.files(ref.dir, ".fa$|.fna$|.fa.gz",
