@@ -45,10 +45,12 @@ run_fastp <- function(sampleName, FileName, seq_tech, endness,
     if (endness == "PE") {
         checkcondition <- !file.exists(trimmedoutfile["FileName1"]) &
             !file.exists(trimmedoutfile["FileName2"])
-        rfastp(infile$FileName1, infile$FileName2, trimmedoutfile, adapterFasta)
+        rfastp(infile$FileName1, infile$FileName2, trimmedoutfile, 
+               adapterFasta, corenum)
     } else {
         checkcondition <- !file.exists(trimmedoutfile)
-        rfastp(infile, outputFastq = trimmedoutfile, adapterFasta)
+        rfastp(infile, outputFastq = trimmedoutfile, adapterFasta, 
+              corenum)
     }
 
     return(invisible(NULL))
