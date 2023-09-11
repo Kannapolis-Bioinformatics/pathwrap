@@ -46,11 +46,11 @@ run_fastp <- function(sampleName, FileName, seq_tech, endness,
         checkcondition <- !file.exists(trimmedoutfile["FileName1"]) &
             !file.exists(trimmedoutfile["FileName2"])
         rfastp(infile$FileName1, infile$FileName2, trimmedoutfile, 
-               adapterFasta, corenum)
+               adapterFasta, thread = corenum)
     } else {
         checkcondition <- !file.exists(trimmedoutfile)
         rfastp(infile, outputFastq = trimmedoutfile, adapterFasta, 
-              corenum)
+             thread =  corenum)
     }
 
     return(invisible(NULL))
