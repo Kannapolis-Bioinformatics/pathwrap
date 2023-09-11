@@ -49,7 +49,7 @@ Imports:
     SummarizedExperiment,
     BiocGenerics
 Depends: 
-    R (>= 4.2.0)
+    R (>= 4.3.0)
 License: UNCC + file LICENSE
 biocViews: 
     Alignment,
