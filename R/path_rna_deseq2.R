@@ -102,7 +102,9 @@ run_deseq2 <- function(cnts, grp.idx, deseq2.dir) {
       height = 15,
       res = 300
     )
-    g <- pheatmap(as.numeric(mat), scale = "row")
+    g <- pheatmap(as.numeric(mat), scale = "row", 
+                 cluster_rows=FALSE, show_rownames=FALSE,
+         cluster_cols=FALSE)
     plot(g)
     dev.off()
   }
