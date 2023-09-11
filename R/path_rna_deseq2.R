@@ -68,7 +68,7 @@ run_deseq2 <- function(cnts, grp.idx, deseq2.dir) {
     ######################################
     message("Principle Componenet Analysis using VST from DESeq2")
     a <- try({
-      vsd <- vst(dds, blind = TRUE)
+      vsd <- vst(dds, blind = TRUE, nsub =dim(df.top)[1] )
     })
     loadError <- (is(a, "try-error") | is(a, "error"))
     if (loadError == T) {
