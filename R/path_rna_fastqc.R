@@ -19,46 +19,46 @@
 #'
 
 run_qc <- function(fq.dir, qc.dir, corenum) {
-    on.exit(closeAllConnections())
-    # install fastqc if system( "which fastqc", intern = TRUE) fails
-    if (Sys.which("fastqc") == "" &
-        !file.exists(file.path(qc.dir, "/FastQC/fastqc"))) {
-        ## work here
-        message("Please install fastqc using
-                fastqcr::fastqc_install(dest.dir = qc.dir)")
-        fastqc.path <- file.path(qc.dir, "/FastQC/fastqc")
-        return(invisible(NULL))
-    } else {
-        fastqc.path <- Sys.which("fastqc")
-    }
-    message("This is the fastqc tool we will run")
-    message(fastqc.path)
-    # check use of threadnum
-    fastqcr::fastqc(fq.dir, qc.dir,
-        fastqc.path = unname(fastqc.path), threads = corenum
-    )
-    message("Complete running fastqc")
-    qc <- qc_aggregate(qc.dir)
-    message(" plotting total sequence and status of qc check in tiff files")
-
-    tiff(file.path(qc.dir, "total_seq.tiff"),
-        units = "in",
-        width = 15, height = 15, res = 300
-    )
-    g <- ggplot(qc, aes(x = sample, y = tot.seq)) +
-        geom_bar(stat = "identity", position = "dodge") +
-        theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
-    plot(g)
-    dev.off()
-    # # pdf(file.path(qc.dir,"qc_heatmap.pdf"), width=15, height=15, res=300)
-    tiff(file.path(qc.dir, "qc_heatmap.tiff"),
-        units = "in", width = 15,
-        height = 15, res = 300
-    )
-    g <- ggplot(qc, aes(x = module, y = sample, fill = status)) +
-        geom_tile() +
-        theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
-    plot(g)
-    dev.off()
+    # on.exit(closeAllConnections())
+    # # install fastqc if system( "which fastqc", intern = TRUE) fails
+    # if (Sys.which("fastqc") == "" &
+    #     !file.exists(file.path(qc.dir, "/FastQC/fastqc"))) {
+    #     ## work here
+    #     message("Please install fastqc using
+    #             fastqcr::fastqc_install(dest.dir = qc.dir)")
+    #     fastqc.path <- file.path(qc.dir, "/FastQC/fastqc")
+    #     return(invisible(NULL))
+    # } else {
+    #     fastqc.path <- Sys.which("fastqc")
+    # }
+    # message("This is the fastqc tool we will run")
+    # message(fastqc.path)
+    # # check use of threadnum
+    # fastqcr::fastqc(fq.dir, qc.dir,
+    #     fastqc.path = unname(fastqc.path), threads = corenum
+    # )
+    # message("Complete running fastqc")
+    # qc <- qc_aggregate(qc.dir)
+    # message(" plotting total sequence and status of qc check in tiff files")
+    # 
+    # tiff(file.path(qc.dir, "total_seq.tiff"),
+    #     units = "in",
+    #     width = 15, height = 15, res = 300
+    # )
+    # g <- ggplot(qc, aes(x = sample, y = tot.seq)) +
+    #     geom_bar(stat = "identity", position = "dodge") +
+    #     theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
+    # plot(g)
+    # dev.off()
+    # # # pdf(file.path(qc.dir,"qc_heatmap.pdf"), width=15, height=15, res=300)
+    # tiff(file.path(qc.dir, "qc_heatmap.tiff"),
+    #     units = "in", width = 15,
+    #     height = 15, res = 300
+    # )
+    # g <- ggplot(qc, aes(x = module, y = sample, fill = status)) +
+    #     geom_tile() +
+    #     theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
+    # plot(g)
+    # dev.off()
     return("Multiqc report done")
 }

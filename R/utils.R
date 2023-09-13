@@ -6,8 +6,6 @@
 #' @param corenum : number of cores
 #' @param compare : comparision to make for gage
 #' @param pos : environment specifier
-#' @param rerun if FALSE the previously complete step will not be rerunned, if
-#' TRUE analysis starts from first step
 #' @return list of different paths for result files
 #' @importFrom stringr str_replace_all
 #' @import Rsamtools
@@ -26,7 +24,7 @@ sanity_check <- function(ref.dir, outdir, pos = 1, entity, corenum, compare){
         # (set of genome and annotation pkg come from developers list)
         sqlite.md5 <- paste0(annotate_pkg, ".sqlite.md5")
         sqlite.SpliceSites.txt.md5 <- paste0(annotate_pkg,
-                                             ".sqlite.SpliceSites.txt.md5")
+                                            ".sqlite.SpliceSites.txt.md5")
         sqlite.SpliceSites.txt <- paste0(annotate_pkg,
             ".sqlite.SpliceSites.txt")
         if (file.exists(file.path(.libPaths()[1],
@@ -59,7 +57,8 @@ sanity_check <- function(ref.dir, outdir, pos = 1, entity, corenum, compare){
         Intall the required package with the following command,
         > BiocManager::install('", annotate_pkg, "'
                         ,force = TRUE,
-                        lib.loc = .libPaths()[1]  )"))
+                        lib.loc = .libPaths()[1]  )"
+            , collapse = ""))
             return(invisible(NULL)) # needs reevaluation
         }
         geneAnnotation <- file.path(
@@ -78,7 +77,7 @@ sanity_check <- function(ref.dir, outdir, pos = 1, entity, corenum, compare){
         Intall the required package with the following command,
         >  BiocManager::install('",
                 genome_pkg, "',force = TRUE,
-                        lib.loc = .libPaths()[1] )"
+                        lib.loc = .libPaths()[1] )",collapse = ""
             ))
             return(invisible(NULL))
         }

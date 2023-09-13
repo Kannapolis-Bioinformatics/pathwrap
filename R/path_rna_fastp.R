@@ -4,21 +4,19 @@
 #' and adapter trimming for Illumina and long read sequencing. It works for both
 #' PE and SE data
 #' @import ShortRead
-#' @import Rfastp
+#' @import Rfastp 
+#' @param FileName name of the raw files
+#' @param seq_tech long read or nanopore
+#' @param endness wheatehr the raw data is paired or single ended
+#' @param trim.dir directory to store the trimmed fasta files
+#' @param corenum number of threads 
 #' @param sampleName : name of the sample
 #' @return no value returned
 
 run_fastp <- function(sampleName, FileName, seq_tech, endness,
-                      trim.dir, corenum) {
-    print(str(FileName))
-    print(FileName)
-    # integer
-    #intformatch <- grep(sampleName, FileName, value = FALSE, fixed = TRUE)
-    # trimmedoutfile$FileName1 , trimmedoutfile$Filename2
-    # infile$FileName1 , infile$FileName2 #infile for SE
+                    trim.dir, corenum) {
     trimmedoutfile <- file.path(paste0(trim.dir, "/",
-                                     basename(str_remove(FileName, 
-                                          ".fastq.gz")[1]), collapse = "|"))
+                                    sampleName, collapse = "|"))
     infile <- FileName
 
 
@@ -38,19 +36,16 @@ run_fastp <- function(sampleName, FileName, seq_tech, endness,
     } else {
         adapterFasta <- ""
     }
-    print("this is trimoutfile")
-    print(trimmedoutfile)
     message("STEP 1b : running fastp")
-    print(infile)
     if (endness == "PE") {
         checkcondition <- !file.exists(trimmedoutfile["FileName1"]) &
             !file.exists(trimmedoutfile["FileName2"])
-        rfastp(infile$FileName1, infile$FileName2, trimmedoutfile, 
-               adapterFasta, thread = corenum)
+        rfastp(infile$FileName1, infile$FileName2, trimmedoutfile,
+            adapterFasta, thread = corenum)
     } else {
         checkcondition <- !file.exists(trimmedoutfile)
-        rfastp(infile, outputFastq = trimmedoutfile, adapterFasta, 
-             thread =  corenum)
+        rfastp(infile, outputFastq = trimmedoutfile, adapterFasta,
+            thread =  corenum)
     }
 
     return(invisible(NULL))

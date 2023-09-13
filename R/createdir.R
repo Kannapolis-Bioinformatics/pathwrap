@@ -1,16 +1,19 @@
 #' create the directories for saving the result
 #'
-#' @param name description
 #' @param entity : scientific name of the organism
 #' @param rerun : if the run is again?
 #' @param keep_tmp : keep bam files resulting from alignment or not
+#' @param pos enviromental 
+#' @param outdir where the directory and its subfolder will be created
+#' @return list of folder names
+
 createdir <- function(pos =1, outdir, entity, rerun, keep_tmp) {
     on.exit(closeAllConnections())
     aligned_bam <- NA
     if (keep_tmp == FALSE) {
         message("deleting aligned bam files, bam file index and log files")
         unlink(list.files(file.path(outdir, "aligned_bam"),
-                          pattern = ".bam$|.bai$", full.names = TRUE
+                        pattern = ".bam$|.bai$", full.names = TRUE
         ))
     }
     if (file.exists(outdir) & rerun == FALSE) {
@@ -21,8 +24,8 @@ createdir <- function(pos =1, outdir, entity, rerun, keep_tmp) {
         dir.create(outdir)
     }
     result.dir <- outdir
-    message(paste0("The results will be organized in ", result.dir))
-    # setwd(outdir)
+    message(paste0("The results will be organized in ", result.dir, 
+        collapse = "|"))
     
     # check and create dir for organizing results
     checkcretdir <- function(parentname, dirname) {
@@ -30,8 +33,8 @@ createdir <- function(pos =1, outdir, entity, rerun, keep_tmp) {
             dir.create(file.path(parentname, dirname))
         }
         assign(dirname,
-               value = file.path(parentname, dirname),
-               envir = as.environment(pos)
+            value = file.path(parentname, dirname),
+            envir = as.environment(pos)
         )} # .GlobalEnv)#environment())}
     folder_to_create <- list(
         "fastqc_results", "fastp_results", "gage_results",

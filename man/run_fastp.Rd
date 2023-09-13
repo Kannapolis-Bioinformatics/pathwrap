@@ -4,10 +4,20 @@
 \alias{run_fastp}
 \title{Runs fastp for quality and adapter trimming}
 \usage{
-run_fastp(sampleName)
+run_fastp(sampleName, FileName, seq_tech, endness, trim.dir, corenum)
 }
 \arguments{
 \item{sampleName}{: name of the sample}
+
+\item{FileName}{name of the raw files}
+
+\item{seq_tech}{long read or nanopore}
+
+\item{endness}{wheatehr the raw data is paired or single ended}
+
+\item{trim.dir}{directory to store the trimmed fasta files}
+
+\item{corenum}{number of threads}
 }
 \value{
 no value returned

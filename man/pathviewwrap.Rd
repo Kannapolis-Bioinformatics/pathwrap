@@ -16,7 +16,7 @@ pathviewwrap(
     keep_tmp = FALSE,
     rerun = FALSE,
     cacheDir = NULL,
-    aligner
+    aligner = "Rhisat2"
 )
 }
 \arguments{
@@ -80,15 +80,19 @@ phenofile <- tempfile()
 # Table col.names should be SampleName, FileName and Class
 library(stringr)
 FileName <- list.files(
-    file.path(system.file(package = "pathviewwrap"),
-    "extdata"),full.names = TRUE, pattern = "fastq.gz")
+    file.path(system.file(
+    package = "pathviewwrap"
+    ), "extdata"),
+    full.names = TRUE,
+    pattern = "fastq.gz"
+)
 
 patternmy <- c(dirname(FileName[1]), "_sub.fastq.gz")
 SampleName <- str_replace_all(
     pattern = paste0(dirname(FileName)[1], "/|_sub.fastq.gz"),
     string = list.files(
     file.path(
-        system.file(package = "pathviewwrap"), "extdata"
+    system.file(package = "pathviewwrap"), "extdata"
     ),
     full.names = TRUE, pattern = "fastq.gz"
     ), ""

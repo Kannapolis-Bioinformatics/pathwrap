@@ -18,9 +18,6 @@ sanity_check(ref.dir, outdir, pos = 1, entity, corenum, compare)
 \item{corenum}{: number of cores}
 
 \item{compare}{: comparision to make for gage}
-
-\item{rerun}{if FALSE the previously complete step will not be rerunned, if
-TRUE analysis starts from first step}
 }
 \value{
 list of different paths for result files

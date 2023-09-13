@@ -39,11 +39,11 @@
 #'
 #' @export
 pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
-                         entity = "Mus musculus",
-                         corenum = 2, compare = "unpaired",
-                         diff.tool = "DESeq2", seq_tech = "Illumina",
-                         keep_tmp = FALSE, rerun = FALSE, cacheDir = NULL,
-                         aligner) {
+                        entity = "Mus musculus",
+                        corenum = 2, compare = "unpaired",
+                        diff.tool = "DESeq2", seq_tech = "Illumina",
+                        keep_tmp = FALSE, rerun = FALSE, cacheDir = NULL,
+                        aligner = "Rhisat2") {
     on.exit(closeAllConnections())
     dirlist <- createdir(pos =1, outdir, entity, rerun, keep_tmp)
     aligned_bam <- NA
@@ -75,6 +75,7 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
     SampleName <- coldata$Sample
     filenames <- as.data.frame(coldata[, -c(1, ncol(coldata))])
     
+    
     if (dim(filenames)[2] == 1) {
         endness <- "SE"
         fq.dir <- dirname(filenames[1, 1])
@@ -93,18 +94,17 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
         }
     }
     
-    print(filenames)
     # just in case there is random component in run_fastp
     RNGkind("L'Ecuyer-CMRG")
-    
-    for (idxval in 1:length(SampleName)){
-        run_fastp(SampleName[idxval], filenames[idxval,1], seq_tech, 
-                  endness, trim.dir, corenum)
+    for (idxval in seq_len(length(SampleName))){
+        run_fastp(SampleName[idxval], filenames[idxval,], seq_tech, 
+                endness, trim.dir, corenum)
         #sampleName, FileName, seq_tech, endness, trim.dir
         #for paired
         #run_fastp(SampleName[idxval], filenames[idxval,2], seq_tech, endness)
     }
-    sampleFile <- writesampleFile(outdir, filenames,SampleName , trim.dir, endness)
+    sampleFile <- writesampleFile(outdir, filenames,
+            SampleName, trim.dir, endness)
     # make txdb from annotation
     txdbfilename <- paste0(gsub(" ", "", entity), "_txdbobj", collapse = "")
     if (!file.exists(file.path(outdir, txdbfilename))) {
@@ -150,7 +150,7 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
     }
     
     deseq_volcano_plot <- paste0(deseq2.dir, "/Volcano_deseq2.tiff", 
-                                 collapse = "")
+                                collapse = "")
     if (!file.exists(deseq_volcano_plot)) {
         message("STEP 5a ; running differential analysis using DESeq2")
         exp.fcncnts.deseq2 <- run_deseq2(cnts, grp.idx, deseq2.dir)
@@ -181,7 +181,7 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
     }
     if (!file.exists("*.txt")) {
         message("STEP 6 : running pathway analysis using GAGE")
-        message(paste0(compare, "this is from pathviewwrap"))
+        message(paste0(compare, "this is from pathviewwrap", collapse = ""))
         run_pathway(entity, exp.fc, compare, gage.dir, cnts, grp.idx)
     }
     return("The analysis is complete")

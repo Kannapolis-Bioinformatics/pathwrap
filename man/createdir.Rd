@@ -7,13 +7,18 @@
 createdir(pos = 1, outdir, entity, rerun, keep_tmp)
 }
 \arguments{
+\item{pos}{enviromental}
+
+\item{outdir}{where the directory and its subfolder will be created}
+
 \item{entity}{: scientific name of the organism}
 
 \item{rerun}{: if the run is again?}
 
 \item{keep_tmp}{: keep bam files resulting from alignment or not}
-
-\item{name}{description}
+}
+\value{
+list of folder names
 }
 \description{
 create the directories for saving the result

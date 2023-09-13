@@ -50,7 +50,7 @@ Imports:
     BiocGenerics
 Depends: 
     R (>= 4.3.0)
-License: UNCC + file LICENSE
+License: MIT + file LICENSE
 biocViews: 
     Alignment,
     Pathways,

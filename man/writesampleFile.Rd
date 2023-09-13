@@ -4,12 +4,18 @@
 \alias{writesampleFile}
 \title{Write sampleFile to run qAlign}
 \usage{
-writesampleFile(outdir, filenames, SampleName)
+writesampleFile(outdir, filenames, SampleName, trim.dir, endness)
 }
 \arguments{
 \item{outdir}{:  path to result dir where the file is written}
 
 \item{filenames}{: list of filenames extracted from phenofile}
+
+\item{SampleName}{name of the sample to match to filenames}
+
+\item{trim.dir}{directory to find trimmed reads}
+
+\item{endness}{paired or single end}
 }
 \value{
 statement about the function run
