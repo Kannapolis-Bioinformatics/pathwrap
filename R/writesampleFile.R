@@ -1,6 +1,7 @@
 #' Write sampleFile to run qAlign 
 #'
 #' This function creates the sampleFile to run qAlign
+#' @import stringr
 #' @param outdir :  path to result dir where the file is written
 #' @param SampleName name of the sample to match to filenames
 #' @param trim.dir directory to find trimmed reads
