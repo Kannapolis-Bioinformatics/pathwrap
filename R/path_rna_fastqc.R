@@ -11,7 +11,7 @@
 #' @param corenum : the number of cores used for running quality check
 #' @return message of fastqc
 #'
-#'
+#' @import stringr
 #' @import ggplot2
 #' @import fastqcr
 #' @importFrom grDevices dev.off
