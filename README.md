@@ -126,3 +126,8 @@ https://docs.google.com/document/d/1pfMI-umnS7GCW9aoAqEm0tZv9g6eVKSA/edit
 
 Thank you for your interest.
 
+Please send all queries to [Dr. Richard Allen White III](mailto:rwhit101@uncc.edu)<br />
+[Eliza Dhungel](mailto:edhungel@uncc.ed) <br /> 
+Or [open an issue]
+(https://github.com/Kannapolis-Bioinformatics/pathwrap/issues)
+
