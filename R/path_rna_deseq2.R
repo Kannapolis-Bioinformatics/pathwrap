@@ -60,12 +60,11 @@ run_deseq2 <- function(cnts, grp.idx, deseq2.dir) {
     #####################################
     sigs <- na.omit(deseq2_res)
     df <- as.data.frame(sigs)
-
+    
     df.top <- df[(df$padj < 0.05) & (abs(df$log2FoldChange) > 2), ]
-    if (dim(df.top)[1] > 19) {
+    if (dim(df.top)[1] > 200) {
         print(paste0("The dimension is", dim(df.top)[1]))
-        df.top <- na.omit(df.top[order(df.top$log2FoldChange,
-            decreasing = TRUE )[seq_len(20)], ])
+        
         ######################################
         message("Principle Componenet Analysis using VST from DESeq2")
         a <- try({
@@ -76,10 +75,6 @@ run_deseq2 <- function(cnts, grp.idx, deseq2.dir) {
             message("transformation using varianceStabilizingTransformation")
             vsd <- varianceStabilizingTransformation(dds, blind = TRUE)
         }
-        
-        rowstoselect <- match(rownames(df.top)[seq_len(20)],  rownames(assay(vsd)))
-        mat <- assay(vsd)[rowstoselect , ]
-
         message("Now we are plotting PCA")
         plot.new()
         tiff(
@@ -92,8 +87,20 @@ run_deseq2 <- function(cnts, grp.idx, deseq2.dir) {
         g <- plotPCA(vsd, intgroup = c("grp"))
         plot(g)
         dev.off()
+    }
+    
+    
+        df.top <- na.omit(df.top[order(df.top$log2FoldChange,
+                                       decreasing = TRUE )[seq_len(20)], ])
+        
+        if (dim(df.top)[1] > 19) {
+        rowstoselect <- match(rownames(df.top)[seq_len(20)], 
+                              rownames(assay(vsd)))
+        mat <- assay(vsd)[rowstoselect , ]
+        
+        
         plot.new()
-
+        
         message(
             "Also plotting heatmap of vst count of top 20 genes with
                                         LFC more than 2 and padj less than 0.05"
@@ -107,7 +114,7 @@ run_deseq2 <- function(cnts, grp.idx, deseq2.dir) {
         )
         print(summary(mat))
         g <- pheatmap(as.numeric(mat), scale = "row", 
-                    cluster_rows=FALSE, show_rownames=FALSE,cluster_cols=FALSE)
+                      cluster_rows=FALSE, show_rownames=FALSE,cluster_cols=FALSE)
         plot(g)
         dev.off()
     }
