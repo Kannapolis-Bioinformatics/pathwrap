@@ -63,6 +63,7 @@ run_deseq2 <- function(cnts, grp.idx, deseq2.dir) {
 
     df.top <- df[(df$padj < 0.05) & (abs(df$log2FoldChange) > 2), ]
     if (dim(df.top)[1] > 19) {
+        print(paste0("The dimension is", dim(df.top)[1]))
         df.top <- na.omit(df.top[order(df.top$log2FoldChange,
             decreasing = TRUE )[seq_len(20)], ])
         ######################################
@@ -76,7 +77,7 @@ run_deseq2 <- function(cnts, grp.idx, deseq2.dir) {
             vsd <- varianceStabilizingTransformation(dds, blind = TRUE)
         }
         
-        rowstoselect <- match(rownames(df.top),  rownames(assay(vsd)))
+        rowstoselect <- match(rownames(df.top)[seq_along(20)],  rownames(assay(vsd)))
         mat <- assay(vsd)[rowstoselect , ]
 
         message("Now we are plotting PCA")
@@ -104,6 +105,7 @@ run_deseq2 <- function(cnts, grp.idx, deseq2.dir) {
             height = 15,
             res = 300
         )
+        print(summary(mat))
         g <- pheatmap(as.numeric(mat), scale = "row", 
                     cluster_rows=FALSE, show_rownames=FALSE,cluster_cols=FALSE)
         plot(g)
