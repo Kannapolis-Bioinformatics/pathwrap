@@ -77,7 +77,7 @@ run_deseq2 <- function(cnts, grp.idx, deseq2.dir) {
             vsd <- varianceStabilizingTransformation(dds, blind = TRUE)
         }
         
-        rowstoselect <- match(rownames(df.top)[seq_along(20)],  rownames(assay(vsd)))
+        rowstoselect <- match(rownames(df.top)[seq_len(20)],  rownames(assay(vsd)))
         mat <- assay(vsd)[rowstoselect , ]
 
         message("Now we are plotting PCA")
