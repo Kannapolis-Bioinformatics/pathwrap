@@ -81,7 +81,7 @@ sanity_check <- function(ref.dir, outdir, entity, corenum, compare){
 
 #' Function to clean the reference directories/packages
 #' @param ref.dir : directory for reference files
-onexistcleanup <- function(ref.dir){
+onexistcleanup <- function(ref.dir, entity){
     if (is.na(ref.dir)) {
         data(anntpkglist, package = "pathviewwrap", envir = environment())
         ref_info <- anntpkglist
