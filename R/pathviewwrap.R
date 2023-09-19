@@ -213,6 +213,6 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
         run_pathway(entity, exp.fc, compare, gage.dir, cnts, grp.idx)
     }
     
-    onexistcleanup(ref.dir)
+    onexistcleanup(ref.dir, entity)
     return("The analysis is complete")
 }
