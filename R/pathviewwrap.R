@@ -189,7 +189,7 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
         names(exp.fcncnts.deseq2) <- rownames(deseq2.res.df)
     }
     
-    if (!file.exists(file.path(edger.dir, "Volcano_edgeR.tiff"))) {
+    if (!file.exists(file.path(edger.dir, "Volcano_deseq2.tiff"))) {
         message("STEP 5b ; running differential analysis using edgeR")
         exp.fcncnts.edger <- run_edgeR(cnts, grp.idx, edger.dir)
     } else {
