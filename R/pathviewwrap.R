@@ -25,7 +25,7 @@
 #'    for human and eukaryotic species
 #' @param keep_tmp : set TRUE if keeping the aligned bam files, if set FALSE,
 #'    bam files are deleted
-#' @param rerun : if FALSE the previously complete step will not be rerunned,
+#' @param startover : if TRUE, all previous analysis is deleted 
 #' if TRUE analysis starts from first step
 #' @param cacheDir : directory where temporary files created during alignment
 #' are stored
@@ -42,21 +42,28 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
                         entity = "Mus musculus",
                         corenum = 2, compare = "unpaired",
                         diff.tool = "DESeq2", seq_tech = "Illumina",
-                        keep_tmp = FALSE, rerun = FALSE, cacheDir = NULL,
+                        keep_tmp = FALSE, startover = TRUE, cacheDir = NULL,
                         aligner = "Rhisat2") {
     on.exit(closeAllConnections())
-    dirlist <- createdir(pos =1, outdir, entity, rerun, keep_tmp)
-    aligned_bam <- NA
-    reference_paths <- sanity_check(ref.dir,
-                                    pos = 1, outdir, entity, corenum, compare )
+    dirlist <- createdir(pos =1, outdir, entity, startover, keep_tmp)
+    
+    reference_paths <- sanity_check(ref.dir, outdir, entity, corenum, compare )
+    
+    if (is.null(reference_paths)) {
+        if (is.na(ref.dir)){
+            message("Please install the reference package")
+        } else{
+        message("Please make sure the file is bgzipped or ref.dir is writtable")
+        }
+    return("Please startover analysis with startover = TRUE")
+    }
+
     genomeFile <- reference_paths[1]
-    message("this is genome File")
+    message("this is genome used")
     message(genomeFile)
     geneAnnotation <- reference_paths[2]
-    if (is.null(reference_paths)) {
-        message("Please install the reference package")
-        return("Please rerun analysis with rerun = TRUE")
-    }
+    message("this is annotation used")
+    message(geneAnnotation)
     qc.dir <- dirlist[1]
     trim.dir <- dirlist[2]
     deseq2.dir <- dirlist[3]
@@ -75,7 +82,6 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
     SampleName <- coldata$Sample
     filenames <- as.data.frame(coldata[, -c(1, ncol(coldata))])
     
-    
     if (dim(filenames)[2] == 1) {
         endness <- "SE"
         fq.dir <- dirname(filenames[1, 1])
@@ -83,6 +89,7 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
         endness <- "PE"
         fq.dir <- dirname(filenames$FileName1[1])
     }
+    
     if (!file.exists(file.path(qc.dir, "qc_heatmap.tiff"))) {
         message("STEP 1 ; running fastqc")
         message("this is qc.dir")
@@ -94,18 +101,25 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
         }
     }
     
-    # just in case there is random component in run_fastp
-    RNGkind("L'Ecuyer-CMRG")
-    for (idxval in seq_len(length(SampleName))){
-        run_fastp(SampleName[idxval], filenames[idxval,], seq_tech, 
-                endness, trim.dir, corenum)
-        #sampleName, FileName, seq_tech, endness, trim.dir
-        #for paired
+    if (length(list.files(trim.dir, "html"))<length(SampleName)){
+    
+        # just in case there is random component in run_fastp
+        RNGkind("L'Ecuyer-CMRG")
+        for (idxval in seq_len(length(SampleName))){
+            run_fastp(SampleName[idxval], filenames[idxval,], seq_tech, 
+                    endness, trim.dir, corenum)
+            #sampleName, FileName, seq_tech, endness, trim.dir
+            #for paired
         #run_fastp(SampleName[idxval], filenames[idxval,2], seq_tech, endness)
+        }
     }
+    
+    
     sampleFile <- writesampleFile(outdir, filenames,
             SampleName, trim.dir, endness)
     # make txdb from annotation
+    
+    
     txdbfilename <- paste0(gsub(" ", "", entity), "_txdbobj", collapse = "")
     if (!file.exists(file.path(outdir, txdbfilename))) {
         message("STEP 2; making txdb obj")
@@ -119,6 +133,8 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
             "_txdbobj" , collapse = ""
         ))
     }
+    
+    
     if (!file.exists(file.path(aligned_bam, "alltrimmedalignedobj.RDS"))) {
         message("STEP 3 : aligning the sequence")
         aligned_proj <- run_qAlign(
@@ -130,6 +146,8 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
             aligned_bam, "alltrimmedalignedobj.RDS"
         ))
     }
+    
+    
     if (!file.exists(file.path(outdir, "combinedcount.trimmed.RDS"))) {
         message("STEP 4: counting aligned sequences")
         cnts <- run_qCount(aligned_proj, corenum, outdir, txdb, entity)
@@ -138,6 +156,7 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
             outdir, "combinedcount.trimmed.RDS"
         )))
     }
+    
     cnts <- cnts[, coldata$SampleName]
     if (all(coldata$SampleName == colnames(cnts))) { # if this then proceed
         ref <- which(coldata$Class == levels(as.factor(coldata$Class))[1])
@@ -149,9 +168,16 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
         message("make sure pheno file have only samples analysed")
     }
     
-    deseq_volcano_plot <- paste0(deseq2.dir, "/Volcano_deseq2.tiff", 
-                                collapse = "")
-    if (!file.exists(deseq_volcano_plot)) {
+    
+    if (keep_tmp == FALSE) {
+        message("deleting aligned bam files, bam file index and log files")
+        unlink(list.files(file.path(outdir, "aligned_bam"),
+                          pattern = ".bam$|.bai$", full.names = TRUE
+        ))
+    }
+    
+
+    if (!file.exists(file.path(deseq2.dir, "Volcano_edgeR.tiff")) {
         message("STEP 5a ; running differential analysis using DESeq2")
         exp.fcncnts.deseq2 <- run_deseq2(cnts, grp.idx, deseq2.dir)
     } else {
@@ -162,8 +188,8 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
         exp.fcncnts.deseq2 <- deseq2.res.df$log2FoldChange
         names(exp.fcncnts.deseq2) <- rownames(deseq2.res.df)
     }
-    edger_volcano_plot <- paste0(edger.dir, "Volcano_edgeR.tiff", collapse = "")
-    if (!file.exists(edger_volcano_plot)) {
+    
+    if (!file.exists(file.path(edger.dir, "Volcano_edgeR.tiff")) {
         message("STEP 5b ; running differential analysis using edgeR")
         exp.fcncnts.edger <- run_edgeR(cnts, grp.idx, edger.dir)
     } else {
@@ -174,15 +200,19 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
         exp.fcncnts.deseq2 <- edger.res.df$log2FC
         names(exp.fcncnts.deseq2) <- rownames(edger.res.df)
     }
+    
     if (diff.tool == "DESeq2") {
         exp.fc <- exp.fcncnts.deseq2
     } else {
         exp.fc <- exp.fcncnts.edger
     }
-    if (!file.exists("*.txt")) {
+    
+    if (!file.exists(file.path(gage.dir , "KEGG.sig.txt"))) {
         message("STEP 6 : running pathway analysis using GAGE")
         message(paste0(compare, "this is from pathviewwrap", collapse = ""))
         run_pathway(entity, exp.fc, compare, gage.dir, cnts, grp.idx)
     }
+    
+    onexistcleanup(ref.dir)
     return("The analysis is complete")
 }

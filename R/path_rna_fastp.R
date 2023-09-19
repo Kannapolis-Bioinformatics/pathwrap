@@ -38,12 +38,12 @@ run_fastp <- function(sampleName, FileName, seq_tech, endness,
     }
     message("STEP 1b : running fastp")
     if (endness == "PE") {
-        checkcondition <- !file.exists(trimmedoutfile["FileName1"]) &
-            !file.exists(trimmedoutfile["FileName2"])
+        #checkcondition <- !file.exists(trimmedoutfile["FileName1"]) &
+            #!file.exists(trimmedoutfile["FileName2"])
         rfastp(infile$FileName1, infile$FileName2, trimmedoutfile,
             adapterFasta, thread = corenum)
     } else {
-        checkcondition <- !file.exists(trimmedoutfile)
+        #checkcondition <- !file.exists(trimmedoutfile)
         rfastp(infile, outputFastq = trimmedoutfile, adapterFasta,
             thread =  corenum)
     }
