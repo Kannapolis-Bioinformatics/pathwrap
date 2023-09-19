@@ -71,6 +71,7 @@ sanity_check <- function(ref.dir, outdir, entity, corenum, compare){
                return(invisible(x = NULL ))
            }
         }
+    }
     
     return(c(genomeFile, geneAnnotation))
 }
