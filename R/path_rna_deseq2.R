@@ -10,7 +10,6 @@
 #' @param cnts :counts of gene
 #' @param grp.idx : index of reference and samples for differential analysis
 #' @param deseq2.dir : directory to store results of deseq2
-#' @importFrom graphics plot.new
 #' @import EnhancedVolcano EnhancedVolcano
 #' @importFrom DESeq2 DESeqDataSetFromMatrix
 #' @import DESeq2
@@ -40,7 +39,7 @@ run_deseq2 <- function(cnts, grp.idx, deseq2.dir) {
         row.names = TRUE,
         quote = FALSE
     )
-    plot.new()
+
     tiff(
         file.path(deseq2.dir, "Volcano_deseq2.tiff"),
         units = "in",
@@ -77,7 +76,7 @@ run_deseq2 <- function(cnts, grp.idx, deseq2.dir) {
         }
         message("Now we are plotting PCA")
         if (dim(df.top)[1] > 200) {
-        plot.new()
+      
         tiff(
             file.path(aligned_bam, "PCA_vst.tiff"),
             units = "in",
@@ -97,11 +96,7 @@ run_deseq2 <- function(cnts, grp.idx, deseq2.dir) {
         if (dim(df.top)[1] > 19) {
         rowstoselect <- match(rownames(df.top)[seq_len(20)], 
                               rownames(assay(vsd)))
-        mat <- assay(vsd)[rowstoselect , ]
-        
-        
-        plot.new()
-        
+        mat <- assay(vsd)[rowstoselect , ]        
         message(
             "Also plotting heatmap of vst count of top 20 genes with
                                         LFC more than 2 and padj less than 0.05"
