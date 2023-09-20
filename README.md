@@ -49,20 +49,13 @@ FileName <- list.files(file.path(system.file(
     package = "pathviewwrap"), "extdata"), pattern = "fastq.gz",
     full.names = TRUE)
 
+SampleName <-str_remove_all( basename(FileName), ".fastq.gz")
 #patternmy <- c(dirname( FileName[1]) , "_sub.fastq.gz")
-SampleName <- str_replace_all(
-    pattern = paste0(dirname(FileName)[1], "/|_sub.fastq.gz" ),
-    string = list.files(file.path(
-    system.file(package = "pathviewwrap"), "extdata"), 
-    full.names = TRUE,
-    pattern = "fastq.gz" ) , "" )
-
 
 Class <- c("A", "B", "A", "B")
 write.table(as.data.frame(cbind(SampleName, FileName, Class)), 
             file = phenofile, sep = "\t", row.names = FALSE, 
             col.names = TRUE, quote = FALSE)
-
 
 message("this is the phenofile ", phenofile )
 library(pathviewwrap)
