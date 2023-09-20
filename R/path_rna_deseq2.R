@@ -61,8 +61,6 @@ run_deseq2 <- function(cnts, grp.idx, deseq2.dir) {
     df <- as.data.frame(sigs)
     
     df.top <- df[(df$padj < 0.05) & (abs(df$log2FoldChange) > 2), ]
-   
-        print(paste0("The dimension is", dim(df.top)[1]))
         
         ######################################
         message("Principle Componenet Analysis using VST from DESeq2")
@@ -76,7 +74,6 @@ run_deseq2 <- function(cnts, grp.idx, deseq2.dir) {
         }
         message("Now we are plotting PCA")
         if (dim(df.top)[1] > 200) {
-      
         tiff(
             file.path(aligned_bam, "PCA_vst.tiff"),
             units = "in",
@@ -91,12 +88,12 @@ run_deseq2 <- function(cnts, grp.idx, deseq2.dir) {
     
     
         df.top <- na.omit(df.top[order(df.top$log2FoldChange,
-                                       decreasing = TRUE )[seq_len(20)], ])
+                                    decreasing = TRUE )[seq_len(20)], ])
         
         if (dim(df.top)[1] > 19) {
         rowstoselect <- match(rownames(df.top)[seq_len(20)], 
-                              rownames(assay(vsd)))
-        mat <- assay(vsd)[rowstoselect , ]        
+                            rownames(assay(vsd)))
+        mat <- assay(vsd)[rowstoselect , ]  
         message(
             "Also plotting heatmap of vst count of top 20 genes with
                                         LFC more than 2 and padj less than 0.05"
@@ -108,9 +105,8 @@ run_deseq2 <- function(cnts, grp.idx, deseq2.dir) {
             height = 15,
             res = 300
         )
-        print(summary(mat))
         g <- pheatmap(as.matrix(mat), scale = "row", 
-                      cluster_rows=FALSE, show_rownames=TRUE,cluster_cols=FALSE)
+                    cluster_rows=FALSE, show_rownames=TRUE,cluster_cols=FALSE)
         plot(g)
         dev.off()
     }

@@ -55,32 +55,32 @@ sanity_check <- function(ref.dir, outdir, entity, corenum, compare){
             return(invisible(NULL))
         }
     } else {
-        geneAnnotation <- list.files(ref.dir, ".gtf$|.gff$", 
-                                     full.names = TRUE)[1]
-        genomeFile <- list.files(ref.dir, ".fa$|.fna$|.fa.gz",
-            full.names = TRUE)[1]
-       
-        if (summary(file(genomeFile))$class == "gzfile") {
-           a <- try({
-                system(paste0("gunzip -k ", genomeFile))
-                genomeFile <- str_remove(pattern = ".gz$", genomeFile)
-            }, silent = TRUE)
-           loadError <- (is(a, "try-error") | is(a, "error"))
-           if (loadError == TRUE) {
-               message("GenomeFile should be bgzip file not gzipped")
-               return(invisible(x = NULL ))
-           }
+            geneAnnotation <- list.files(ref.dir, ".gtf$|.gff$", 
+                                        full.names = TRUE)[1]
+            genomeFile <- list.files(ref.dir, ".fa$|.fna$|.fa.gz",
+                full.names = TRUE)[1]
+            if (summary(file(genomeFile))$class == "gzfile") {
+            a <- try({
+                    system(paste0("gunzip -k ", genomeFile))
+                    genomeFile <- str_remove(pattern = ".gz$", genomeFile)
+                }, silent = TRUE)
+            loadError <- (is(a, "try-error") | is(a, "error"))
+            if (loadError == TRUE) {
+                message("GenomeFile should be bgzip file not gzipped")
+                return(invisible(x = NULL ))
+            }
         }
     }
     
     return(c(genomeFile, geneAnnotation))
 }
 
-
-
-
+ 
 #' Function to clean the reference directories/packages
-#' @param ref.dir : directory for reference files
+#' Function to clean the reference directories/packages
+#' @param entity : scientific name of the organism
+#' @param ref.dir : directory for reference filesi
+#' @return return message about clean up completion
 onexistcleanup <- function(ref.dir, entity){
     if (is.na(ref.dir)) {
         data(anntpkglist, package = "pathviewwrap", envir = environment())
@@ -91,24 +91,24 @@ onexistcleanup <- function(ref.dir, entity){
         # (set of genome and annotation pkg come from developers list)
         sqlite.md5 <- paste0(annotate_pkg, ".sqlite.md5")
         sqlite.SpliceSites.txt.md5 <- paste0(annotate_pkg,
-                                             ".sqlite.SpliceSites.txt.md5")
+                                            ".sqlite.SpliceSites.txt.md5")
         sqlite.SpliceSites.txt <- paste0(annotate_pkg,
-                                         ".sqlite.SpliceSites.txt")
+                                        ".sqlite.SpliceSites.txt")
         if (file.exists(file.path(.libPaths()[1],
-                                  annotate_pkg, "extdata", sqlite.md5
+                                annotate_pkg, "extdata", sqlite.md5
         ))) {
             unlink(file.path(.libPaths()[1],
-                             annotate_pkg, "extdata", sqlite.md5
+                            annotate_pkg, "extdata", sqlite.md5
             ))}
         if (file.exists(file.path(.libPaths()[1],
-                                  annotate_pkg, "extdata",
-                                  sqlite.SpliceSites.txt.md5
+                                annotate_pkg, "extdata",
+                                sqlite.SpliceSites.txt.md5
         ))) {
             unlink(file.path( .libPaths()[1], annotate_pkg,
-                              "extdata", sqlite.SpliceSites.txt.md5
+                            "extdata", sqlite.SpliceSites.txt.md5
             ))}
         if (file.exists(file.path(.libPaths()[1], annotate_pkg,
-                                  "extdata", sqlite.SpliceSites.txt
+                                "extdata", sqlite.SpliceSites.txt
         ))) {
             unlink(file.path(
                 .libPaths()[1], annotate_pkg,
@@ -116,4 +116,5 @@ onexistcleanup <- function(ref.dir, entity){
             ))
             }
     }
-    }
+    return ("package clean up complete.")
+}

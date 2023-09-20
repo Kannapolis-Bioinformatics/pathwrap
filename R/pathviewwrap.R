@@ -172,7 +172,7 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
     if (keep_tmp == FALSE) {
         message("deleting aligned bam files, bam file index and log files")
         unlink(list.files(file.path(outdir, "aligned_bam"),
-                          pattern = ".bam$|.bai$", full.names = TRUE
+                        pattern = ".bam$|.bai$", full.names = TRUE
         ))
     }
     
