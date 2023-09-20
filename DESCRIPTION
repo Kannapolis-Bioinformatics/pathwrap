@@ -45,7 +45,6 @@ Imports:
     stringr,
     S4Vectors,
     ComplexHeatmap,
-    graphics,
     SummarizedExperiment,
     BiocGenerics
 Depends: 

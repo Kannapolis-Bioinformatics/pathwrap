@@ -7,14 +7,14 @@
 }}
 \usage{
 run_qAlign(
-  corenum,
-  endness,
-  sampleFile,
-  genomeFile,
-  geneAnnotation,
-  ref.dir,
-  cacheDir,
-  aligner
+    corenum,
+    endness,
+    sampleFile,
+    genomeFile,
+    geneAnnotation,
+    ref.dir,
+    cacheDir,
+    aligner
 )
 }
 \arguments{

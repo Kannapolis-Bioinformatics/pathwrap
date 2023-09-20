@@ -2,13 +2,20 @@
 % Please edit documentation in R/utils.R
 \name{onexistcleanup}
 \alias{onexistcleanup}
-\title{Function to clean the reference directories/packages}
+\title{Function to clean the reference directories/packages
+Function to clean the reference directories/packages}
 \usage{
 onexistcleanup(ref.dir, entity)
 }
 \arguments{
-\item{ref.dir}{: directory for reference files}
+\item{ref.dir}{: directory for reference filesi}
+
+\item{entity}{: scientific name of the organism}
+}
+\value{
+return message about clean up completion
 }
 \description{
+Function to clean the reference directories/packages
 Function to clean the reference directories/packages
 }
