@@ -5,18 +5,18 @@
 \title{Wrapper for RNASeq data analysis from raw reads to pathway visualization}
 \usage{
 pathviewwrap(
-    ref.dir = NA,
-    phenofile = NA,
-    outdir = "results",
-    entity = "Mus musculus",
-    corenum = 2,
-    compare = "unpaired",
-    diff.tool = "DESeq2",
-    seq_tech = "Illumina",
-    keep_tmp = FALSE,
-    rerun = FALSE,
-    cacheDir = NULL,
-    aligner = "Rhisat2"
+  ref.dir = NA,
+  phenofile = NA,
+  outdir = "results",
+  entity = "Mus musculus",
+  corenum = 2,
+  compare = "unpaired",
+  diff.tool = "DESeq2",
+  seq_tech = "Illumina",
+  keep_tmp = FALSE,
+  startover = TRUE,
+  cacheDir = NULL,
+  aligner = "Rhisat2"
 )
 }
 \arguments{
@@ -44,7 +44,7 @@ paired or unpaired, as.group}
 \item{keep_tmp}{: set TRUE if keeping the aligned bam files, if set FALSE,
 bam files are deleted}
 
-\item{rerun}{: if FALSE the previously complete step will not be rerunned,
+\item{startover}{: if TRUE, all previous analysis is deleted
 if TRUE analysis starts from first step}
 
 \item{cacheDir}{: directory where temporary files created during alignment
@@ -92,7 +92,7 @@ SampleName <- str_replace_all(
     pattern = paste0(dirname(FileName)[1], "/|_sub.fastq.gz"),
     string = list.files(
     file.path(
-    system.file(package = "pathviewwrap"), "extdata"
+      system.file(package = "pathviewwrap"), "extdata"
     ),
     full.names = TRUE, pattern = "fastq.gz"
     ), ""

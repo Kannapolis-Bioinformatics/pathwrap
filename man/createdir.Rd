@@ -4,7 +4,7 @@
 \alias{createdir}
 \title{create the directories for saving the result}
 \usage{
-createdir(pos = 1, outdir, entity, rerun, keep_tmp)
+createdir(pos = 1, outdir, entity, startover, keep_tmp)
 }
 \arguments{
 \item{pos}{enviromental}
@@ -13,7 +13,7 @@ createdir(pos = 1, outdir, entity, rerun, keep_tmp)
 
 \item{entity}{: scientific name of the organism}
 
-\item{rerun}{: if the run is again?}
+\item{startover}{: if the run is again?}
 
 \item{keep_tmp}{: keep bam files resulting from alignment or not}
 }
