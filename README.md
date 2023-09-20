@@ -33,8 +33,14 @@ Just run the pathwrap function with as much argument as possible for compelte an
 
 #create directory to store results
 Results <- tempdir()
+#Make sure research is path to the location where you can see
+#the data and explore it ; like
+#>Results <- "/Users/edhungel/Research/Documents/myresults
+  
 #phenofile should be path to some file not temporary file
 phenofile <-tempfile("hellotmpphenofile.txt")
+#Make sure this is a file path readable by R, read.table like 
+#>phenofile <- "/Users/edhungel/Research/Documents/myphenofile.txt"
 
 #create columns for phenofile, this is for SE data
 #col.names should be SampleName, FileName and Class for SE data
