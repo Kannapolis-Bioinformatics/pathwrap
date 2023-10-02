@@ -15,10 +15,10 @@
 
 run_fastp <- function(sampleName, FileName, seq_tech, endness,
                     trim.dir, corenum) {
-    trimmedoutfile <- file.path(paste0(trim.dir, "/",
-                                    sampleName, collapse = "|"))
+    # trimmedoutfile <- file.path(paste0(trim.dir, "/",
+    #  sampleName, collapse = "|"))
+    trimmedoutfile <- file.path(trim.dir, sampleName, fsep = .Platform$file.sep)
     infile <- FileName
-
 
     # actual command
     if (seq_tech == "PacBio" | seq_tech == "Nanopore") { # use custom adapters
@@ -40,12 +40,13 @@ run_fastp <- function(sampleName, FileName, seq_tech, endness,
     if (endness == "PE") {
         #checkcondition <- !file.exists(trimmedoutfile["FileName1"]) &
             #!file.exists(trimmedoutfile["FileName2"])
-        rfastp(infile$FileName1, infile$FileName2, trimmedoutfile,
+        rfastp(path.expand(infile$FileName1), path.expand(infile$FileName2)
+            , path.expand(trimmedoutfile),
             adapterFasta, thread = corenum)
     } else {
         #checkcondition <- !file.exists(trimmedoutfile)
-        rfastp(infile, outputFastq = trimmedoutfile, adapterFasta,
-            thread =  corenum)
+        rfastp(path.expand(infile), outputFastq = path.expand(trimmedoutfile),
+            adapterFasta, thread =  corenum)
     }
 
     return(invisible(NULL))

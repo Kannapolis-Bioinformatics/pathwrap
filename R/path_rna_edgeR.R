@@ -28,14 +28,15 @@ run_edgeR <- function(cnts, grp.idx, edger.dir) {
     exp.fc <- edger.fc
     write.table(
         et,
-        file.path(edger.dir, "edgeR_logfoldchange.txt"),
+        file.path(edger.dir, "edgeR_logfoldchange.txt",
+                fsep = .Platform$file.sep),
         sep = "\t",
         col.names = TRUE,
         row.names = TRUE,
         quote = FALSE
     )
     tiff(
-        paste0(edger.dir, "/Volcano_edgeR.tiff"),
+        file.path(edger.dir, "Volcano_edgeR.tiff",fsep = .Platform$file.sep),
         units = "in",
         width = 15,
         height = 15,

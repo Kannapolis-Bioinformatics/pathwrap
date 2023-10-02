@@ -33,7 +33,8 @@ run_deseq2 <- function(cnts, grp.idx, deseq2.dir) {
     table(is.na(deseq2_res$padj))
     write.table(
         deseq2_res,
-        file.path(deseq2.dir, "DESEQ2_logfoldchange.txt"),
+        file.path(deseq2.dir, "DESEQ2_logfoldchange.txt",
+                fsep = .Platform$file.sep),
         sep = "\t",
         col.names = NA,
         row.names = TRUE,
@@ -41,7 +42,7 @@ run_deseq2 <- function(cnts, grp.idx, deseq2.dir) {
     )
 
     tiff(
-        file.path(deseq2.dir, "Volcano_deseq2.tiff"),
+        file.path(deseq2.dir, "Volcano_deseq2.tiff",fsep = .Platform$file.sep),
         units = "in",
         width = 15,
         height = 15,
@@ -75,7 +76,7 @@ run_deseq2 <- function(cnts, grp.idx, deseq2.dir) {
         message("Now we are plotting PCA")
         if (dim(df.top)[1] > 200) {
         tiff(
-            file.path(aligned_bam, "PCA_vst.tiff"),
+            file.path(aligned_bam, "PCA_vst.tiff",fsep = .Platform$file.sep),
             units = "in",
             width = 15,
             height = 15,
@@ -99,7 +100,8 @@ run_deseq2 <- function(cnts, grp.idx, deseq2.dir) {
                                         LFC more than 2 and padj less than 0.05"
         )
         tiff(
-            file.path(aligned_bam, "heatmap_vst.tiff"),
+            file.path(aligned_bam, "heatmap_vst.tiff",
+                    fsep = .Platform$file.sep),
             units = "in",
             width = 15,
             height = 15,

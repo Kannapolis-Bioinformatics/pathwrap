@@ -46,7 +46,7 @@ run_pathway <- function(entity, exp.fc, compare, gage.dir, cnts, grp.idx) {
         anla_type <- "KEGG"
         if (same.dir == TRUE) {
             anla_type <- "GO"
-            gage.dir <- file.path(gage.dir , "GO")
+            gage.dir <- file.path(gage.dir , "GO",fsep = .Platform$file.sep)
             sel.l <- fc.kegg.p$less[, "q.val"] < 0.1 & !is.na(
                 fc.kegg.p$less[, "q.val"]
             )
@@ -54,9 +54,7 @@ run_pathway <- function(entity, exp.fc, compare, gage.dir, cnts, grp.idx) {
             write.table(fc.kegg.p$less,
                 sep = "\t",
                 file = file.path(work.dir, paste0(
-                    "fc.",
-                    anla_type, ".p.less.txt"
-                ))
+                    "fc.", anla_type, ".p.less.txt"), fsep = .Platform$file.sep)
             )
             path.ids <- c(path.ids[seq_len(3)], path.ids.l[seq_len(3)])
         }
@@ -67,14 +65,12 @@ run_pathway <- function(entity, exp.fc, compare, gage.dir, cnts, grp.idx) {
         write.table(fc.kegg.p$greater,
             sep = "\t",
             file = file.path(work.dir, paste0(
-                "fc.", anla_type,
-                "p.greater.txt"
-            ))
+                "fc.", anla_type,"p.greater.txt"), fsep = .Platform$file.sep)
         )
         # visualize top 3 pathways
         # run pathview only for KEGG pathways
         if (same.dir == FALSE) {
-            gage.dir <- file.path(gage.dir , "KEGG")
+            gage.dir <- file.path(gage.dir , "KEGG",fsep = .Platform$file.sep)
             message(paste0("STEP 7: visualizing the pathway", " in ", entity,
                             collapse=""))
             pv.out.list <- vapply(
@@ -95,7 +91,8 @@ run_pathway <- function(entity, exp.fc, compare, gage.dir, cnts, grp.idx) {
         )
         # wont give heatmap for fold change used in gage
         write.table(kegg.sig$greater,
-            file = file.path(gage.dir, paste0(anla_type, ".sig.txt")),
+            file = file.path(gage.dir, paste0(anla_type, ".sig.txt"),
+                            fsep = .Platform$file.sep),
             sep = "\t"
         )
     }

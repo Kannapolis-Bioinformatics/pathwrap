@@ -49,6 +49,7 @@ run_qCount <- function(aligned_proj, corenum, result.dir, txdb, entity) {
         # converting to entrez # what if gene id is not ensembl and what if
         # arabidopsis thaliana id.map might be ath or else thing
     }
-    saveRDS(cnts, file.path(result.dir, "combinedcount.trimmed.RDS"))
+    saveRDS(cnts, file.path(result.dir, "combinedcount.trimmed.RDS",
+                            fsep = .Platform$file.sep))
     return(cnts)
 }

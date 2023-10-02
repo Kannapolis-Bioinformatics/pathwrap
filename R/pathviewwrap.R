@@ -42,10 +42,15 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
                         entity = "Mus musculus",
                         corenum = 2, compare = "unpaired",
                         diff.tool = "DESeq2", seq_tech = "Illumina",
-                        keep_tmp = FALSE, startover = TRUE, cacheDir = NULL,
+                        keep_tmp = FALSE, startover = FALSE, cacheDir = NULL,
                         aligner = "Rhisat2") {
     on.exit(closeAllConnections())
+
     dirlist <- createdir(pos =1, outdir, entity, startover, keep_tmp)
+    if (is.null(dirlist)){
+        message(paste0("Please make sure the outdir is empty or start",
+                        "analysis with startover= FALSE", collapse=""))
+    }
     
     reference_paths <- sanity_check(ref.dir, outdir, entity, corenum, compare )
     
@@ -90,7 +95,8 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
         fq.dir <- dirname(filenames$FileName1[1])
     }
     
-    if (!file.exists(file.path(qc.dir, "qc_heatmap.tiff"))) {
+    if (!file.exists(file.path(qc.dir, "qc_heatmap.tiff",
+                            fsep = .Platform$file.sep))) {
         message("STEP 1 ; running fastqc")
         message("this is qc.dir")
         message(qc.dir)
@@ -108,34 +114,28 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
         for (idxval in seq_len(length(SampleName))){
             run_fastp(SampleName[idxval], filenames[idxval,], seq_tech, 
                     endness, trim.dir, corenum)
-            #sampleName, FileName, seq_tech, endness, trim.dir
-            #for paired
-        #run_fastp(SampleName[idxval], filenames[idxval,2], seq_tech, endness)
         }
     }
-    
     
     sampleFile <- writesampleFile(outdir, filenames,
             SampleName, trim.dir, endness)
     # make txdb from annotation
     
-    
     txdbfilename <- paste0(gsub(" ", "", entity), "_txdbobj", collapse = "")
-    if (!file.exists(file.path(outdir, txdbfilename))) {
+    if (!file.exists(file.path(outdir, txdbfilename,
+                                fsep = .Platform$file.sep))) {
         message("STEP 2; making txdb obj")
         txdb <- make_txdbobj(
             geneAnnotation, corenum,
             genomeFile, entity, outdir
         )
     } else {
-        txdb <- AnnotationDbi::loadDb(paste0(
-            outdir, "/", gsub(" ", "", entity),
-            "_txdbobj" , collapse = ""
-        ))
+        txdb <- AnnotationDbi::loadDb(file.path(outdir, txdbfilename,
+                                                fsep = .Platform$file.sep))
     }
     
-    
-    if (!file.exists(file.path(aligned_bam, "alltrimmedalignedobj.RDS"))) {
+    if (!file.exists(file.path(aligned_bam, "alltrimmedalignedobj.RDS",
+                            fsep = .Platform$file.sep))) {
         message("STEP 3 : aligning the sequence")
         aligned_proj <- run_qAlign(
             corenum, endness, sampleFile, genomeFile,
@@ -143,17 +143,18 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
         )
     } else {
         aligned_proj <- readRDS(file.path(
-            aligned_bam, "alltrimmedalignedobj.RDS"
-        ))
+            aligned_bam, "alltrimmedalignedobj.RDS",
+            fsep = .Platform$file.sep  ))
     }
     
     
-    if (!file.exists(file.path(outdir, "combinedcount.trimmed.RDS"))) {
+    if (!file.exists(file.path(outdir, "combinedcount.trimmed.RDS",
+                            fsep = .Platform$file.sep))) {
         message("STEP 4: counting aligned sequences")
         cnts <- run_qCount(aligned_proj, corenum, outdir, txdb, entity)
     } else {
         cnts <- as.data.frame(readRDS(file.path(
-            outdir, "combinedcount.trimmed.RDS"
+            outdir, "combinedcount.trimmed.RDS", fsep = .Platform$file.sep
         )))
     }
     
@@ -171,29 +172,34 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
     
     if (keep_tmp == FALSE) {
         message("deleting aligned bam files, bam file index and log files")
-        unlink(list.files(file.path(outdir, "aligned_bam"),
-                        pattern = ".bam$|.bai$", full.names = TRUE
+        unlink(list.files(file.path(outdir, "aligned_bam", 
+        fsep = .Platform$file.sep), pattern = ".bam$|.bai$", 
+        full.names = TRUE
         ))
     }
     
-    if (!file.exists(file.path(deseq2.dir, "Volcano_deseq2.tiff"))) {
+    if (!file.exists(file.path(deseq2.dir, "Volcano_deseq2.tiff",
+                            fsep = .Platform$file.sep))) {
         message("STEP 5a ; running differential analysis using DESeq2")
         exp.fcncnts.deseq2 <- run_deseq2(cnts, grp.idx, deseq2.dir)
     } else {
         deseq2.res.df <- read.table(
-            file.path(deseq2.dir, "DESEQ2_logfoldchange.txt" ),
+            file.path(deseq2.dir, "DESEQ2_logfoldchange.txt", 
+                    fsep = .Platform$file.sep ),
             header = TRUE, sep = "\t", row.names = 1 )
         # works with gage
         exp.fcncnts.deseq2 <- deseq2.res.df$log2FoldChange
         names(exp.fcncnts.deseq2) <- rownames(deseq2.res.df)
     }
     
-    if (!file.exists(file.path(edger.dir, "Volcano_edgeR.tiff"))) {
+    if (!file.exists(file.path(edger.dir, "Volcano_edgeR.tiff",
+                            fsep = .Platform$file.sep))) {
         message("STEP 5b ; running differential analysis using edgeR")
         exp.fcncnts.edger <- run_edgeR(cnts, grp.idx, edger.dir)
     } else {
         edger.res.df <- read.table(
-            file.path( edger.dir, "edgeR_logfoldchange.txt" ),
+            file.path( edger.dir, "edgeR_logfoldchange.txt",
+                    fsep = .Platform$file.sep),
             header = TRUE, sep = "\t", row.names = 1 )
         # works with gage
         exp.fcncnts.deseq2 <- edger.res.df$logFC
@@ -206,7 +212,8 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
         exp.fc <- exp.fcncnts.edger
     }
     
-    if (!file.exists(file.path(gage.dir , "KEGG.sig.txt"))) {
+    if (!file.exists(file.path(gage.dir , "KEGG.sig.txt",
+                            fsep = .Platform$file.sep))) {
         message("STEP 6 : running pathway analysis using GAGE")
         message(paste0(compare, "this is from pathviewwrap", collapse = ""))
         run_pathway(entity, exp.fc, compare, gage.dir, cnts, grp.idx)

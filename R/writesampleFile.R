@@ -9,7 +9,8 @@
 #' @param filenames : list of filenames extracted from phenofile
 #' @return statement about the function run
 writesampleFile <- function(outdir, filenames, SampleName, trim.dir, endness){
-        sampleFile <- file.path(outdir, "sampleFile.txt")
+        sampleFile <- file.path(outdir, "sampleFile.txt", 
+                                fsep = .Platform$file.sep)
         
         if (endness == "SE") {
             FileName <- file.path(trim.dir, 
@@ -25,10 +26,11 @@ writesampleFile <- function(outdir, filenames, SampleName, trim.dir, endness){
     } else {
         FileName1 <- file.path(trim.dir, 
                             str_replace(SampleName,
-                                        "$", "_R1.fastq.gz"))
+                                        "$", "_R1.fastq.gz"), 
+                            fsep = .Platform$file.sep)
         FileName2 <- file.path(trim.dir, 
                             str_replace(SampleName,
-                            "$", "_R2.fastq.gz"))
+                            "$", "_R2.fastq.gz"), fsep = .Platform$file.sep)
         write.table(
             file = sampleFile, sep = "\t",
             as.data.frame(cbind(

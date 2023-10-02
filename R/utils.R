@@ -36,7 +36,7 @@ sanity_check <- function(ref.dir, outdir, entity, corenum, compare){
         }
         geneAnnotation <- file.path(
             .libPaths()[1], annotate_pkg,
-            "extdata", paste0(annotate_pkg, ".sqlite")
+            "extdata", paste0(annotate_pkg, ".sqlite"), fsep= .Platform$file.sep
         )
         # genome file installation
         genomeFile <- genome_pkg
@@ -75,8 +75,9 @@ sanity_check <- function(ref.dir, outdir, entity, corenum, compare){
     return(c(genomeFile, geneAnnotation))
 }
 
- 
 #' Function to clean the reference directories/packages
+
+
 #' Function to clean the reference directories/packages
 #' @param entity : scientific name of the organism
 #' @param ref.dir : directory for reference filesi
@@ -95,24 +96,24 @@ onexistcleanup <- function(ref.dir, entity){
         sqlite.SpliceSites.txt <- paste0(annotate_pkg,
                                         ".sqlite.SpliceSites.txt")
         if (file.exists(file.path(.libPaths()[1],
-                                annotate_pkg, "extdata", sqlite.md5
+            annotate_pkg, "extdata", sqlite.md5, fsep = .Platform$file.sep
         ))) {
             unlink(file.path(.libPaths()[1],
-                            annotate_pkg, "extdata", sqlite.md5
+                annotate_pkg, "extdata", sqlite.md5,fsep = .Platform$file.sep
             ))}
         if (file.exists(file.path(.libPaths()[1],
                                 annotate_pkg, "extdata",
-                                sqlite.SpliceSites.txt.md5
+                    sqlite.SpliceSites.txt.md5, fsep = .Platform$file.sep
         ))) {
             unlink(file.path( .libPaths()[1], annotate_pkg,
-                            "extdata", sqlite.SpliceSites.txt.md5
+            "extdata", sqlite.SpliceSites.txt.md5, fsep = .Platform$file.sep
             ))}
         if (file.exists(file.path(.libPaths()[1], annotate_pkg,
-                                "extdata", sqlite.SpliceSites.txt
+                "extdata", sqlite.SpliceSites.txt, fsep = .Platform$file.sep
         ))) {
             unlink(file.path(
                 .libPaths()[1], annotate_pkg,
-                "extdata", sqlite.SpliceSites.txt
+                "extdata", sqlite.SpliceSites.txt, fsep = .Platform$file.sep
             ))
             }
     }

@@ -60,7 +60,8 @@ make_txdbobj <-
                 )
         }
         AnnotationDbi::saveDb(txdb,
-            file = paste0(outdir, "/", gsub(" ", "", entity), "_txdbobj")
+            file = file.path(outdir, paste0(gsub(" ", "", entity), "_txdbobj"),
+                            fsep = .Platform$file.sep)
         )
         return(txdb)
     }

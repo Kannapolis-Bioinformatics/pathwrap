@@ -11,9 +11,18 @@ createdir <- function(pos =1, outdir, entity, startover, keep_tmp) {
     on.exit(closeAllConnections())
     aligned_bam <- NA
     
-    if (file.exists(outdir) & startover == TRUE) {
-        unlink(outdir, recursive = TRUE)
-    } 
+    ##make sure outdir is valid one
+    if (file.exists(outdir)& length(list.files(outdir))>0 & startover == TRUE) {
+        ans <- readline(paste0("Are you sure you want to delete everything in",
+                            outdir))
+        if (substr(ans, 1, 1) == "n"){
+            return(invisible(x=NULL))
+        }
+        else{
+            
+            unlink(outdir, recursive = TRUE)
+        }
+    }
         if (!file.exists(outdir)) {
             # default output file
             dir.create(outdir)
@@ -24,11 +33,14 @@ createdir <- function(pos =1, outdir, entity, startover, keep_tmp) {
         
         # check and create dir for organizing results
         checkcretdir <- function(parentname, dirname) {
-            if (!file.exists(file.path(parentname, dirname))) {
-                dir.create(file.path(parentname, dirname))
+            if (!file.exists(file.path(parentname, dirname,
+                                    fsep = .Platform$file.sep))) {
+                dir.create(file.path(parentname, dirname,
+                                    fsep = .Platform$file.sep))
             }
             assign(dirname,
-                value = file.path(parentname, dirname),
+                value = file.path(parentname, dirname,
+                                fsep = .Platform$file.sep),
                 envir = as.environment(pos)
             )} # .GlobalEnv)#environment())}
         folder_to_create <- list(
@@ -43,15 +55,15 @@ createdir <- function(pos =1, outdir, entity, startover, keep_tmp) {
             "biological_process", "molecular_function", "cellular_component" )
         lapply(folder_to_create, checkcretdir, parentname = result.dir)
         lapply(trim_dir, checkcretdir, parentname = file.path(
-            result.dir, "fastp_results"))
+            result.dir, "fastp_results",fsep = .Platform$file.sep))
         lapply(diff_dir, checkcretdir, parentname = file.path(
-            result.dir, "differential_analysis"))
+            result.dir, "differential_analysis",fsep = .Platform$file.sep))
         lapply(pathway_types, checkcretdir, parentname = file.path(
-            result.dir, "gage_results"))
+            result.dir, "gage_results",fsep = .Platform$file.sep))
         lapply(kegg_types, checkcretdir, parentname = file.path(
-            result.dir, "gage_results", "KEGG"))
+            result.dir, "gage_results", "KEGG",fsep = .Platform$file.sep))
         lapply(go_types, checkcretdir, parentname = file.path(
-            result.dir, "gage_results", "GO"))
+            result.dir, "gage_results", "GO",fsep = .Platform$file.sep))
         # just to make sure rest of codes are same
         qc.dir <- fastqc_results
         diff.dir <- differential_analysis

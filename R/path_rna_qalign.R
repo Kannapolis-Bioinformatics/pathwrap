@@ -88,7 +88,8 @@ run_qAlign <- function(corenum, endness, sampleFile, genomeFile, geneAnnotation,
         )
         message("done")
     }
-    saveRDS(aligned_proj, file.path(aligned_bam, "alltrimmedalignedobj.RDS"))
+    saveRDS(aligned_proj, file.path(aligned_bam, "alltrimmedalignedobj.RDS",
+                                    fsep = .Platform$file.sep))
     stopCluster(cl2)
     # Plot the alignment mapping statistics
     aligned_stat_my <- alignmentStats(aligned_proj)
@@ -99,7 +100,7 @@ run_qAlign <- function(corenum, endness, sampleFile, genomeFile, geneAnnotation,
     genomeofsamples <- c(rep(rownames(aligned_stat_my), 2))
     value <- c(aligned_stat_my[, 2], aligned_stat_my[, 3])
     data <- data.frame(genomeofsamples, typesofdata, value)
-    tiff(file.path(aligned_bam, "mapping_stats.tiff"),
+    tiff(file.path(aligned_bam, "mapping_stats.tiff",fsep = .Platform$file.sep),
         units = "in", width = 15, height = 15, res = 300
     )
     g <- ggplot(data, aes(

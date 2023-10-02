@@ -5,18 +5,18 @@
 \title{Wrapper for RNASeq data analysis from raw reads to pathway visualization}
 \usage{
 pathviewwrap(
-    ref.dir = NA,
-    phenofile = NA,
-    outdir = "results",
-    entity = "Mus musculus",
-    corenum = 2,
-    compare = "unpaired",
-    diff.tool = "DESeq2",
-    seq_tech = "Illumina",
-    keep_tmp = FALSE,
-    startover = TRUE,
-    cacheDir = NULL,
-    aligner = "Rhisat2"
+  ref.dir = NA,
+  phenofile = NA,
+  outdir = "results",
+  entity = "Mus musculus",
+  corenum = 2,
+  compare = "unpaired",
+  diff.tool = "DESeq2",
+  seq_tech = "Illumina",
+  keep_tmp = FALSE,
+  startover = FALSE,
+  cacheDir = NULL,
+  aligner = "Rhisat2"
 )
 }
 \arguments{
@@ -92,7 +92,7 @@ SampleName <- str_replace_all(
     pattern = paste0(dirname(FileName)[1], "/|_sub.fastq.gz"),
     string = list.files(
     file.path(
-        system.file(package = "pathviewwrap"), "extdata"
+      system.file(package = "pathviewwrap"), "extdata"
     ),
     full.names = TRUE, pattern = "fastq.gz"
     ), ""
