@@ -2,7 +2,7 @@
 
 ## Overview
 
-Pathwrap is a RNASeq analysis tool that provides a wrapper for the processing of RNAseq datasets from quality control of raw reads to the visualization of enriched pathwys obtained from processing the datasets. This tool runs all the essential steps of RNAseq processing from quality control, filtering out low quality reads, trimming adapters, sequence alignemnt, alignment count, differential analysis, enrichemnt analysis and pathway visualization. It is the first tool that combines all essential steps of RNSeq analysis till pathway visualization. It has the ability to continue the analysis if it is halted at any stage and generate quality pictures and generate comprehensive analysis of the data. 
+Pathwrap is an analysis tool for the processing of RNAseq datasets from raw data to data visualizations. Pathwrap is built on pathway enrichment tool GAGE (Generally Applicable Gene-set Enrichment for Pathway Analysis) and pathway visualization using pathview.  Features include all the essential steps of RNAseq processing including read quality control (e.g., trimming and filtering), read mapping,  read summarization/quantification, statistical differential abundance analysis (DESeq2 and edgeR), pathway enrichment (GAGE using KEGG KO), and pathway visualization (pathview). Pathwrap provides a start to finish automatic pipeline within the R framework for comprehensive analysis of RNAseq data.  
 
 ## Installation
 In order to install pathwrap, open R (version "4.3") and write
@@ -25,7 +25,7 @@ BiocManager::install(anntpkg)
 ```
 
 ## Quick start with demo data 
-Just run the pathwrap function with as much argument as possible for compelte analysis. You will need phenofile which has information about the path in which the raw files are stored and the class or category each sample belong to.
+Just run the pathwrap function with as much argument as possible for complete analysis. You will need phenofile which has information about the path in which the raw files are stored and the class or category each sample belong to.
 
 ``` r
 # This code creates the phenofile and runs the pathviewrap
@@ -70,18 +70,18 @@ system.time({
 
 ```
 
-## Steps run by the wrapper 
-The steps run by the wrapper are as follows:
+## Steps run by the pathwrap
+The steps run are as follows:
 
 #test
 
-With one wrapper function, it runs all the steps listed below. 
+With one function, it runs all the steps listed below. 
 
 ## STEP 1 : Quality control
 
 # STEP 1a: running fastqc
 
-It runs fastqc analysis in R using fastqcr. If fastqc is not available in system to run by R, this function is capable of downloading the fastqc tools before running the quality check. The results are standard html files where the quality of each fastq files can be examined.
+It runs fastqc analysis in R using fastqcR. If fastqc is not available in system to run by R, this function is capable of downloading the fastqc tools before running the quality check. The results are standard html files where the quality of each fastq files can be examined.
 
 # STEP 1b : running fastp
 
@@ -108,7 +108,7 @@ Then the wrapper runs standard DESeq2 for differential gene expression analysis 
 
 ## STEP 5b ; running differential gene analysis using edgeR
 
-Then the wrapper runs standard edgeR for differential gene expression analysis and plots volcano plots. The function run_deseq2 takes counts and the list indicating reference and samples and the directory where the results are stored and performs the deseq2 analysis. The output is result table with columns of genes and log2FoldChange from result of deseq2 analysis and a volcanoplot.
+Then the wrapper runs standard edgeR for differential gene expression analysis and plots volcano plots. The function run_deseq2 takes counts and the list indicating reference and samples and the directory where the results are stored and performs the DESeq2 analysis. The output is result table with columns of genes and log2FoldChange from result of DESeq2 analysis and a volcanoplot.
 
 ## STEP 6 : running pathway analysis using GAGE 
 
