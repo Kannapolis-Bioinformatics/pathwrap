@@ -4,7 +4,7 @@
 #' to run by R. this function is capable of downloading the fastqc tools before
 #' running the quality check. The results of quality check is aggregated and
 #' barplot of the total sequence and heatmap of the status of the qc check is
-#' produced.
+#' produced. do not install fastqc in your results directory
 #'
 #' @param fq.dir : the directory in which raw RNAseq files are stored
 #' @param qc.dir : the directory in which results of quality check are stored
@@ -21,25 +21,28 @@ run_qc <- function(fq.dir, qc.dir, corenum) {
     on.exit(closeAllConnections())
     # install fastqc if system( "which fastqc", intern = TRUE) fails
     if (Sys.which("fastqc") == "" & 
-        !file.exists(file.path(qc.dir, "FastQC", "fastqc",
+        !file.exists(file.path("~/bin", "FastQC", "fastqc",
                             fsep = .Platform$file.sep ))) {
         ## work here
-        message("Please install fastqc using
-                fastqcr::fastqc_install(dest.dir = qc.dir)")
+        message("Please install fastqc using", "\n", 
+                "fastqcr::fastqc_install( )" , "\n", 
+                "Make sure it can be executed by R" )
         return(invisible(NULL))
-    } else if (file.exists(file.path(qc.dir, "FastQC", "fastqc",
+    } else if (file.exists(file.path("~/bin", "FastQC", "fastqc",
                                     fsep = .Platform$file.sep))){
-        fastqc.path <- file.path(qc.dir, "FastQC", "fastqc", 
-                                fsep = .Platform$file.sep)
+        fastqc.path <- "~/bin/FastQC/fastqc"
     } else {
         fastqc.path <- Sys.which("fastqc")
     }
+
     message("This is the fastqc tool we will run")
     message(fastqc.path)
     # check use of threadnum
     fastqcr::fastqc(fq.dir, qc.dir,
         fastqc.path = unname(fastqc.path), threads = corenum )
     message("Complete running fastqc")
+    print(qc.dir)
+    print("This is the source of error")
     qc <- qc_aggregate(qc.dir)
     message(" plotting total sequence and status of qc check in tiff files")
 
