@@ -48,8 +48,8 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
 
     dirlist <- createdir(pos =1, outdir, entity, startover, keep_tmp)
     if (is.null(dirlist)){
-        message(paste0("Please make sure the outdir is empty or start",
-                        "analysis with startover= FALSE", collapse=""))
+      return(paste0("Please make sure the outdir is empty or start ",
+                        "analysis with startover= FALSE", collapse="")) 
     }
     
     reference_paths <- sanity_check(ref.dir, outdir, entity, corenum, compare )
