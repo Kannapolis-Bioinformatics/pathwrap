@@ -31,6 +31,7 @@ run_gage <- function(gsets, work.dir, same.dir, fc_matrix,
                 fc.kegg.p$greater[, "q.val"])
         path.ids <- rownames(fc.kegg.p$greater)[sel]
         anla_type <- "KEGG"
+        gage.dir <- dirname(dirname(work.dir))
         if (same.dir == TRUE) {
                 anla_type <- "GO"
                 gage.dir <- file.path(gage.dir , "GO",fsep = .Platform$file.sep)
