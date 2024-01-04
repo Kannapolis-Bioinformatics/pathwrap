@@ -76,7 +76,6 @@ run_qAlign <- function(corenum, endness, sampleFile, genomeFile, geneAnnotation,
                                     fsep = .Platform$file.sep))
     stopCluster(cl2)
     plotalignmentstats(aligned_proj,aligned_bam)
-    stopCluster(cl2)
     return(aligned_proj)
 }
 
