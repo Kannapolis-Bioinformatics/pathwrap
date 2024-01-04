@@ -7,139 +7,66 @@
 #' molecular function analysis for GO terms are done separately.
 #'
 #' KEGG disease, KEGG signalling and metabolism pathways are analysed separately
-#' Top enriched pathways with  "q.val" < 0.1 are visualized using pathview.
+#' Top enriched pathways with    "q.val" < 0.1 are visualized using pathview.
 #'
-#' @param entity : scientific name of the species
-#' @param exp.fc : log fold expression values
-#' @param compare : how the comparison is done for GAGE, see gage for details
-#' @param gage.dir : directory in which GAGE will be run
-#' @param cnts : counts of genes to use in pathview
-#' @param grp.idx : index of the reference and sample for differential analysis
-#'
-#' @import stats
+#' @param gsets : gene sets to analyse
+#' @param work.dir : directory where results will be stored
+#' @param same.dir : if the direction is same for GAGE analysis, GAGE parameter
+#' @param compare : GAGE parameter
+#' @param    fc_matrix fold change values
+#' @param entity organism of study, scientific name
+#' @import gage
 #' @import utils
 #' @import gage
 #' @import pathview
 #' @return nothing returned
 #'
-
-run_pathway <- function(entity, exp.fc, compare, gage.dir, cnts, grp.idx) {
-    ref <- which(grp.idx == "reference")
-    samp <- which(grp.idx == "sample")
-
-    kegg.gs <- kegg.gsets(entity)
-    run_gset_analysis <- function(gsets, work.dir, same.dir,
-                                compare = compare) {
-        # setwd(work.dir)
-        fc.kegg.p <- gage(
-            exp.fc,
-            gsets = gsets,
-            ref = NULL,
-            samp = NULL,
-            same.dir = same.dir,
-            compare = compare
-        )
+run_gage <- function(gsets, work.dir, same.dir, fc_matrix,
+        compare = compare, entity) {
+        exp.fc<- fc_matrix
+        #set workdir
+        fc.kegg.p <- gage( exp.fc, gsets = gsets, ref = NULL,samp = NULL,
+                                        same.dir = same.dir, compare = compare)
         sel <- fc.kegg.p$greater[, "q.val"] < 0.1 & !is.na(
-            fc.kegg.p$greater[, "q.val"]
-        )
+                fc.kegg.p$greater[, "q.val"])
         path.ids <- rownames(fc.kegg.p$greater)[sel]
         anla_type <- "KEGG"
         if (same.dir == TRUE) {
-            anla_type <- "GO"
-            gage.dir <- file.path(gage.dir , "GO",fsep = .Platform$file.sep)
-            sel.l <- fc.kegg.p$less[, "q.val"] < 0.1 & !is.na(
-                fc.kegg.p$less[, "q.val"]
-            )
-            path.ids.l <- rownames(fc.kegg.p$less)[sel.l]
-            write.table(fc.kegg.p$less,
-                sep = "\t",
-                file = file.path(work.dir, paste0(
-                    "fc.", anla_type, ".p.less.txt"), fsep = .Platform$file.sep)
-            )
-            path.ids <- c(path.ids[seq_len(3)], path.ids.l[seq_len(3)])
+                anla_type <- "GO"
+                gage.dir <- file.path(gage.dir , "GO",fsep = .Platform$file.sep)
+                sel.l <- fc.kegg.p$less[, "q.val"] < 0.1 & !is.na(
+                        fc.kegg.p$less[, "q.val"]
+                )
+                path.ids.l <- rownames(fc.kegg.p$less)[sel.l]
+                write.table(fc.kegg.p$less,
+                                        sep = "\t",
+                                        file = file.path(work.dir, paste0(
+        "fc.", anla_type, ".p.less.txt"), fsep = .Platform$file.sep))
+                path.ids <- c(path.ids[seq_len(3)], path.ids.l[seq_len(3)])
         }
-
         path.ids <- substr(path.ids, 1, 8)
-        # path.ids <- gsub("[^0-9.-]", "", sapply(stringr::str_split(path.ids,
-        # " ", 2),"[[",1))
         write.table(fc.kegg.p$greater,
-            sep = "\t",
-            file = file.path(work.dir, paste0(
-                "fc.", anla_type,"p.greater.txt"), fsep = .Platform$file.sep)
-        )
+                                sep = "\t",
+                                file = file.path(work.dir, paste0(
+        "fc.", anla_type,"p.greater.txt"), fsep = .Platform$file.sep))
         # visualize top 3 pathways
         # run pathview only for KEGG pathways
         if (same.dir == FALSE) {
             gage.dir <- file.path(gage.dir , "KEGG",fsep = .Platform$file.sep)
             message(paste0("STEP 7: visualizing the pathway", " in ", entity,
-                            collapse=""))
-            pv.out.list <- vapply(
-                na.omit(path.ids[seq_len(6)]),
-                function(pid) {
-                    pathview(kegg.dir = work.dir,
-                        gene.data = exp.fc, pathway.id = pid,
-                        species = entity, out.suffix = paste0(entity, pid)
-                    )[1]
-                }, data.frame(length(na.omit(path.ids[seq_len(6)])))
-            )
-        }
+            collapse=""))
+                pv.out.list <- vapply(
+                        na.omit(path.ids[seq_len(6)]),
+                        function(pid) {
+                                pathview(kegg.dir = work.dir,gene.data = exp.fc,
+                                pathway.id = pid, species = entity, 
+                                out.suffix = paste0(entity, pid))[1]
+                        }, data.frame(length(na.omit(path.ids[seq_len(6)]))))}
         kegg.sig <- sigGeneSet(fc.kegg.p,
-            outname = paste0(
-                entity, anla_type, ".sig",
-                basename(work.dir)
-            ), pdf.size = c(17, 17), heatmap = FALSE
-        )
+        outname = paste0(entity, anla_type, ".sig", basename(work.dir)
+            ), pdf.size = c(17, 17), heatmap = FALSE)
         # wont give heatmap for fold change used in gage
         write.table(kegg.sig$greater,
             file = file.path(gage.dir, paste0(anla_type, ".sig.txt"),
-                            fsep = .Platform$file.sep),
-            sep = "\t"
-        )
-    }
-    signmetinkegg <- kegg.gs$kg.sets[kegg.gs$sigmet.idx]
-    diseaseinkegg <- kegg.gs$kg.sets[kegg.gs$dise.idx]
-    siginkegg <- kegg.gs$kg.sets[kegg.gs$sig.idx]
-    metainkegg <- kegg.gs$kg.sets[kegg.gs$met.idx]
-
-    # TO DO try using lapply for all function call of kegg pathways
-    run_gset_analysis(signmetinkegg, sig_n_met,
-        same.dir = FALSE,
-        compare = compare
-    )
-    run_gset_analysis(diseaseinkegg, disease,
-        same.dir = FALSE,
-        compare = compare
-    )
-    run_gset_analysis(siginkegg, signalling,
-        same.dir = FALSE,
-        compare = compare
-    )
-    run_gset_analysis(metainkegg, metabolism,
-        same.dir = FALSE,
-        compare = compare
-    )
-    ###########################################################################
-
-    keggcode_sel <- unname(korg[which(korg[, 4] == entity), 3])
-    data(bods, package = "gage", envir = environment())
-    common_name_species <- bods[, 2][which(bods[, 3] == keggcode_sel)]
-
-    go.gs <- go.gsets(common_name_species)
-    go.bp <- go.gs$go.sets[go.gs$go.subs$BP]
-    go.mf <- go.gs$go.sets[go.gs$go.subs$MF]
-    go.cc <- go.gs$go.sets[go.gs$go.subs$CC]
-
-    run_gset_analysis(go.bp, biological_process,
-        same.dir = TRUE,
-        compare = compare
-    )
-    run_gset_analysis(go.mf, molecular_function,
-        same.dir = TRUE,
-        compare = compare
-    )
-    run_gset_analysis(go.cc, cellular_component,
-        same.dir = TRUE,
-        compare = compare
-    )
-    return(invisible(NULL))
+            fsep = .Platform$file.sep),sep = "\t")
 }

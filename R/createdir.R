@@ -6,47 +6,45 @@
 #' @param pos enviromental 
 #' @param outdir where the directory and its subfolder will be created
 #' @return list of folder names
+#' 
+# qc.dir <- fastqc_results
+# diff.dir <- differential_analysis
+# trim.dir <- fastp_results
+# gage.dir <- gage_results
+# trim.log <- fastp_log
+# edger.dir <- edgeR
+# message(edger.dir)
+# deseq2.dir <- DESeq2
+# kegg.dir <- KEGG
+# go.dir <- GO
+#     
+
 
 createdir <- function(pos =1, outdir, entity, startover, keep_tmp) {
     on.exit(closeAllConnections())
-    aligned_bam <- NA
-    
-    ##make sure outdir is valid one
     if (file.exists(outdir)& length(list.files(outdir))>0 & startover == TRUE) {
         ans <- readline(paste0("Are you sure you want to delete everything in",
                             outdir))
         if (substr(ans, 1, 1) == "n"){
-            return(invisible(x=NULL))
-        }
-        else{
-            
-            unlink(outdir, recursive = TRUE)
-        }
-    }
+            return(invisible(x=NULL))}
+        else{  unlink(outdir, recursive = TRUE)}}
         if (!file.exists(outdir)) {
-            # default output file
-            dir.create(outdir)
-        }
+            dir.create(outdir)} # default output file
         result.dir <- outdir
         message(paste0("The results will be organized in ", result.dir, 
             collapse = "|"))
-        
         # check and create dir for organizing results
         checkcretdir <- function(parentname, dirname) {
             if (!file.exists(file.path(parentname, dirname,
                                     fsep = .Platform$file.sep))) {
                 dir.create(file.path(parentname, dirname,
-                                    fsep = .Platform$file.sep))
-            }
-            assign(dirname,
+                                    fsep = .Platform$file.sep))}
+            assign(dirname,# .GlobalEnv)#environment())
                 value = file.path(parentname, dirname,
-                                fsep = .Platform$file.sep),
-                envir = as.environment(pos)
-            )} # .GlobalEnv)#environment())}
+                    fsep = .Platform$file.sep),envir = as.environment(pos))} 
         folder_to_create <- list(
             "fastqc_results", "fastp_results", "gage_results",
-            "differential_analysis", "aligned_bam"
-        )
+            "differential_analysis", "aligned_bam")
         trim_dir <- list("fastp_log", "unpaired")
         diff_dir <- list("DESeq2", "edgeR")
         pathway_types <- list("KEGG", "GO")
@@ -65,20 +63,7 @@ createdir <- function(pos =1, outdir, entity, startover, keep_tmp) {
         lapply(go_types, checkcretdir, parentname = file.path(
             result.dir, "gage_results", "GO",fsep = .Platform$file.sep))
         # just to make sure rest of codes are same
-        qc.dir <- fastqc_results
-        diff.dir <- differential_analysis
-        trim.dir <- fastp_results
-        gage.dir <- gage_results
-        trim.log <- fastp_log
-        edger.dir <- edgeR
-        message(edger.dir)
-        deseq2.dir <- DESeq2
-        kegg.dir <- KEGG
-        go.dir <- GO
-    
-    return(c(
-        qc.dir, trim.dir, deseq2.dir,
-        edger.dir, gage.dir
-    ))
+    #return(c(qc.dir, trim.dir, deseq2.dir,edger.dir, gage.dir))
+        return(c(fastqc_results, fastp_results, DESeq2,edgeR, gage_results ))
 }
-    
+

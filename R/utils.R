@@ -21,40 +21,30 @@ sanity_check <- function(ref.dir, outdir, entity, corenum, compare){
     annotate_pkg <- ref_info$annotation[species_no]
     genome_pkg <- ref_info$genome[species_no]
         # annotation pkg installation
-        pkg.on <- requireNamespace(annotate_pkg,
-            lib.loc = .libPaths()[1],
-            quietly = TRUE
-        )
+        pkg.on <- requireNamespace(annotate_pkg,lib.loc = .libPaths()[1],
+            quietly = TRUE)
         if (!pkg.on) {
             message(paste0("
         Intall the required package with the following command,
         > BiocManager::install('", annotate_pkg, "'
                         ,force = TRUE,
-                        lib.loc = .libPaths()[1]  )"
-            , collapse = ""))
+                        lib.loc = .libPaths()[1]  )", collapse = ""))
             return(invisible(NULL)) # needs reevaluation
         }
         geneAnnotation <- file.path(
-            .libPaths()[1], annotate_pkg,
-            "extdata", paste0(annotate_pkg, ".sqlite"), fsep= .Platform$file.sep
-        )
-        # genome file installation
-        genomeFile <- genome_pkg
+            .libPaths()[1], annotate_pkg, "extdata", 
+            paste0(annotate_pkg, ".sqlite"), fsep= .Platform$file.sep)
+        genomeFile <- genome_pkg # genome file installation
         pkg.on <- requireNamespace(genome_pkg,
-            lib.loc = .libPaths()[1],
-            quietly = TRUE
-        )
+            lib.loc = .libPaths()[1], quietly = TRUE)
         if (!pkg.on) {
             message(paste0(
-                "
-        Intall the required package with the following command,
+        "Intall the required package with the following command,
         >  BiocManager::install('",
                 genome_pkg, "',force = TRUE,
-                        lib.loc = .libPaths()[1] )",collapse = ""
-            ))
-            return(invisible(NULL))
-        }
-    } else {
+                        lib.loc = .libPaths()[1] )",collapse = ""))
+            return(invisible(NULL)) }
+        } else {
             geneAnnotation <- list.files(ref.dir, ".gtf$|.gff$", 
                                         full.names = TRUE)[1]
             genomeFile <- list.files(ref.dir, ".fa$|.fna$|.fa.gz",
@@ -68,10 +58,7 @@ sanity_check <- function(ref.dir, outdir, entity, corenum, compare){
             if (loadError == TRUE) {
                 message("GenomeFile should be bgzip file not gzipped")
                 return(invisible(x = NULL ))
-            }
-        }
-    }
-    
+            }}}
     return(c(genomeFile, geneAnnotation))
 }
 

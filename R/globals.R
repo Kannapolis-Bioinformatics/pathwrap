@@ -1,8 +1,8 @@
 utils::globalVariables(c(
-    "FileName", "filenames", "endness", "trim.dir", "seq_tech",
+    "FileName", "filenames", "endness", "trim.dir", 
     "sig_n_met", "edgeR.dir", "disease", "signalling", "metabolism",
     "korg", "biological_process", "molecular_function",
-    "cellular_component", "aligned_bam"
+    "run_gage_analysis","entity",    "cellular_component", "aligned_bam"
 ))
 
 

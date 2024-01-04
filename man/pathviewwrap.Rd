@@ -5,18 +5,17 @@
 \title{Wrapper for RNASeq data analysis from raw reads to pathway visualization}
 \usage{
 pathviewwrap(
-  ref.dir = NA,
-  phenofile = NA,
-  outdir = "results",
-  entity = "Mus musculus",
-  corenum = 2,
-  compare = "unpaired",
-  diff.tool = "DESeq2",
-  seq_tech = "Illumina",
-  keep_tmp = FALSE,
-  startover = FALSE,
-  cacheDir = NULL,
-  aligner = "Rhisat2"
+    ref.dir = NA,
+    phenofile = NA,
+    outdir = "results",
+    entity = "Mus musculus",
+    corenum = 2,
+    compare = "unpaired",
+    diff.tool = "DESeq2",
+    keep_tmp = FALSE,
+    startover = FALSE,
+    cacheDir = NULL,
+    aligner = "Rhisat2"
 )
 }
 \arguments{
@@ -38,8 +37,6 @@ paired or unpaired, as.group}
 
 \item{diff.tool}{: what differential tool to to use,
 “DESEQ2” or “edgeR” available}
-
-\item{seq_tech}{: Illumina, pacbio or nanopore}
 
 \item{keep_tmp}{: set TRUE if keeping the aligned bam files, if set FALSE,
 bam files are deleted}
@@ -70,7 +67,7 @@ analysis of the data.
 
 # install pathwrap from github or bioconductor and load library
 # BiocManager::install("Kannapolis-Bioinformatics/pathwrap",
-# force  = TRUE)
+# force    = TRUE)
 library(pathviewwrap)
 # create directory to store results
 Results <- tempdir()
@@ -80,39 +77,39 @@ phenofile <- tempfile()
 # Table col.names should be SampleName, FileName and Class
 library(stringr)
 FileName <- list.files(
-    file.path(system.file(
-    package = "pathviewwrap"
-    ), "extdata"),
-    full.names = TRUE,
-    pattern = "fastq.gz"
+        file.path(system.file(
+        package = "pathviewwrap"
+        ), "extdata"),
+        full.names = TRUE,
+        pattern = "fastq.gz"
 )
 
 patternmy <- c(dirname(FileName[1]), "_sub.fastq.gz")
 SampleName <- str_replace_all(
-    pattern = paste0(dirname(FileName)[1], "/|_sub.fastq.gz"),
-    string = list.files(
-    file.path(
-      system.file(package = "pathviewwrap"), "extdata"
-    ),
-    full.names = TRUE, pattern = "fastq.gz"
-    ), ""
+        pattern = paste0(dirname(FileName)[1], "/|_sub.fastq.gz"),
+        string = list.files(
+        file.path(
+            system.file(package = "pathviewwrap"), "extdata"
+        ),
+        full.names = TRUE, pattern = "fastq.gz"
+        ), ""
 )
 
 
 Class <- c("A", "B", "A", "B")
 write.table(as.data.frame(cbind(SampleName, FileName, Class)),
-    file = phenofile, sep = "\t", row.names = FALSE,
-    col.names = TRUE, quote = FALSE
+        file = phenofile, sep = "\t", row.names = FALSE,
+        col.names = TRUE, quote = FALSE
 )
 
 
 message("this is the phenofile ", phenofile)
 system.time({
-    pathviewwrap(
-    ref.dir = NA, phenofile = phenofile,
-    outdir = Results, entity = "Mus musculus", corenum = 16,
-    compare = "as.group", seq_tech = "Illumina", keep_tmp = TRUE,
-    startover = TRUE, diff.tool = "DESeq2", aligner = "Rhisat2"
-    )
+        pathviewwrap(
+        ref.dir = NA, phenofile = phenofile,
+        outdir = Results, entity = "Mus musculus", corenum = 16,
+        compare = "as.group",    keep_tmp = TRUE,
+        startover = TRUE, diff.tool = "DESeq2", aligner = "Rhisat2"
+        )
 })
 }

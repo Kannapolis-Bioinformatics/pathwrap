@@ -4,14 +4,12 @@
 \alias{run_fastp}
 \title{Runs fastp for quality and adapter trimming}
 \usage{
-run_fastp(sampleName, FileName, seq_tech, endness, trim.dir, corenum)
+run_fastp(sampleName, FileName, endness, trim.dir, corenum)
 }
 \arguments{
 \item{sampleName}{: name of the sample}
 
 \item{FileName}{name of the raw files}
-
-\item{seq_tech}{long read or nanopore}
 
 \item{endness}{wheatehr the raw data is paired or single ended}
 

@@ -41,8 +41,6 @@ run_qc <- function(fq.dir, qc.dir, corenum) {
     fastqcr::fastqc(fq.dir, qc.dir,
         fastqc.path = unname(fastqc.path), threads = corenum )
     message("Complete running fastqc")
-    print(qc.dir)
-    print("This is the source of error")
     qc <- qc_aggregate(qc.dir)
     message(" plotting total sequence and status of qc check in tiff files")
 

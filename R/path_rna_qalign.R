@@ -39,29 +39,20 @@ run_qAlign <- function(corenum, endness, sampleFile, genomeFile, geneAnnotation,
             sampleFiletmp <- read.table(sampleFile, "\t", header = TRUE)[1, ]
             sampleFiletmp_name <- paste0(gsub(
                 "sampleFile.txt",
-                "sampleFiletmp.txt", sampleFile
-            ))
+                "sampleFiletmp.txt", sampleFile))
             write.table(sampleFiletmp,
                 sep = "\t", col.names = TRUE,
-                row.names = FALSE, file = sampleFiletmp_name
-            )
+                row.names = FALSE, file = sampleFiletmp_name)
             cl2 <- makeCluster(corenum)
-            if (endness == "SE") {
-                aligned_proj <- qAlign(sampleFiletmp_name,
-                    paired = "no", clObj = cl2, alignmentsDir = aligned_bam,
-                    genome = genomeFile, geneAnnotation = geneAnnotation,
-                    splicedAlignment = TRUE, aligner = aligner,
-                    cacheDir = cacheDir
-                )
-            } else {
-                aligned_proj <- qAlign(sampleFiletmp_name,
-                    paired = "fr", clObj = cl2, alignmentsDir = aligned_bam,
-                    genome = genomeFile, geneAnnotation = geneAnnotation,
-                    splicedAlignment = TRUE, aligner = aligner,
-                    cacheDir = cacheDir
-                )
-            } # this will form the reference index
-
+            if (endness == "PE") {
+                pairedinfo <- "fr"
+            } else{ 
+                pairedinfo <- "no" }
+            aligned_proj <- qAlign(sampleFiletmp_name,
+            paired = pairedinfo, clObj = cl2,alignmentsDir = aligned_bam, 
+            genome = genomeFile, geneAnnotation = geneAnnotation,
+            splicedAlignment = TRUE,aligner = aligner, cacheDir = cacheDir) 
+            # this will form the reference index
             # the program check for aligned bam before running so we dont really
             # need to remove this sample from our sampleFile
             unlink(sampleFiletmp_name)
@@ -71,27 +62,29 @@ run_qAlign <- function(corenum, endness, sampleFile, genomeFile, geneAnnotation,
     cl2 <- makeCluster(corenum)
     message("Alignment is running")
     if (endness == "PE") {
-        aligned_proj <- qAlign(sampleFile,
-            paired = "fr", clObj = cl2,
-            alignmentsDir = aligned_bam, genome = genomeFile,
-            geneAnnotation = geneAnnotation,
-            splicedAlignment = TRUE,
-            aligner = aligner, cacheDir = cacheDir
-        )
-    } else {
-        aligned_proj <- qAlign(sampleFile,
-            paired = "no", clObj = cl2,
-            alignmentsDir = aligned_bam, genome = genomeFile,
-            geneAnnotation = geneAnnotation,
-            splicedAlignment = TRUE,
-            aligner = aligner, cacheDir = cacheDir
-        )
-        message("done")
+        pairedinfo <- "fr"
+    } else{ 
+        pairedinfo <- "no"
     }
+        aligned_proj <- qAlign(sampleFile,
+            paired = pairedinfo, clObj = cl2,
+            alignmentsDir = aligned_bam, genome = genomeFile,
+            geneAnnotation = geneAnnotation,
+            splicedAlignment = TRUE,
+            aligner = aligner, cacheDir = cacheDir)
     saveRDS(aligned_proj, file.path(aligned_bam, "alltrimmedalignedobj.RDS",
                                     fsep = .Platform$file.sep))
     stopCluster(cl2)
-    # Plot the alignment mapping statistics
+    plotalignmentstats(aligned_proj,aligned_bam)
+    stopCluster(cl2)
+    return(aligned_proj)
+}
+
+#' Plot the alignment mapping statistics
+#' @param aligned_proj object from qAlign
+#' @param aligned_bam directory for bam files
+#' @return  returns after completing plot
+plotalignmentstats <- function(aligned_proj, aligned_bam){
     aligned_stat_my <- alignmentStats(aligned_proj)
     typesofdata <- c(
         rep("mapped", dim(aligned_stat_my)[1]),
@@ -114,5 +107,5 @@ run_qAlign <- function(corenum, endness, sampleFile, genomeFile, geneAnnotation,
         theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
     plot(g)
     dev.off()
-    return(aligned_proj)
+    return(invisible(NULL)) 
 }

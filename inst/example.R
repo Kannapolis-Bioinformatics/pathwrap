@@ -43,7 +43,7 @@ system.time({
     pathviewwrap(
     ref.dir = NA, phenofile = phenofile,
     outdir = Results, entity = "Mus musculus", corenum = 16,
-    compare = "as.group", seq_tech = "Illumina", keep_tmp = TRUE,
+    compare = "as.group",  keep_tmp = TRUE,
     startover = TRUE, diff.tool = "DESeq2", aligner = "Rhisat2"
     )
 })

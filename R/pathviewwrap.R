@@ -20,7 +20,6 @@
 #' “DESEQ2” or “edgeR” available
 #' @param compare : what is sample/experimental design you have,
 #'    paired or unpaired, as.group
-#' @param seq_tech : Illumina, pacbio or nanopore
 #' @param aligner : One of "Rhisat2" or "Rbowtie2"; Rbowtie2 can be very slow
 #'    for human and eukaryotic species
 #' @param keep_tmp : set TRUE if keeping the aligned bam files, if set FALSE,
@@ -41,14 +40,14 @@
 pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
                         entity = "Mus musculus",
                         corenum = 2, compare = "unpaired",
-                        diff.tool = "DESeq2", seq_tech = "Illumina",
-                        keep_tmp = FALSE, startover = FALSE, cacheDir = NULL,
+                        diff.tool = "DESeq2",keep_tmp = FALSE, 
+                        startover = FALSE, cacheDir = NULL,
                         aligner = "Rhisat2") {
     on.exit(closeAllConnections())
 
     dirlist <- createdir(pos =1, outdir, entity, startover, keep_tmp)
     if (is.null(dirlist)){
-      return(paste0("Please make sure the outdir is empty or start ",
+        return(paste0("Please make sure the outdir is empty or start ",
                         "analysis with startover= FALSE", collapse="")) 
     }
     
@@ -60,7 +59,7 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
         } else{
         message("Please make sure the file is bgzipped or ref.dir is writtable")
         }
-    return("Please startover analysis with startover = TRUE")
+        return("Please startover analysis with startover = TRUE")
     }
 
     genomeFile <- reference_paths[1]
@@ -112,7 +111,7 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
         # just in case there is random component in run_fastp
         RNGkind("L'Ecuyer-CMRG")
         for (idxval in seq_len(length(SampleName))){
-            run_fastp(SampleName[idxval], filenames[idxval,], seq_tech, 
+            run_fastp(SampleName[idxval], filenames[idxval,], 
                     endness, trim.dir, corenum)
         }
     }
@@ -183,7 +182,7 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
         message("STEP 5a ; running differential analysis using DESeq2")
         exp.fcncnts.deseq2 <- run_deseq2(cnts, grp.idx, deseq2.dir)
     } else {
-        deseq2.res.df <- read.table(
+            deseq2.res.df <- read.table(
             file.path(deseq2.dir, "DESEQ2_logfoldchange.txt", 
                     fsep = .Platform$file.sep ),
             header = TRUE, sep = "\t", row.names = 1 )
