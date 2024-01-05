@@ -56,6 +56,7 @@ run_gage <- function(gsets, work.dir, same.dir, fc_matrix,
             gage.dir <- file.path(gage.dir , "KEGG",fsep = .Platform$file.sep)
             message(paste0("STEP 7: visualizing the pathway", " in ", entity,
             collapse=""))
+            print(paste0("This is where I want pathway pngs", work.dir))
                 pv.out.list <- vapply(
                         na.omit(path.ids[seq_len(6)]),
                         function(pid) {
