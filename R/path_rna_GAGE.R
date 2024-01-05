@@ -59,9 +59,9 @@ run_gage <- function(gsets, work.dir, same.dir, fc_matrix,
                 pv.out.list <- vapply(
                         na.omit(path.ids[seq_len(6)]),
                         function(pid) {
-                                pathview(kegg.dir = work.dir,gene.data = exp.fc,
-                                pathway.id = pid, species = entity, 
-                                out.suffix = paste0(entity, pid))[1]
+                            try({pathview(kegg.dir = work.dir,
+                         gene.data = exp.fc, pathway.id = pid,
+                         species = entity,out.suffix = paste0(entity, pid))})[1]
                         }, data.frame(length(na.omit(path.ids[seq_len(6)]))))}
         kegg.sig <- sigGeneSet(fc.kegg.p,
         outname = paste0(entity, anla_type, ".sig", basename(work.dir)
