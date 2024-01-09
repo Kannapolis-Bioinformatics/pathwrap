@@ -58,7 +58,7 @@ run_gage <- function(gsets, work.dir, same.dir,compare = compare) {
                 })
         Files <- list.files(path = getwd(),  full.names = TRUE,
                             pattern =paste0(pid, ".pathview.png$"))
-        newName <- gsub(dirname(Files), gage.dir, Files)
+        newName <- gsub(dirname(Files), work.dir, Files)
         file.rename(Files, newName)
         }
     }
