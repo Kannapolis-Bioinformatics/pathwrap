@@ -22,6 +22,7 @@
 #'
 run_gage <- function(gsets, work.dir, same.dir,compare ,
                      fc_matrix , entity) {
+    gage.dir <- dirname(dirname(work.dir))
     exp.fc <- fc_matrix
     fc.kegg.p <- gage( exp.fc, gsets = gsets, ref = NULL,samp = NULL,
                        same.dir = same.dir, compare = compare)
