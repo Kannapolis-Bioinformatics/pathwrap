@@ -21,7 +21,7 @@
 #' @return nothing returned
 #'
 run_gage <- function(gsets, work.dir, same.dir,compare = compare,
-                     fc_matrix = exp.fc, entity)) {
+                     fc_matrix = exp.fc, entity) {
     fc.kegg.p <- gage( exp.fc, gsets = gsets, ref = NULL,samp = NULL,
                        same.dir = same.dir, compare = compare)
     sel <- fc.kegg.p$greater[, "q.val"] < 0.1 & !is.na(
