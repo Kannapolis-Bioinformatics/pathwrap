@@ -53,7 +53,7 @@ run_pathway <- function(entity, exp.fc, compare, gage.dir, cnts, grp.idx) {
     go.mf <- go.gs$go.sets[go.gs$go.subs$MF]
     go.cc <- go.gs$go.sets[go.gs$go.subs$CC]
 
-    run_gage_analysis(go.bp, biological_process,fc_matrix = exp.fc,
+    run_gage(go.bp, biological_process,fc_matrix = exp.fc,
         same.dir = TRUE,compare = compare,entity)
     run_gage(go.mf, molecular_function,same.dir = TRUE,
         compare = compare,fc_matrix = exp.fc, entity)
