@@ -56,13 +56,16 @@ run_gage <- function(gsets, work.dir, same.dir,compare ,
                 message(paste0("Plotting pathview for ", pid))
                     pathview::pathview(gene.data = exp.fc,pathway.id = pid,
                         species = entity,out.suffix = "pathview")
-                }, error = function(e) {
-                    message(c("ERROR: Pathview failed on", pid))
-                })
+                
         Files <- list.files(path = getwd(),  full.names = TRUE,
                             pattern =paste0(pid, ".pathview.png$"))
-        newName <- gsub(dirname(Files), work.dir, Files)
-        file.rename(Files, newName)
+              if (length(Files)!=0){
+                  newName <- gsub(dirname(Files), work.dir, Files)
+                  file.rename(Files, newName)
+                }
+              }, error = function(e) {
+                    message(c("ERROR: Pathview failed on", pid))
+                })
         }
     }
     kegg.sig <- sigGeneSet(fc.kegg.p,
