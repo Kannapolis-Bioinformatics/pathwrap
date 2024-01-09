@@ -51,7 +51,7 @@ run_gage <- function(gsets, work.dir, same.dir,compare ,
         gage.dir <- file.path(gage.dir , "KEGG",fsep = .Platform$file.sep)
         message(paste0("STEP 7: visualizing the pathway", " in ", entity,
                        collapse=""))
-        for (pid in na.omit(path.ids.2[1:6])) {
+        for (pid in na.omit(path.ids[1:6])) {
             tryCatch({
                 message(paste0("Plotting pathview for ", pid))
                     pathview::pathview(gene.data = exp.fc,pathway.id = pid,
