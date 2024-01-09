@@ -23,8 +23,8 @@
 createdir <- function(pos =1, outdir, entity, startover, keep_tmp) {
     on.exit(closeAllConnections())
     if (file.exists(outdir)& length(list.files(outdir))>0 & startover == TRUE) {
-        ans <- readline(paste0("Are you sure you want to delete everything in",
-                            outdir))
+        ans <- readline(paste0("Are you sure you want to delete everything in ",
+                            outdir , "? "))
         if (substr(ans, 1, 1) == "n"){
             return(invisible(x=NULL))}
         else{  unlink(outdir, recursive = TRUE)}}
