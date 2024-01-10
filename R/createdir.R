@@ -19,21 +19,27 @@
 # go.dir <- GO
 #     
 
-
 createdir <- function(pos =1, outdir, entity, startover, keep_tmp) {
     on.exit(closeAllConnections())
     if (file.exists(outdir)& length(list.files(outdir))>0 & startover == TRUE) {
         ans <- readline(paste0("Are you sure you want to delete everything in ",
                             outdir , "? "))
         if (substr(ans, 1, 1) == "n"){
+            message("Make sure result directory is empty to start from beginning
+                    or use startover = FALSE with same other parameters")
             return(invisible(x=NULL))}
-        else{  unlink(outdir, recursive = TRUE)}}
+        else {  unlink(outdir, recursive = TRUE)}}
+    if (startover == FALSE){
+        ans <- readline(paste0("Is this your first run and are parameters 
+                               same as previous runs? "))
+        if (substr(ans, 1, 1) == "n"){
+            message("Make sure the parameters are same as previous run or answer
+                    yes to above question ")
+            return(invisible(x=NULL))}}
         if (!file.exists(outdir)) {
             dir.create(outdir)} # default output file
-        result.dir <- outdir
-        message(paste0("The results will be organized in ", result.dir, 
-            collapse = "|"))
-        # check and create dir for organizing results
+        message(paste0("The results will be organized in ", outdir, 
+                       collapse = "|"))
         checkcretdir <- function(parentname, dirname) {
             if (!file.exists(file.path(parentname, dirname,
                                     fsep = .Platform$file.sep))) {
@@ -51,19 +57,16 @@ createdir <- function(pos =1, outdir, entity, startover, keep_tmp) {
         kegg_types <- list("signalling", "metabolism", "disease", "sig_n_met")
         go_types <- list(
             "biological_process", "molecular_function", "cellular_component" )
-        lapply(folder_to_create, checkcretdir, parentname = result.dir)
+        lapply(folder_to_create, checkcretdir, parentname = outdir)
         lapply(trim_dir, checkcretdir, parentname = file.path(
-            result.dir, "fastp_results",fsep = .Platform$file.sep))
+            outdir, "fastp_results",fsep = .Platform$file.sep))
         lapply(diff_dir, checkcretdir, parentname = file.path(
-            result.dir, "differential_analysis",fsep = .Platform$file.sep))
+            outdir, "differential_analysis",fsep = .Platform$file.sep))
         lapply(pathway_types, checkcretdir, parentname = file.path(
-            result.dir, "gage_results",fsep = .Platform$file.sep))
+            outdir, "gage_results",fsep = .Platform$file.sep))
         lapply(kegg_types, checkcretdir, parentname = file.path(
-            result.dir, "gage_results", "KEGG",fsep = .Platform$file.sep))
+            outdir, "gage_results", "KEGG",fsep = .Platform$file.sep))
         lapply(go_types, checkcretdir, parentname = file.path(
-            result.dir, "gage_results", "GO",fsep = .Platform$file.sep))
-        # just to make sure rest of codes are same
-    #return(c(qc.dir, trim.dir, deseq2.dir,edger.dir, gage.dir))
+            outdir, "gage_results", "GO",fsep = .Platform$file.sep))
         return(c(fastqc_results, fastp_results, DESeq2,edgeR, gage_results ))
 }
-
