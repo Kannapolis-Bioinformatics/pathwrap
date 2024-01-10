@@ -4,7 +4,7 @@
 \alias{run_gage}
 \title{Run GAGE and Pathview}
 \usage{
-run_gage(gsets, work.dir, same.dir, fc_matrix, compare = compare, entity)
+run_gage(gsets, work.dir, same.dir, compare, fc_matrix, entity)
 }
 \arguments{
 \item{gsets}{: gene sets to analyse}
@@ -13,11 +13,11 @@ run_gage(gsets, work.dir, same.dir, fc_matrix, compare = compare, entity)
 
 \item{same.dir}{: if the direction is same for GAGE analysis, GAGE parameter}
 
-\item{fc_matrix}{fold change values}
-
 \item{compare}{: GAGE parameter}
 
-\item{entity}{organism of study, scientific name}
+\item{fc_matrix}{: log fold change in matrix form}
+
+\item{entity}{scientific name of organism}
 }
 \value{
 nothing returned

@@ -31,7 +31,7 @@ createdir <- function(pos =1, outdir, entity, startover, keep_tmp) {
         else {  unlink(outdir, recursive = TRUE)}}
     if (startover == FALSE){
         ans <- readline(paste0("Is this your first run and are parameters 
-                               same as previous runs? "))
+                            same as previous runs? "))
         if (substr(ans, 1, 1) == "n"){
             message("Make sure the parameters are same as previous run or answer
                     yes to above question ")
@@ -39,7 +39,7 @@ createdir <- function(pos =1, outdir, entity, startover, keep_tmp) {
         if (!file.exists(outdir)) {
             dir.create(outdir)} # default output file
         message(paste0("The results will be organized in ", outdir, 
-                       collapse = "|"))
+                    collapse = "|"))
         checkcretdir <- function(parentname, dirname) {
             if (!file.exists(file.path(parentname, dirname,
                                     fsep = .Platform$file.sep))) {
@@ -48,9 +48,8 @@ createdir <- function(pos =1, outdir, entity, startover, keep_tmp) {
             assign(dirname,# .GlobalEnv)#environment())
                 value = file.path(parentname, dirname,
                     fsep = .Platform$file.sep),envir = as.environment(pos))} 
-        folder_to_create <- list(
-            "fastqc_results", "fastp_results", "gage_results",
-            "differential_analysis", "aligned_bam")
+        folder_to_create <- list("fastqc_results", "fastp_results",
+                        "gage_results","differential_analysis", "aligned_bam")
         trim_dir <- list("fastp_log", "unpaired")
         diff_dir <- list("DESeq2", "edgeR")
         pathway_types <- list("KEGG", "GO")

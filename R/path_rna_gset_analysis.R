@@ -26,23 +26,21 @@
 run_pathway <- function(entity, exp.fc, compare, gage.dir, cnts, grp.idx) {
     ref <- which(grp.idx == "reference")
     samp <- which(grp.idx == "sample")
-
     kegg.gs <- kegg.gsets(entity)
-    
     signmetinkegg <- kegg.gs$kg.sets[kegg.gs$sigmet.idx]
     diseaseinkegg <- kegg.gs$kg.sets[kegg.gs$dise.idx]
     siginkegg <- kegg.gs$kg.sets[kegg.gs$sig.idx]
     metainkegg <- kegg.gs$kg.sets[kegg.gs$met.idx]
 
     # TO DO try using lapply for all function call of kegg pathways
-    run_gage(signmetinkegg, sig_n_met, fc_matrix = exp.fc,entity,
-                same.dir = FALSE, compare = compare)
-    run_gage(diseaseinkegg, disease,fc_matrix = exp.fc,entity,
-        same.dir = FALSE,compare = compare )
-    run_gage(siginkegg, signalling,fc_matrix = exp.fc,entity,
-        same.dir = FALSE,compare = compare   )
-    run_gage(metainkegg, metabolism,fc_matrix = exp.fc,entity,
-        same.dir = FALSE,compare = compare)
+    run_gage(signmetinkegg, sig_n_met, same.dir = FALSE,
+                compare = compare, fc_matrix = exp.fc,entity)
+    run_gage(diseaseinkegg, disease, same.dir = FALSE,
+                compare = compare, fc_matrix = exp.fc,entity )
+    run_gage(siginkegg, signalling,same.dir = FALSE,
+                compare = compare, fc_matrix = exp.fc,entity  )
+    run_gage(metainkegg, metabolism,same.dir = FALSE,
+                compare = compare,fc_matrix = exp.fc,entity)
     #GO ANALYSIS
     keggcode_sel <- unname(korg[which(korg[, 4] == entity), 3])
     data(bods, package = "gage", envir = environment())
@@ -53,8 +51,8 @@ run_pathway <- function(entity, exp.fc, compare, gage.dir, cnts, grp.idx) {
     go.mf <- go.gs$go.sets[go.gs$go.subs$MF]
     go.cc <- go.gs$go.sets[go.gs$go.subs$CC]
 
-    run_gage(go.bp, biological_process,fc_matrix = exp.fc,
-        same.dir = TRUE,compare = compare,entity)
+    run_gage(go.bp, biological_process, same.dir = TRUE,
+        compare = compare,fc_matrix = exp.fc, entity)
     run_gage(go.mf, molecular_function,same.dir = TRUE,
         compare = compare,fc_matrix = exp.fc, entity)
     run_gage(go.cc, cellular_component,same.dir = TRUE,

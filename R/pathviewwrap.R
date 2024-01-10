@@ -201,8 +201,8 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
                     fsep = .Platform$file.sep),
             header = TRUE, sep = "\t", row.names = 1 )
         # works with gage
-        exp.fcncnts.deseq2 <- edger.res.df$logFC
-        names(exp.fcncnts.deseq2) <- rownames(edger.res.df)
+        exp.fcncnts.edger <- edger.res.df$logFC
+        names(exp.fcncnts.edger) <- rownames(edger.res.df)
     }
     
     if (diff.tool == "DESeq2") {
