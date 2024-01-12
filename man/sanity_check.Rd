@@ -2,23 +2,24 @@
 % Please edit documentation in R/utils.R
 \name{sanity_check}
 \alias{sanity_check}
-\title{Title}
+\title{function to make sure things are good}
 \usage{
-sanity_check(
-  fq.dir,
-  ref.dir,
-  phenofile,
-  outdir,
-  endness,
-  entity,
-  corenum,
-  diff.tool,
-  compare
-)
+sanity_check(ref.dir, outdir, entity, corenum, compare)
 }
 \arguments{
-\item{compare}{}
+\item{ref.dir}{: directory for reference files}
+
+\item{outdir}{: directory for result}
+
+\item{entity}{: scientific name of species of interest}
+
+\item{corenum}{: number of cores}
+
+\item{compare}{: comparision to make for gage}
+}
+\value{
+list of different paths for result files
 }
 \description{
-Title
+function to make sure things are good
 }

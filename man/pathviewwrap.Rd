@@ -2,24 +2,114 @@
 % Please edit documentation in R/pathviewwrap.R
 \name{pathviewwrap}
 \alias{pathviewwrap}
-\title{Title}
+\title{Wrapper for RNASeq data analysis from raw reads to pathway visualization}
 \usage{
 pathviewwrap(
-  fq.dir = "mouse_raw",
-  ref.dir = NA,
-  phenofile = NA,
-  outdir = "results",
-  endness = "SE",
-  entity = "Mus musculus",
-  corenum = 8,
-  diff.tool = "DESEQ2",
-  compare = "unpaired",
-  seq_tech = "Illumina"
+    ref.dir = NA,
+    phenofile = NA,
+    outdir = "results",
+    entity = "Mus musculus",
+    corenum = 2,
+    compare = "unpaired",
+    diff.tool = "DESeq2",
+    keep_tmp = FALSE,
+    startover = FALSE,
+    cacheDir = NULL,
+    aligner = "Rhisat2"
 )
 }
 \arguments{
-\item{seq_tech}{}
+\item{ref.dir}{: path to reference directory which contain
+reference file(\emph{.fa) and annotation file(}.gtf), can be NULL}
+
+\item{phenofile}{: path to phenofile ; see note on test data to
+see the format of phenofile}
+
+\item{outdir}{: give the name of parent result dir , this can be existing or
+not , rest of directory will be formed by program for organization}
+
+\item{entity}{: Scientific name of species whose RNA is being analyzed}
+
+\item{corenum}{: number of cores available for analysis #defaut 2}
+
+\item{compare}{: what is sample/experimental design you have,
+paired or unpaired, as.group}
+
+\item{diff.tool}{: what differential tool to to use,
+“DESEQ2” or “edgeR” available}
+
+\item{keep_tmp}{: set TRUE if keeping the aligned bam files, if set FALSE,
+bam files are deleted}
+
+\item{startover}{: if TRUE, all previous analysis is deleted
+if TRUE analysis starts from first step}
+
+\item{cacheDir}{: directory where temporary files created during alignment
+are stored}
+
+\item{aligner}{: One of "Rhisat2" or "Rbowtie2"; Rbowtie2 can be very slow
+for human and eukaryotic species}
+}
+\value{
+the analysis status message
 }
 \description{
-Title
+wrapper that does quality control analysis of raw files, performs adapter and
+quality trimming, builds genome index and does alignment , counts genes
+perfoms differential gene expression analysis,does gene enrichment test using
+GAGE and visualize the enriched pathways using pathview all using one
+wrapper function. It has the ability to continue the analysis if it is
+halted at any stage and generate quality pictures and generate comprehensive
+analysis of the data.
+}
+\examples{
+# This code creates the phenofile and runs the pathviewrap
+
+# install pathwrap from github or bioconductor and load library
+# BiocManager::install("Kannapolis-Bioinformatics/pathwrap",
+# force    = TRUE)
+library(pathviewwrap)
+# create directory to store results
+Results <- tempdir()
+phenofile <- tempfile()
+
+# create columns for phenofile, this is for SE data
+# Table col.names should be SampleName, FileName and Class
+library(stringr)
+FileName <- list.files(
+        file.path(system.file(
+        package = "pathviewwrap"
+        ), "extdata"),
+        full.names = TRUE,
+        pattern = "fastq.gz"
+)
+
+patternmy <- c(dirname(FileName[1]), "_sub.fastq.gz")
+SampleName <- str_replace_all(
+        pattern = paste0(dirname(FileName)[1], "/|_sub.fastq.gz"),
+        string = list.files(
+        file.path(
+            system.file(package = "pathviewwrap"), "extdata"
+        ),
+        full.names = TRUE, pattern = "fastq.gz"
+        ), ""
+)
+
+
+Class <- c("A", "B", "A", "B")
+write.table(as.data.frame(cbind(SampleName, FileName, Class)),
+        file = phenofile, sep = "\t", row.names = FALSE,
+        col.names = TRUE, quote = FALSE
+)
+
+
+message("this is the phenofile ", phenofile)
+system.time({
+        pathviewwrap(
+        ref.dir = NA, phenofile = phenofile,
+        outdir = Results, entity = "Mus musculus", corenum = 16,
+        compare = "as.group",    keep_tmp = TRUE,
+        startover = TRUE, diff.tool = "DESeq2", aligner = "Rhisat2"
+        )
+})
 }

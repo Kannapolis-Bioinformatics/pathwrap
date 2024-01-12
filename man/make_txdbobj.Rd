@@ -2,13 +2,30 @@
 % Please edit documentation in R/mktxdbobj.R
 \name{make_txdbobj}
 \alias{make_txdbobj}
-\title{Title}
+\title{Make TxDb object either from annotation file or
+by loading from the annotation package}
 \usage{
-make_txdbobj(geneAnnotation, corenum, genomeFile, entity)
+make_txdbobj(geneAnnotation, corenum, genomeFile, entity, outdir)
 }
 \arguments{
-\item{entity}{}
+\item{geneAnnotation}{: annotation file or if using package, path to sqlite
+file in package}
+
+\item{corenum}{: the number of cores}
+
+\item{genomeFile}{: genomeFile or when using package, genomeFile is not used,
+pkg name can be given}
+
+\item{entity}{: the scientific name of the organism}
+
+\item{outdir}{: directory to store output, Results is default}
+}
+\value{
+txdb object that is returned
 }
 \description{
-Title
+Make_txdbobj uses the makeTxDbFromGFF to make
+TxDb object from transcript annotations
+available in gtf file in ref.dir or if ref.dir is NA
+It makes txdb object fromt the annotaion package
 }

@@ -1,144 +1,108 @@
-#make sure force = T is good
-#' Title
+#' function to make sure things are good
 #'
-#' @param fq.dir
-#' @param ref.dir
-#' @param phenofile
-#' @param outdir
-#' @param endness
-#' @param entity
-#' @param corenum
-#' @param diff.tool
-#' @param compare
+#' @param ref.dir : directory for reference files
+#' @param outdir : directory for result
+#' @param entity : scientific name of species of interest
+#' @param corenum : number of cores
+#' @param compare : comparision to make for gage
+#' @return list of different paths for result files
+#' @importFrom stringr str_replace_all
+#' @import Rsamtools
+#' @importFrom methods is
 #'
-#' @return
-#' @export
-#'
-#' @examples
-sanity_check <- function(fq.dir, ref.dir , phenofile, outdir, endness,  entity , corenum , diff.tool, compare){
 
-  library(stringr)
-
-  #################################################################
-  ##
-  #Check if files/folders  exists and create if not
-  ##
-  #################################################################
-
-  if (!file.exists(outdir)){
-    # default output file
-    dir.create(outdir)
-  }
-  result.dir <- outdir
-  #print("The results will be organized in ",result.dir)
-
-  # make sure the second column is class and first column is sample name
-  # make sure file is tab seperated
-  if (!file.exists(phenofile)){ ###TO DO make sure reference is first aplhanumerically#
-    print("Please provide phenofile with Class information")
-  }
-  coldata <- read.table(phenofile, sep = "\t", header = T)
-  if(colnames(coldata)[2]!="Class"){
-    print("Please make sure class information is in cloumn 2 with colname 'Class' . ")
-  }
-  coldata$Class <- as.factor(coldata$Class)
-  ref <- which(coldata[, 2] ==  levels(coldata[, 2])[1])
-  samp <- which(coldata[, 2] ==  levels(coldata[, 2])[2])
-  grp.idx <-NULL
-  grp.idx[ref] <- "reference"
-  grp.idx[samp] <- "sample"
-  ##TO DO write something to automatically determine paired infromation, rev/fr etc
-  print("this is first grp.idx")
-  print(grp.idx)
-  #check and create dir for organizing results
-  checkcretdir <- function(parentname, dirname){
-    if(!file.exists(file.path(parentname, dirname))) {
-      dir.create(file.path(parentname, dirname))
-    }
-    assign(dirname,value = file.path(parentname, dirname), envir = .GlobalEnv)
-  }
-
-  folder_to_create<- list("fastqc_results", "fastp_results","gage_results", "differential_analysis","aligned_bam","pathway_analysis" )
-  trim_dir <-list ( "fastp_log", "unpaired")
-  diff_dir <-list ("DESeq2","edgeR")
-  pathway_types <- list("KEGG", "GO")
-  kegg_types <- list("signalling", "metabolism", "disease", "sig_n_met")
-  go_types <- list("biological_process", "molecular_function", "cellular_component")
-  lapply(folder_to_create, checkcretdir, parentname= result.dir  )
-  lapply(trim_dir, checkcretdir, parentname= file.path(result.dir ,"fastp_results")  )
-  lapply(diff_dir, checkcretdir, parentname= file.path(result.dir , "differential_analysis")  )
-  lapply(pathway_types, checkcretdir, parentname= file.path(result.dir , "gage_results")  )
-  lapply(kegg_types, checkcretdir, parentname= file.path(result.dir ,"gage_results","KEGG" )  )
-  lapply(go_types, checkcretdir, parentname= file.path(result.dir ,"gage_results","GO" )  )
-
-  #just to make sure rest of codes are same
-  qc.dir <- fastqc_results
-  diff.dir <- differential_analysis
-  trim.dir <- fastp_results
-  gage.dir <- gage_results
-  trim.log <- fastp_log
-  pathway.dir <- pathway_analysis
-  edger.dir <- edgeR
-  deseq2.dir <- DESeq2
-  kegg.dir <- KEGG
-  go.dir <- GO
-
-
-  ### To run qAlign we need samplefile
-  ## TO DO Make sure this works for all types of file name and single and paired end data, bunch of bam files and bunch of fastq files, partially complete
-  ##############################################################################
-
-  if( endness== "SE"){
-    pinfo_string <- ".fastq"
-  }else{
-    pinfo_string <- "_1.fastq"
-  }
-  library(stringr)
-  FileName <- grep(pinfo_string,list.files(fq.dir, full.names=T) ,value =T)
-  FileName <- str_replace_all(file.path(trim.dir,  basename(FileName)),pinfo_string, paste0("_paired", pinfo_string))
-  sampleFile <- file.path(result.dir, "sampleFile.txt")
-  SampleName <-  str_remove_all(basename(FileName), paste0("_paired",pinfo_string))
-  if(endness == "SE") {
-    write.table(file =sampleFile,sep = "\t", as.data.frame( cbind(FileName, SampleName)) ,quote =F ,  col.names=T, row.names=F)
-  } else{
-    FileName1 <- FileName
-    FileName2 <- str_replace_all(FileName1, "_1.fastq", "_2.fastq")
-    sampleFile <- file.path(result.dir, "sampleFile.txt")
-    write.table(file =sampleFile,sep = "\t", as.data.frame( cbind(FileName1, FileName2, SampleName)) ,quote =F ,  col.names=T, row.names=F)
-  }
-
-
-
-  #References
-  #if only species name is given and both geneAnnotation and genome is NULL
-  if( is.na(ref.dir)){
-    #ref_info <- read.table("data/species_genome_annotation_pkg", sep = "\t", header = T, na.strings=c(""," ","NA")) #this file is supplied with script
-    #ref_info <- as.data.frame(readRDS("data/anntpkglist.RDS"))#, sep = "\t", header = T, na.strings=c(""," ","NA")) #this file is supplied with script
+sanity_check <- function(ref.dir, outdir, entity, corenum, compare){
+    # References
+    # if only species name is given and both geneAnnotation and genome is NULL
+    if (is.na(ref.dir)) {
+    data(anntpkglist, package = "pathviewwrap", envir = environment())
     ref_info <- anntpkglist
-
-    species_no <- which(ref_info$species==entity)
+    species_no <- which(ref_info$species == entity)
     annotate_pkg <- ref_info$annotation[species_no]
     genome_pkg <- ref_info$genome[species_no]
-
-    ###make sure both annot and genome package is installed for the species
-    # (set of genome and annotation pkg come from developers list)
-
-    pkg.on = require(annotate_pkg, character.only = TRUE, lib.loc = .libPaths()[1])
-    if (!pkg.on) {
-      if (!requireNamespace("BiocManager", quietly=TRUE))
-        install.packages("BiocManager")
-      BiocManager::install(annotate_pkg,force = T, suppressUpdates =TRUE, lib.loc = .libPaths()[1] )
-      pkg.on = require(annotate_pkg, character.only = TRUE, lib.loc = .libPaths()[1])
-      if (!pkg.on)
-        stop(paste("Fail to install/load gene annotation package ",annotate_pkg, "!", sep = ""))
-    }
-    geneAnnotation <-  file.path(.libPaths()[1],annotate_pkg, "extdata", paste0(annotate_pkg, ".sqlite" ) )
-    genomeFile <- genome_pkg
-  } else {
-    genomeFile <- list.files(ref.dir, ".fa$", full.names= T)
-    geneAnnotation <- list.files(ref.dir, ".gtf$", full.names = T) #could be changed to include one of gtf, gff etc, check with quasR package
-
-  }
-  return (c(qc.dir,trim.dir,sampleFile, genomeFile, geneAnnotation, deseq2.dir,gage.dir, grp.idx))
+        # annotation pkg installation
+        pkg.on <- requireNamespace(annotate_pkg,lib.loc = .libPaths()[1],
+            quietly = TRUE)
+        if (!pkg.on) {
+            message(paste0("
+        Intall the required package with the following command,
+        > BiocManager::install('", annotate_pkg, "'
+                        ,force = TRUE,
+                        lib.loc = .libPaths()[1]  )", collapse = ""))
+            return(invisible(NULL)) # needs reevaluation
+        }
+        geneAnnotation <- file.path(
+            .libPaths()[1], annotate_pkg, "extdata", 
+            paste0(annotate_pkg, ".sqlite"), fsep= .Platform$file.sep)
+        genomeFile <- genome_pkg # genome file installation
+        pkg.on <- requireNamespace(genome_pkg,
+            lib.loc = .libPaths()[1], quietly = TRUE)
+        if (!pkg.on) {
+            message(paste0(
+        "Intall the required package with the following command,
+        >  BiocManager::install('",
+                genome_pkg, "',force = TRUE,
+                        lib.loc = .libPaths()[1] )",collapse = ""))
+            return(invisible(NULL)) }
+        } else {
+            geneAnnotation <- list.files(ref.dir, ".gtf$|.gff$", 
+                                        full.names = TRUE)[1]
+            genomeFile <- list.files(ref.dir, ".fa$|.fna$|.fa.gz",
+                full.names = TRUE)[1]
+            if (summary(file(genomeFile))$class == "gzfile") {
+            a <- try({
+                    system(paste0("gunzip -k ", genomeFile))
+                    genomeFile <- str_remove(pattern = ".gz$", genomeFile)
+                }, silent = TRUE)
+            loadError <- (is(a, "try-error") | is(a, "error"))
+            if (loadError == TRUE) {
+                message("GenomeFile should be bgzip file not gzipped")
+                return(invisible(x = NULL ))
+            }}}
+    return(c(genomeFile, geneAnnotation))
 }
 
+#' Function to clean the reference directories/packages
+
+
+#' Function to clean the reference directories/packages
+#' @param entity : scientific name of the organism
+#' @param ref.dir : directory for reference filesi
+#' @return return message about clean up completion
+onexistcleanup <- function(ref.dir, entity){
+    if (is.na(ref.dir)) {
+        data(anntpkglist, package = "pathviewwrap", envir = environment())
+        ref_info <- anntpkglist
+        species_no <- which(ref_info$species == entity)
+        annotate_pkg <- ref_info$annotation[species_no]
+        genome_pkg <- ref_info$genome[species_no]
+        # (set of genome and annotation pkg come from developers list)
+        sqlite.md5 <- paste0(annotate_pkg, ".sqlite.md5")
+        sqlite.SpliceSites.txt.md5 <- paste0(annotate_pkg,
+                                            ".sqlite.SpliceSites.txt.md5")
+        sqlite.SpliceSites.txt <- paste0(annotate_pkg,
+                                        ".sqlite.SpliceSites.txt")
+        if (file.exists(file.path(.libPaths()[1],
+            annotate_pkg, "extdata", sqlite.md5, fsep = .Platform$file.sep
+        ))) {
+            unlink(file.path(.libPaths()[1],
+                annotate_pkg, "extdata", sqlite.md5,fsep = .Platform$file.sep
+            ))}
+        if (file.exists(file.path(.libPaths()[1],
+                                annotate_pkg, "extdata",
+                    sqlite.SpliceSites.txt.md5, fsep = .Platform$file.sep
+        ))) {
+            unlink(file.path( .libPaths()[1], annotate_pkg,
+            "extdata", sqlite.SpliceSites.txt.md5, fsep = .Platform$file.sep
+            ))}
+        if (file.exists(file.path(.libPaths()[1], annotate_pkg,
+                "extdata", sqlite.SpliceSites.txt, fsep = .Platform$file.sep
+        ))) {
+            unlink(file.path(
+                .libPaths()[1], annotate_pkg,
+                "extdata", sqlite.SpliceSites.txt, fsep = .Platform$file.sep
+            ))
+            }
+    }
+    return ("package clean up complete.")
+}

@@ -1,0 +1,6 @@
+SampleName	FileName	Class
+sample1	/Library/Frameworks/R.framework/Versions/4.3-x86_64/Resources/library/pathviewwrap/extdata/sample1_sub.fastq.gz	A
+sample3	/Library/Frameworks/R.framework/Versions/4.3-x86_64/Resources/library/pathviewwrap/extdata/sample3_sub.fastq.gz	B
+sample5	/Library/Frameworks/R.framework/Versions/4.3-x86_64/Resources/library/pathviewwrap/extdata/sample5_sub.fastq.gz	A
+sample6	/Library/Frameworks/R.framework/Versions/4.3-x86_64/Resources/library/pathviewwrap/extdata/sample6_sub.fastq.gz	B
+

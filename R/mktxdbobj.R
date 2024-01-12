@@ -1,35 +1,67 @@
-#' Title
+#' Make TxDb object either from annotation file or
+#' by loading from the annotation package
 #'
-#' @param geneAnnotation
-#' @param corenum
-#' @param genomeFile
-#' @param entity
+#' Make_txdbobj uses the makeTxDbFromGFF to make
+#' TxDb object from transcript annotations
+#' available in gtf file in ref.dir or if ref.dir is NA
+#' It makes txdb object fromt the annotaion package
 #'
-#' @return
-#' @export
+#' @param geneAnnotation : annotation file or if using package, path to sqlite
+#' file in package
+#' @param corenum : the number of cores
+#' @param genomeFile : genomeFile or when using package, genomeFile is not used,
+#'  pkg name can be given
+#' @param entity  : the scientific name of the organism
+#' @param outdir : directory to store output, Results is default
 #'
-#' @examples
-make_txdbobj <- function(geneAnnotation, corenum, genomeFile, entity){
-txdb <- try(loadDb(geneAnnotation), silent = T)
-cl2 <- makeCluster(corenum)
-if (class(txdb)==  "TxDb"){
-  if(!grepl("chr", seqlevels(txdb)[1])){ #check if this is necessary
-    newSeqNames <- paste('Chr', seqlevels(txdb), sep = '')
-    names(newSeqNames) <- seqlevels(txdb)
-    txdb <- renameSeqlevels( txdb, newSeqNames )
-    seqlevels(txdb)
-  }
-}else{
-  library(GenomicFeatures)
+#' @import GenomicFeatures
+#' @import Rsamtools
+#' @importFrom AnnotationDbi loadDb
+#' @importFrom GenomeInfoDb seqlevels
+#' @importFrom GenomeInfoDb renameSeqlevels
+#' @importFrom GenomeInfoDb seqnames
+#' @importFrom BiocGenerics width
+#' @return txdb object that is returned
+#'
 
-  chrLen <- scanFaIndex(genomeFile)
-  chrominfo <- data.frame(chrom = as.character(seqnames(chrLen)),
-                          length = width(chrLen),
-                          is_circular = rep(FALSE, length(chrLen)))
-  txdb <- makeTxDbFromGFF(file = geneAnnotation, format = "gtf",
-                          chrominfo = chrominfo,
-                          dataSource = "Ensembl",
-                          organism = entity)
-}
-return(txdb)
-}
+make_txdbobj <-
+    function(geneAnnotation,
+            corenum,
+            genomeFile,
+            entity,
+            outdir) {
+        options(cache_size = NULL, synchronous = NULL)
+        txdb <- try(loadDb(geneAnnotation), silent = TRUE)
+        cl2 <- makeCluster(corenum)
+        # if (class(txdb)==  "TxDb"){
+        if (is(txdb, "TxDb")) {
+            if (!grepl("chr", seqlevels(txdb)[1])) {
+                # check if this is necessary
+                newSeqNames <- paste("Chr", seqlevels(txdb), sep = "")
+                names(newSeqNames) <- seqlevels(txdb)
+                txdb <- renameSeqlevels(txdb, newSeqNames)
+                # seqlevels(txdb)
+            }
+            closeAllConnections()
+        } else {
+            chrLen <- Rsamtools::scanFaIndex(genomeFile)
+            chrominfo <- data.frame(
+                chrom = as.character(seqnames(chrLen)),
+                length = width(chrLen),
+                is_circular = rep(FALSE, length(chrLen))
+            )
+            txdb <-
+                makeTxDbFromGFF(
+                    file = geneAnnotation,
+                    format = "gtf",
+                    chrominfo = chrominfo,
+                    dataSource = "Ensembl",
+                    organism = entity
+                )
+        }
+        AnnotationDbi::saveDb(txdb,
+            file = file.path(outdir, paste0(gsub(" ", "", entity), "_txdbobj"),
+                            fsep = .Platform$file.sep)
+        )
+        return(txdb)
+    }

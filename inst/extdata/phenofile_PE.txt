@@ -1,0 +1,5 @@
+SampleName	FileName1	FileName2	Class
+sample1	full_path_to_read_1_sample1	full_path_to_read_2_sample1	A
+sample3	full_path_to_read_1_sample3	full_path_to_read_2_sample3	B
+sample5	full_path_to_read_1_sample5	full_path_to_read_2_sample5	A
+sample6	full_path_to_read_1_sample6	full_path_to_read_2_sample6	B

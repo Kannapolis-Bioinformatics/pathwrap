@@ -1,28 +1,69 @@
 Package: pathviewwrap
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
-Authors@R:
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+Title: Wrapper for RNASeq Data analysis and pathway visualization
+Version: 0.99.0
+Authors@R: 
+    person("Eliza", "Dhungel","", "elidhungel@gmail.com", 
+    role = c("aut", "cre"),
+    comment = c(ORCID = "0000-0002-7246-9452"))
+Description:
+    Pathviewwrap is a RNASeq analysis tool that provides a wrapper
+    for the processing of RNASeq datasets from quality control of raw
+    reads to the visualization of enriched pathways obtained from processing 
+    the datasets. This tool runs all the essential steps of RNASeq processing
+    from quality control, filtering out low quality reads, trimming adapters,
+    sequence alignment, alignment count, differential analysis, enrichment 
+    analysis and pathway visualization. It is the first tool that combines 
+    all essential steps of RNASeq analysis till pathway visualization. It has
+    the ability to continue the analysis if it is halted at any stage and 
+    generate quality pictures and generate comprehensive analysis of the data.
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.1
-Imports: 
+URL: https://github.com/Kannapolis-Bioinformatics/pathwrap
+BugReports: https://github.com/Kannapolis-Bioinformatics/pathwrap/issues
+RoxygenNote: 7.2.3
+Imports:
+    stats,
+    utils,
+    grDevices, 
+    methods,
     DESeq2,
+    EnhancedVolcano,
     edgeR,
     fastqcr,
     gage,
     GenomicFeatures,
     ggplot2,
-    gplots,
     parallel,
+    Rfastp,
+    ShortRead,
     pathview,
     QuasR,
     Rsamtools,
-    stringr
+    Rhisat2,
+    AnnotationDbi,
+    GenomeInfoDb,
+    stringr,
+    S4Vectors,
+    ComplexHeatmap,
+    SummarizedExperiment,
+    BiocGenerics
 Depends: 
-    R (>= 2.10)
-LazyData: true
+    R (>= 4.3.0)
+License: MIT + file LICENSE
+biocViews: 
+    Alignment,
+    Pathways,
+    QualityControl, 
+    Sequencing, 
+    RNASeq,
+    ChIPSeq,
+    GeneExpression, 
+    Transcription
+Suggests:
+    RUnit,
+    BiocManager,
+    BiocStyle, 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
+VignetteEngine: knitr, rmarkdown
