@@ -29,15 +29,10 @@ run_deseq2 <- function(cnts, grp.idx, deseq2.dir) {
     # direction of fc, depends on levels(coldat$grp), the first level
     # taken as reference (or control) and the second one as experiment.
     deseq2.fc <- deseq2_res$log2FoldChange
-    #names(deseq2.fc) <- rownames(deseq2_res)
     genesymbols <- eg2id(eg=rownames(deseq2_res), 
-        org = unname(bods[bods[,3]==unname(korg[korg[,4]==entity, 3]) , 2])
-    names(deseq2.fc) <-genesymbols 
+        org = unname(bods[bods[,3]==unname(korg[korg[,4]==entity, 3]) , 2]))
+    names(deseq2.fc) <-genesymbols[,2]
     exp.fc <- deseq2.fc
-    table(is.na(deseq2_res$padj))
-    #org = common_name of organism from bods
-    genesymbols <- eg2id(eg=rownames(deseq2_res), 
-    org = unname(bods[bods[,3]==unname(korg[korg[,4]==entity, 3]) , 2])
     write.table(
         deseq2_res,
         file.path(deseq2.dir, "DESEQ2_logfoldchange.txt",
