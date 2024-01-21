@@ -30,6 +30,9 @@ run_deseq2 <- function(cnts, grp.idx, deseq2.dir) {
     # direction of fc, depends on levels(coldat$grp), the first level
     # taken as reference (or control) and the second one as experiment.
     deseq2.fc <- deseq2_res$log2FoldChange
+    data(bods, package = "gage", envir = environment())
+    data(korg, package = "pathview", envir = environment())
+    data(gene.idtype.list, package = "pathview", envir = environment())
     genesymbols <- eg2id(eg=rownames(deseq2_res), 
         org = unname(bods[bods[,3]==unname(korg[korg[,4]==entity, 3]) , 2]))
     names(deseq2.fc) <-genesymbols[,2]
