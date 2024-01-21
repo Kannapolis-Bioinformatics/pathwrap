@@ -16,6 +16,7 @@
 #' @importFrom SummarizedExperiment assay
 #' @importFrom S4Vectors DataFrame
 #' @importFrom ComplexHeatmap pheatmap
+#' @import pathview
 #' @return fold change values
 #'
 
@@ -28,24 +29,29 @@ run_deseq2 <- function(cnts, grp.idx, deseq2.dir) {
     # direction of fc, depends on levels(coldat$grp), the first level
     # taken as reference (or control) and the second one as experiment.
     deseq2.fc <- deseq2_res$log2FoldChange
-    names(deseq2.fc) <- rownames(deseq2_res)
+    #names(deseq2.fc) <- rownames(deseq2_res)
+    genesymbols <- eg2id(eg=rownames(deseq2_res), 
+        org = unname(bods[bods[,3]==unname(korg[korg[,4]==entity, 3]) , 2])
+    names(deseq2.fc) <-genesymbols 
     exp.fc <- deseq2.fc
     table(is.na(deseq2_res$padj))
+    #org = common_name of organism from bods
+    genesymbols <- eg2id(eg=rownames(deseq2_res), 
+    org = unname(bods[bods[,3]==unname(korg[korg[,4]==entity, 3]) , 2])
     write.table(
         deseq2_res,
         file.path(deseq2.dir, "DESEQ2_logfoldchange.txt",
                 fsep = .Platform$file.sep),
         sep = "\t", col.names = NA,     row.names = TRUE,    quote = FALSE)
-
     tiff(
         file.path(deseq2.dir, "Volcano_deseq2.tiff",fsep = .Platform$file.sep),
         units = "in", width = 15,height = 15, res = 300)
+    #plot has ensembl/gencode geneids
     plot(
         EnhancedVolcano::EnhancedVolcano(deseq2_res,
             x = "log2FoldChange", y = "pvalue",lab = rownames(deseq2_res)))
     dev.off()
     plotdeseqheatmap(deseq2_res,dds,deseq2.dir)
-
     return(exp.fc)
 }
 
