@@ -180,7 +180,7 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
     if (!file.exists(file.path(deseq2.dir, "Volcano_deseq2.tiff",
                             fsep = .Platform$file.sep))) {
         message("STEP 5a ; running differential analysis using DESeq2")
-        exp.fcncnts.deseq2 <- run_deseq2(cnts, grp.idx, deseq2.dir)
+        exp.fcncnts.deseq2 <- run_deseq2(cnts, grp.idx, deseq2.dir, entity)
     } else {
             deseq2.res.df <- read.table(
             file.path(deseq2.dir, "DESEQ2_logfoldchange.txt", 
