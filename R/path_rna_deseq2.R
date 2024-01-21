@@ -10,6 +10,7 @@
 #' @param cnts :counts of gene
 #' @param grp.idx : index of reference and samples for differential analysis
 #' @param deseq2.dir : directory to store results of deseq2
+#' @param entity : scientific name of organism to convert gene to symbol
 #' @import EnhancedVolcano EnhancedVolcano
 #' @importFrom DESeq2 DESeqDataSetFromMatrix
 #' @import DESeq2
@@ -21,7 +22,7 @@
 #' @return fold change values
 #'
 
-run_deseq2 <- function(cnts, grp.idx, deseq2.dir) {
+run_deseq2 <- function(cnts, grp.idx, deseq2.dir, entity) {
     coldat <- DataFrame(grp = factor(grp.idx))
     dds <-
         DESeqDataSetFromMatrix(cnts, colData = coldat, design = ~grp)
