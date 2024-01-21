@@ -17,6 +17,7 @@
 #' @importFrom S4Vectors DataFrame
 #' @importFrom ComplexHeatmap pheatmap
 #' @import pathview
+#' @import gage
 #' @return fold change values
 #'
 
