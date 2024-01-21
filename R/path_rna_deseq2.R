@@ -45,7 +45,7 @@ run_deseq2 <- function(cnts, grp.idx, deseq2.dir) {
     #plot has ensembl/gencode geneids
     plot(
         EnhancedVolcano::EnhancedVolcano(deseq2_res,
-            x = "log2FoldChange", y = "pvalue",lab = genesymbols[,2])
+            x = "log2FoldChange", y = "pvalue",lab = genesymbols[,2]))
     dev.off()
     plotdeseqheatmap(deseq2_res,dds,deseq2.dir)
     return(exp.fc)
