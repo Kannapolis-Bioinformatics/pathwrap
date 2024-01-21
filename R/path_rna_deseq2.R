@@ -31,18 +31,18 @@ run_deseq2 <- function(cnts, grp.idx, deseq2.dir, entity) {
     # direction of fc, depends on levels(coldat$grp), the first level
     # taken as reference (or control) and the second one as experiment.
     deseq2.fc <- deseq2_res$log2FoldChange
-    data(bods, package = "gage", envir = environment())
-    data(korg, package = "pathview", envir = environment())
-    data(gene.idtype.list, package = "pathview", envir = environment())
-    genesymbols <- eg2id(eg=rownames(deseq2_res), category = c("SYMBOL", "GENENAME"),
-        org = unname(bods[bods[,3]==unname(korg[korg[,4]==entity, 3]) , 2]))
-    names(deseq2.fc) <- names(deseq2_res)
+    names(deseq2.fc) <- rownames(deseq2_res)
     exp.fc <- deseq2.fc
     write.table(
         deseq2_res,
         file.path(deseq2.dir, "DESEQ2_logfoldchange.txt",
                 fsep = .Platform$file.sep),
-        sep = "\t", col.names = NA,     row.names = TRUE,    quote = FALSE)
+        sep = "\t", col.names = NA,     row.names = TRUE,    quote = FALSE)   
+    data(bods, package = "gage", envir = environment())
+    data(korg, package = "pathview", envir = environment())
+    data(gene.idtype.list, package = "pathview", envir = environment())
+    genesymbols <- eg2id(eg=rownames(deseq2_res), category = c("SYMBOL", "GENENAME"),
+        org = unname(bods[bods[,3]==unname(korg[korg[,4]==entity, 3]) , 2]))
     tiff(
         file.path(deseq2.dir, "Volcano_deseq2.tiff",fsep = .Platform$file.sep),
         units = "in", width = 15,height = 15, res = 300)
