@@ -36,7 +36,7 @@ run_deseq2 <- function(cnts, grp.idx, deseq2.dir, entity) {
     data(gene.idtype.list, package = "pathview", envir = environment())
     genesymbols <- eg2id(eg=rownames(deseq2_res), category = c("SYMBOL", "GENENAME"),
         org = unname(bods[bods[,3]==unname(korg[korg[,4]==entity, 3]) , 2]))
-    names(deseq2.fc) <-genesymbols[,2]
+    names(deseq2.fc) <- names(deseq2_res)
     exp.fc <- deseq2.fc
     write.table(
         deseq2_res,
