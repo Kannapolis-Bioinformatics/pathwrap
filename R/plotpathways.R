@@ -22,6 +22,8 @@ plotpathways <- function(gage.dir,entity,path.ids, fc_matrix,cpd_data = NULL){
             Files <- list.files(path = getwd(),  full.names = TRUE,pattern =pid)
             if (length(Files)!=0){
                 newName <- gsub(dirname(Files)[1], gage.dir, Files)
+		print(paste0("renaming file", Files, " to ", newName ))
+
                 file.rename(Files, newName)
 		}
             
