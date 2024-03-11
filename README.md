@@ -16,7 +16,7 @@ BiocManager::install("Kannapolis-Bioinformatics/pathwrap", force = TRUE, build_v
 Also you can find the latest annotation and genome package useful for analysis by running following code.
 
 ```r 
-library(pathviewwrap)
+library(pathwrap)
 data(anntpkglist)
 genomepkg <- anntpkglist$genome[which(anntpkglist$species=="Mus musculus")]
 anntpkg <- anntpkglist$annotation[which(anntpkglist$species=="Mus musculus")]
@@ -46,7 +46,7 @@ phenofile <-tempfile("hellotmpphenofile.txt")
 #col.names should be SampleName, FileName and Class for SE data
 library(stringr)
 FileName <- list.files(file.path(system.file(
-    package = "pathviewwrap"), "extdata"), pattern = "fastq.gz",
+    package = "pathwrap"), "extdata"), pattern = "fastq.gz",
     full.names = TRUE)
 
 SampleName <-str_remove_all( basename(FileName), ".fastq.gz")
@@ -58,9 +58,9 @@ write.table(as.data.frame(cbind(SampleName, FileName, Class)),
             col.names = TRUE, quote = FALSE)
 
 message("this is the phenofile ", phenofile )
-library(pathviewwrap)
+library(pathwrap)
 system.time({
-    pathviewwrap(
+    pathwrap(
         ref.dir = NA, phenofile = phenofile,
         outdir = Results, entity = "Mus musculus", corenum = 16,
         compare = "as.group",  keep_tmp = TRUE,

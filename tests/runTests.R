@@ -1,1 +1,1 @@
-BiocGenerics:::testPackage("pathviewwrap")
+BiocGenerics:::testPackage("pathwrap")

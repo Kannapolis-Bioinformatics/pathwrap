@@ -15,7 +15,7 @@ sanity_check <- function(ref.dir, outdir, entity, corenum, compare){
     # References
     # if only species name is given and both geneAnnotation and genome is NULL
     if (is.na(ref.dir)) {
-    data(anntpkglist, package = "pathviewwrap", envir = environment())
+    data(anntpkglist, package = "pathwrap", envir = environment())
     ref_info <- anntpkglist
     species_no <- which(ref_info$species == entity)
     annotate_pkg <- ref_info$annotation[species_no]
@@ -71,7 +71,7 @@ sanity_check <- function(ref.dir, outdir, entity, corenum, compare){
 #' @return return message about clean up completion
 onexistcleanup <- function(ref.dir, entity){
     if (is.na(ref.dir)) {
-        data(anntpkglist, package = "pathviewwrap", envir = environment())
+        data(anntpkglist, package = "pathwrap", envir = environment())
         ref_info <- anntpkglist
         species_no <- which(ref_info$species == entity)
         annotate_pkg <- ref_info$annotation[species_no]

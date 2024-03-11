@@ -13,55 +13,84 @@
 #'  pkg name can be given
 #' @param entity  : the scientific name of the organism
 #' @param outdir : directory to store output, Results is default
-#'
 #' @import GenomicFeatures
-#' @import Rsamtools
 #' @importFrom AnnotationDbi loadDb
-#' @importFrom GenomeInfoDb seqlevels
-#' @importFrom GenomeInfoDb renameSeqlevels
-#' @importFrom GenomeInfoDb seqnames
-#' @importFrom BiocGenerics width
+#' @importFrom AnnotationDbi saveDb
 #' @return txdb object that is returned
 #'
 
 make_txdbobj <-
-    function(geneAnnotation,
-            corenum,
-            genomeFile,
-            entity,
-            outdir) {
+    function(geneAnnotation,corenum,genomeFile,entity, outdir) {
         options(cache_size = NULL, synchronous = NULL)
         txdb <- try(loadDb(geneAnnotation), silent = TRUE)
-        cl2 <- makeCluster(corenum)
-        # if (class(txdb)==  "TxDb"){
-        if (is(txdb, "TxDb")) {
-            if (!grepl("chr", seqlevels(txdb)[1])) {
-                # check if this is necessary
-                newSeqNames <- paste("Chr", seqlevels(txdb), sep = "")
-                names(newSeqNames) <- seqlevels(txdb)
-                txdb <- renameSeqlevels(txdb, newSeqNames)
-                # seqlevels(txdb)
-            }
-            closeAllConnections()
-        } else {
-            chrLen <- Rsamtools::scanFaIndex(genomeFile)
-            chrominfo <- data.frame(
-                chrom = as.character(seqnames(chrLen)),
-                length = width(chrLen),
-                is_circular = rep(FALSE, length(chrLen))
-            )
-            txdb <-
-                makeTxDbFromGFF(
-                    file = geneAnnotation,
-                    format = "gtf",
-                    chrominfo = chrominfo,
-                    dataSource = "Ensembl",
-                    organism = entity
-                )
+        if (inherits(txdb, "TxDb")){
+            message("Annotation generated from bioconductor package")
+        }else{
+            cl2 <- makeCluster(corenum)
+            txdb <- makeTxDbFromGFF( 
+                            file = geneAnnotation,
+                            format = "auto",
+                            chrominfo = NULL,
+                            dataSource = NA,
+                            organism = entity
+                        )
+           stopCluster(cl2)
         }
         AnnotationDbi::saveDb(txdb,
-            file = file.path(outdir, paste0(gsub(" ", "", entity), "_txdbobj"),
-                            fsep = .Platform$file.sep)
-        )
+             file = file.path(outdir, paste0(gsub(" ", "", entity), "_txdbobj"),
+            fsep = .Platform$file.sep) )
         return(txdb)
-    }
+}
+
+
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+     #   stopCluster(cl)
+       
+    #     # if (class(txdb)==  "TxDb"){
+    #     if (is(txdb, "TxDb")) {
+    #         if (!grepl("chr", seqlevels(txdb)[1])) {
+    #             # check if this is necessary
+    #             newSeqNames <- paste("Chr", seqlevels(txdb), sep = "")
+    #             names(newSeqNames) <- seqlevels(txdb)
+    #             txdb <- renameSeqlevels(txdb, newSeqNames)
+    #             # seqlevels(txdb)
+    #         }
+    #         closeAllConnections()
+    #     } else {
+    #         chrLen <- Rsamtools::scanFaIndex(genomeFile)
+    #         chrominfo <- data.frame(
+    #             chrom = as.character(seqnames(chrLen)),
+    #             length = width(chrLen),
+    #             is_circular = rep(FALSE, length(chrLen))
+    #         )
+    #         txdb <-
+    #             makeTxDbFromGFF(
+    #                 file = geneAnnotation,
+    #                 format = "gtf",
+    #                 chrominfo = chrominfo,
+    #                 dataSource = "Ensembl",
+    #                 organism = entity
+    #             )
+    #     }
+    #     AnnotationDbi::saveDb(txdb,
+    #         file = file.path(outdir, paste0(gsub(" ", "", entity), "_txdbobj"),
+    #                         fsep = .Platform$file.sep)
+    #     )
+    #     return(txdb)
+    # }

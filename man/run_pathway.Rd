@@ -20,7 +20,7 @@ run_pathway(entity, exp.fc, compare, gage.dir, cnts, grp.idx)
 \item{grp.idx}{: index of the reference and sample for differential analysis}
 }
 \value{
-nothing returned
+gage_return_obj gage_return_obj which is list is returned
 }
 \description{
 \code{run_pathway} runs GAGE for pathway analysis

@@ -1,14 +1,14 @@
 ---
-title: "Tutorial for RNASeq analysis using pathviewwrap package"
+title: "Tutorial for RNASeq analysis using pathwrap package"
 author: "Eliza Dhungel"
-package: pathviewwrap
+package: pathwrap
 output: 
     rmarkdown::html_document:
     highlight : pygments
     toc : true
     fig_width: 5
 vignette: >
-    %\VignetteIndexEntry{Tutorial for RNASeq analysis using pathviewwrap}
+    %\VignetteIndexEntry{Tutorial for RNASeq analysis using pathwrap}
     %\VignetteEngine{knitr::knitr} 
     %\VignetteEncoding{UTF-8}
 ---
@@ -21,21 +21,21 @@ knitr::opts_chunk$set(
 ```
 
 ## Installation
-To install pathviewwrap package, start R(version "4.3") and enter:
+To install pathwrap package, start R(version "4.3") and enter:
 
 ```{r setup, eval = FALSE}
 if (!require("BiocManager", quietly = TRUE)) {
     install.packages("BiocManager")
 }
-BiocManager::install("pathviewwrap")
+BiocManager::install("pathwrap")
 ```
 
 Based on the species you want to analyse, you can install the bioconductor 
 annotation and genome package. For example, for human species
 
 ```{r installation, eval = FALSE}
-library(pathviewwrap)
-data(anntpkglist, package = "pathviewwrap")
+library(pathwrap)
+data(anntpkglist, package = "pathwrap")
 #replace Homo sapiens with scientific name of mouse, Mus musculus for mouse data
 genomepkg <- anntpkglist$genome[which(anntpkglist$species == "Homo sapiens")]
 anntpkg <- anntpkglist$annotate[which(anntpkglist$species == "Homo sapiens")]
@@ -46,7 +46,7 @@ BiocManager::install(anntpkg)
 ## Documentation
 To view this documentation, run following command in R.
 ```{r documentation, eval = FALSE}
-browseVignettes("pathviewwrap")
+browseVignettes("pathwrap")
 ```
 
 
@@ -62,7 +62,7 @@ phenofile <- tempfile("hellotmpphenofile.txt")
 library(stringr)
 FileName <- list.files(
     file.path(system.file(
-        package = "pathviewwrap"
+        package = "pathwrap"
     ), "extdata"),
     full.names = TRUE,
     pattern = "fastq.gz"
@@ -72,7 +72,7 @@ SampleName <- str_replace_all(
     pattern = paste0(dirname(FileName)[1], "/|_sub.fastq.gz"),
     string = list.files(
         file.path(
-            system.file(package = "pathviewwrap"), "extdata"
+            system.file(package = "pathwrap"), "extdata"
         ),
         full.names = TRUE, pattern = "fastq.gz"
     ), ""
@@ -97,7 +97,7 @@ For single end experiment;
 ```{r sampleFileSingle, echo=FALSE, results="asis"}
 cat(paste(
     readLines(system.file(
-        package = "pathviewwrap",
+        package = "pathwrap",
         "extdata", "phenofile_SE.txt"
     )),
     collapse = "\n"
@@ -110,7 +110,7 @@ For paired end experiment;
 ```{r sampleFilePaired, echo=FALSE, results="asis"}
 cat(paste(
     readLines(system.file(
-        package = "pathviewwrap",
+        package = "pathwrap",
         "extdata", "phenofile_PE.txt"
     )),
     collapse = "\n"
@@ -136,7 +136,7 @@ To run the wrapper,
 ```{r demorun, eval = FALSE}
 # create directory to store results
 Results <- tempdir()
-pathviewwrap(
+pathwrap(
     ref.dir = NA, phenofile = phenofile,
     outdir = Results, entity = "Mus musculus", corenum = 16,
     compare = "as.group", keep_tmp = TRUE,

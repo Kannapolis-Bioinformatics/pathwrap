@@ -1,4 +1,4 @@
-Package: pathviewwrap
+Package: pathwrap
 Title: Wrapper for RNASeq Data analysis and pathway visualization
 Version: 0.99.0
 Authors@R: 
@@ -20,7 +20,7 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 URL: https://github.com/Kannapolis-Bioinformatics/pathwrap
 BugReports: https://github.com/Kannapolis-Bioinformatics/pathwrap/issues
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 Imports:
     stats,
     utils,
@@ -41,12 +41,11 @@ Imports:
     Rsamtools,
     Rhisat2,
     AnnotationDbi,
-    GenomeInfoDb,
     stringr,
     S4Vectors,
     ComplexHeatmap,
     SummarizedExperiment,
-    BiocGenerics
+    KEGGREST
 Depends: 
     R (>= 4.3.0)
 License: MIT + file LICENSE

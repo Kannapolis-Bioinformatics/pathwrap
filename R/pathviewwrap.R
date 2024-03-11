@@ -27,7 +27,14 @@
 #' @param startover : if TRUE, all previous analysis is deleted 
 #' if TRUE analysis starts from first step
 #' @param cacheDir : directory where temporary files created during alignment
-#' are stored
+#' @param gene_id : gene id type 
+#' @param cpd_id : compound id type
+#' @param csamp  : sample column of compound
+#' @param cref  : reference column of compound
+#' @param mode : how to select pathways, "auto" , "combined"=using both cpd and gene
+#' @param pid  kegg pathway ids
+#' @param cdatapath path for the tsv file of compound
+#' @param ccompare what is the comparision for sample and reference
 #' @return the analysis status message
 #'
 #' @importFrom stringr str_replace_all
@@ -42,7 +49,9 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
                         corenum = 2, compare = "unpaired",
                         diff.tool = "DESeq2",keep_tmp = FALSE, 
                         startover = FALSE, cacheDir = NULL,
-                        aligner = "Rhisat2") {
+                        aligner = "Rhisat2", gene_id = NULL, 
+                        cpd_id = NULL,csamp= NULL, cref = NULL,
+                        mode="auto",ccompare=NA, pid= NULL, cdatapath=NA ) {
     on.exit(closeAllConnections())
 
     dirlist <- createdir(pos =1, outdir, entity, startover, keep_tmp)
@@ -73,6 +82,7 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
     deseq2.dir <- dirlist[3]
     edger.dir <- dirlist[4]
     gage.dir <- dirlist[5]
+    cset_dir <- dirlist[6]
     
     if (!file.exists(phenofile)) { ### TO DO make sure reference is first ANum
         message("Please provide phenofile with Class information")
@@ -213,9 +223,33 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
     
     if (!file.exists(file.path(gage.dir , "KEGG.sig.txt",
                             fsep = .Platform$file.sep))) {
-        message("STEP 6 : running pathway analysis using GAGE")
+        message("STEP 6 : running gene pathway analysis using GAGE")
         message(paste0(compare, "this is from pathviewwrap", collapse = ""))
-        run_pathway(entity, exp.fc, compare, gage.dir, cnts, grp.idx)
+        res_gage_gene <-run_pathway(entity, exp.fc, compare, gage.dir, 
+                                    cnts, grp.idx)
+        #return transfer properly TO DO
+        gpath_ids <- res_gage_gene[1]
+        pgs.gene <- res_gage_gene[2]
+        gage_out <- res_gage_gene[3]
+        gsets <- res_gage_gene[4]
+    }
+    
+    if(!file.exists(file.path(cset_dir, "CKEGG.sig.txt",
+                              fsep = .Platform$file.sep )) & !is.na(cdatapath)){
+        message("STEP 7: running compound set analysis using GAGE")
+        res_gage_cpd <-run_cpathway(cdatapath,cpd_id, csamp,cref, ccompare,cset_dir )
+        cpath_ids <- res_gage_cpd[1]
+        pgs_cpd <- res_gage_cpd[2]
+        gage_out_cpd <- res_gage_cpd[3]
+        cpd_data <- res_gage_cpd[4]
+    }
+    
+    if (mode == "combined"){
+        qcut <- 0.2
+        path.ids <- run_combinedpath_analysis(gpath_ids, cpath_ids,gsets, 
+                        pgs.gene,pgs_cpd, cset_dir, gage_out, gage_out_cpd, qcut)
+        plotpathways(gage.dir,entity,path.ids, 
+                     exp.fc,cpd_data = cpd_data)
     }
     
     onexistcleanup(ref.dir, entity)

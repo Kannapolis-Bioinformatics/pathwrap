@@ -5,7 +5,7 @@
 \title{Run standard DESeq2 for differential gene expression analysis and plot
 volcano plots}
 \usage{
-run_deseq2(cnts, grp.idx, deseq2.dir)
+run_deseq2(cnts, grp.idx, deseq2.dir, entity)
 }
 \arguments{
 \item{cnts}{:counts of gene}
@@ -13,6 +13,8 @@ run_deseq2(cnts, grp.idx, deseq2.dir)
 \item{grp.idx}{: index of reference and samples for differential analysis}
 
 \item{deseq2.dir}{: directory to store results of deseq2}
+
+\item{entity}{: scientific name of organism to convert gene to symbol}
 }
 \value{
 fold change values

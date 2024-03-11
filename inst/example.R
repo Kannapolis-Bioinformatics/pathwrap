@@ -3,7 +3,7 @@
 # install pathwrap from github or bioconductor and load library
 # BiocManager::install("Kannapolis-Bioinformatics/pathwrap",
 # force  = TRUE)
-library(pathviewwrap)
+library(pathwrap)
 # create directory to store results
 Results <- tempdir()
 phenofile <- tempfile()
@@ -13,7 +13,7 @@ phenofile <- tempfile()
 library(stringr)
 FileName <- list.files(
     file.path(system.file(
-    package = "pathviewwrap"
+    package = "pathwrap"
     ), "extdata"),
     full.names = TRUE,
     pattern = "fastq.gz"
@@ -24,7 +24,7 @@ SampleName <- str_replace_all(
     pattern = paste0(dirname(FileName)[1], "/|_sub.fastq.gz"),
     string = list.files(
     file.path(
-      system.file(package = "pathviewwrap"), "extdata"
+      system.file(package = "pathwrap"), "extdata"
     ),
     full.names = TRUE, pattern = "fastq.gz"
     ), ""

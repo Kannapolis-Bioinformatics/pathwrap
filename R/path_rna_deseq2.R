@@ -33,8 +33,10 @@ run_deseq2 <- function(cnts, grp.idx, deseq2.dir, entity) {
     deseq2.fc <- deseq2_res$log2FoldChange
     names(deseq2.fc) <- rownames(deseq2_res)
     exp.fc <- deseq2.fc
+    deseq2_res_ord <- deseq2_res[order(deseq2_res$pvalue),]
+    
     write.table(
-        deseq2_res,
+        deseq2_res_ord,
         file.path(deseq2.dir, "DESEQ2_logfoldchange.txt",
                 fsep = .Platform$file.sep),
         sep = "\t", col.names = NA,     row.names = TRUE,    quote = FALSE)   

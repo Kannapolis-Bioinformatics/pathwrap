@@ -20,7 +20,7 @@
 #' @import utils
 #' @import gage
 #' @import pathview
-#' @return nothing returned
+#' @return gage_return_obj gage_return_obj which is list is returned
 #'
 
 run_pathway <- function(entity, exp.fc, compare, gage.dir, cnts, grp.idx) {
@@ -31,9 +31,9 @@ run_pathway <- function(entity, exp.fc, compare, gage.dir, cnts, grp.idx) {
     diseaseinkegg <- kegg.gs$kg.sets[kegg.gs$dise.idx]
     siginkegg <- kegg.gs$kg.sets[kegg.gs$sig.idx]
     metainkegg <- kegg.gs$kg.sets[kegg.gs$met.idx]
-
+    
     # TO DO try using lapply for all function call of kegg pathways
-    run_gage(signmetinkegg, sig_n_met, same.dir = FALSE,
+    gage_return_obj <-run_gage(signmetinkegg, sig_n_met, same.dir = FALSE,
                 compare = compare, fc_matrix = exp.fc,entity)
     run_gage(diseaseinkegg, disease, same.dir = FALSE,
                 compare = compare, fc_matrix = exp.fc,entity )
@@ -57,5 +57,6 @@ run_pathway <- function(entity, exp.fc, compare, gage.dir, cnts, grp.idx) {
         compare = compare,fc_matrix = exp.fc, entity)
     run_gage(go.cc, cellular_component,same.dir = TRUE,
         compare = compare, fc_matrix = exp.fc,entity)
-    return(invisible(NULL))
+    #return(invisible(NULL))
+    return(gage_return_obj)
 }

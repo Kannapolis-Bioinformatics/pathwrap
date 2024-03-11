@@ -2,7 +2,7 @@ test_divideBy <- function() {
   goodtestresultmessage <- "The analysis is complete"
   Results <- tempdir()
   phenofile <- system.file("extdata", "phenofile_SE.txt",
-    package = "pathviewwrap"
+    package = "pathwrap"
   )
 
   # create columns for phenofile, this is for SE data
@@ -10,7 +10,7 @@ test_divideBy <- function() {
   library(stringr)
   FileName <- list.files(
     file.path(system.file(
-      package = "pathviewwrap"
+      package = "pathwrap"
     ), "extdata"),
     full.names = TRUE,
     pattern = "fastq.gz"
@@ -21,7 +21,7 @@ test_divideBy <- function() {
     pattern = paste0(dirname(FileName)[1], "/|_sub.fastq.gz"),
     string = list.files(
       file.path(
-        system.file(package = "pathviewwrap"), "extdata"
+        system.file(package = "pathwrap"), "extdata"
       ),
       full.names = TRUE, pattern = "fastq.gz"
     ), ""

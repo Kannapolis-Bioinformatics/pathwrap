@@ -31,7 +31,7 @@ run_qCount <- function(aligned_proj, corenum, result.dir, txdb, entity) {
         reportLevel = "gene",
         clObj = cl2
     )
-
+    stopCluster(cl2)
     #####################
     # post processing for count
     cnts <- geneLevels[, -1]
@@ -41,11 +41,16 @@ run_qCount <- function(aligned_proj, corenum, result.dir, txdb, entity) {
     # if(!all(rownames(cnts)%in% unlist(unname(kegg.gs.species$kg.sets))))
     # { #check if the use of "all" is appropriate
     if (sum(rownames(cnts) %in% unlist(unname(kegg.gs.species$kg.sets))) < 10) {
-        rownames(cnts) <- str_remove(rownames(cnts), "\\.[0-9]+$")
-        cnts <- mol.sum(cnts,
-            id.map = "ENSEMBL",
-            gene.annotpkg = bods[which(bods[, 3] == orgcode)]
-        )
+        if (sum(grepl("\\.[0-9]+$", x = rownames(cnts) )) > 10 ){
+            rownames(cnts) <- str_remove(rownames(cnts), "\\.[0-9]+$")
+            cnts <- mol.sum(cnts,
+                id.map = "ENSEMBL",
+                gene.annotpkg = bods[which(bods[, 3] == orgcode)])
+        } else{
+            cnts <- mol.sum(cnts,
+                            id.map = "SYMBOL",
+                            gene.annotpkg = bods[which(bods[, 3] == orgcode)])
+        }
         # converting to entrez # what if gene id is not ensembl and what if
         # arabidopsis thaliana id.map might be ath or else thing
     }

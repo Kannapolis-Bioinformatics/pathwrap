@@ -5,17 +5,25 @@
 \title{Wrapper for RNASeq data analysis from raw reads to pathway visualization}
 \usage{
 pathviewwrap(
-    ref.dir = NA,
-    phenofile = NA,
-    outdir = "results",
-    entity = "Mus musculus",
-    corenum = 2,
-    compare = "unpaired",
-    diff.tool = "DESeq2",
-    keep_tmp = FALSE,
-    startover = FALSE,
-    cacheDir = NULL,
-    aligner = "Rhisat2"
+  ref.dir = NA,
+  phenofile = NA,
+  outdir = "results",
+  entity = "Mus musculus",
+  corenum = 2,
+  compare = "unpaired",
+  diff.tool = "DESeq2",
+  keep_tmp = FALSE,
+  startover = FALSE,
+  cacheDir = NULL,
+  aligner = "Rhisat2",
+  gene_id = NULL,
+  cpd_id = NULL,
+  csamp = NULL,
+  cref = NULL,
+  mode = "auto",
+  ccompare = NA,
+  pid = NULL,
+  cdatapath = NA
 )
 }
 \arguments{
@@ -44,11 +52,26 @@ bam files are deleted}
 \item{startover}{: if TRUE, all previous analysis is deleted
 if TRUE analysis starts from first step}
 
-\item{cacheDir}{: directory where temporary files created during alignment
-are stored}
+\item{cacheDir}{: directory where temporary files created during alignment}
 
 \item{aligner}{: One of "Rhisat2" or "Rbowtie2"; Rbowtie2 can be very slow
 for human and eukaryotic species}
+
+\item{gene_id}{: gene id type}
+
+\item{cpd_id}{: compound id type}
+
+\item{csamp}{: sample column of compound}
+
+\item{cref}{: reference column of compound}
+
+\item{mode}{: how to select pathways, "auto" , "combined"=using both cpd and gene}
+
+\item{ccompare}{what is the comparision for sample and reference}
+
+\item{pid}{kegg pathway ids}
+
+\item{cdatapath}{path for the tsv file of compound}
 }
 \value{
 the analysis status message
@@ -67,8 +90,8 @@ analysis of the data.
 
 # install pathwrap from github or bioconductor and load library
 # BiocManager::install("Kannapolis-Bioinformatics/pathwrap",
-# force    = TRUE)
-library(pathviewwrap)
+# force  = TRUE)
+library(pathwrap)
 # create directory to store results
 Results <- tempdir()
 phenofile <- tempfile()
@@ -77,39 +100,39 @@ phenofile <- tempfile()
 # Table col.names should be SampleName, FileName and Class
 library(stringr)
 FileName <- list.files(
-        file.path(system.file(
-        package = "pathviewwrap"
-        ), "extdata"),
-        full.names = TRUE,
-        pattern = "fastq.gz"
+    file.path(system.file(
+    package = "pathwrap"
+    ), "extdata"),
+    full.names = TRUE,
+    pattern = "fastq.gz"
 )
 
 patternmy <- c(dirname(FileName[1]), "_sub.fastq.gz")
 SampleName <- str_replace_all(
-        pattern = paste0(dirname(FileName)[1], "/|_sub.fastq.gz"),
-        string = list.files(
-        file.path(
-            system.file(package = "pathviewwrap"), "extdata"
-        ),
-        full.names = TRUE, pattern = "fastq.gz"
-        ), ""
+    pattern = paste0(dirname(FileName)[1], "/|_sub.fastq.gz"),
+    string = list.files(
+    file.path(
+      system.file(package = "pathwrap"), "extdata"
+    ),
+    full.names = TRUE, pattern = "fastq.gz"
+    ), ""
 )
 
 
 Class <- c("A", "B", "A", "B")
 write.table(as.data.frame(cbind(SampleName, FileName, Class)),
-        file = phenofile, sep = "\t", row.names = FALSE,
-        col.names = TRUE, quote = FALSE
+    file = phenofile, sep = "\t", row.names = FALSE,
+    col.names = TRUE, quote = FALSE
 )
 
 
 message("this is the phenofile ", phenofile)
 system.time({
-        pathviewwrap(
-        ref.dir = NA, phenofile = phenofile,
-        outdir = Results, entity = "Mus musculus", corenum = 16,
-        compare = "as.group",    keep_tmp = TRUE,
-        startover = TRUE, diff.tool = "DESeq2", aligner = "Rhisat2"
-        )
+    pathviewwrap(
+    ref.dir = NA, phenofile = phenofile,
+    outdir = Results, entity = "Mus musculus", corenum = 16,
+    compare = "as.group",  keep_tmp = TRUE,
+    startover = TRUE, diff.tool = "DESeq2", aligner = "Rhisat2"
+    )
 })
 }
