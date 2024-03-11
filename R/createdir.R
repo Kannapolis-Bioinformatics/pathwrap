@@ -52,7 +52,7 @@ createdir <- function(pos =1, outdir, entity, startover, keep_tmp) {
                         "gage_results","differential_analysis", "aligned_bam")
         trim_dir <- list("fastp_log", "unpaired")
         diff_dir <- list("DESeq2", "edgeR")
-        pathway_types <- list("KEGG", "GO", "KEGG_CSETS")
+        pathway_types <- list("KEGG","GO","kegg_csets","combined_analysis_kegg")
         kegg_types <- list("signalling", "metabolism", "disease", "sig_n_met")
         go_types <- list(
             "biological_process", "molecular_function", "cellular_component" )
@@ -67,6 +67,6 @@ createdir <- function(pos =1, outdir, entity, startover, keep_tmp) {
             outdir, "gage_results", "KEGG",fsep = .Platform$file.sep))
         lapply(go_types, checkcretdir, parentname = file.path(
             outdir, "gage_results", "GO",fsep = .Platform$file.sep))
-        return(c(fastqc_results, fastp_results, DESeq2,edgeR, gage_results,
-                KEGG_CSETS))
+        return(c(fastqc_results, fastp_results, DESeq2,edgeR, 
+                 gage_results,kegg_csets,combined_analysis_kegg ))
 }
