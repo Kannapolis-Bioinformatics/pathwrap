@@ -16,8 +16,11 @@
 
 run_cpathway<- function( cdatapath,cpd_id_type= "KEGG COMPOUND accession",csamp,
                         cref, ccompare="paired" , cset_dir){
-    cdata<- read.table(file = cdatapath ,  sep="\t", header= TRUE)
-    
+    if (grepl(".csv$", x = cdatapath)){
+        cdata <- read.csv(cdatapath, header = T)
+    } else{
+        cdata<- read.table(file = cdatapath ,  sep="\t", header= TRUE)
+    }    
     if (cpd_id_type!="KEGG COMPOUND accession"){
         cpd_idmap<-cpd2kegg(in.ids=rownames(cdata),in.type=toupper(cpd_id_type))
         didx<-duplicated(cpd_idmap[,1])
