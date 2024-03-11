@@ -67,5 +67,6 @@ createdir <- function(pos =1, outdir, entity, startover, keep_tmp) {
             outdir, "gage_results", "KEGG",fsep = .Platform$file.sep))
         lapply(go_types, checkcretdir, parentname = file.path(
             outdir, "gage_results", "GO",fsep = .Platform$file.sep))
-        return(c(fastqc_results, fastp_results, DESeq2,edgeR, gage_results ))
+        return(c(fastqc_results, fastp_results, DESeq2,edgeR, gage_results,
+                KEGG_CSETS))
 }
