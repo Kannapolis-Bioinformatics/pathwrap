@@ -115,7 +115,6 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
                 accessible to R")
         }
     }
-    
     if (length(list.files(trim.dir, "html"))<length(SampleName)){
     
         # just in case there is random component in run_fastp
@@ -125,7 +124,6 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
                     endness, trim.dir, corenum)
         }
     }
-    
     sampleFile <- writesampleFile(outdir, filenames,
             SampleName, trim.dir, endness)
     # make txdb from annotation
@@ -142,7 +140,6 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
         txdb <- AnnotationDbi::loadDb(file.path(outdir, txdbfilename,
                                                 fsep = .Platform$file.sep))
     }
-    
     if (!file.exists(file.path(aligned_bam, "alltrimmedalignedobj.RDS",
                             fsep = .Platform$file.sep))) {
         message("STEP 3 : aligning the sequence")
@@ -155,8 +152,6 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
             aligned_bam, "alltrimmedalignedobj.RDS",
             fsep = .Platform$file.sep  ))
     }
-    
-    
     if (!file.exists(file.path(outdir, "combinedcount.trimmed.RDS",
                             fsep = .Platform$file.sep))) {
         message("STEP 4: counting aligned sequences")
@@ -166,7 +161,6 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
             outdir, "combinedcount.trimmed.RDS", fsep = .Platform$file.sep
         )))
     }
-    
     cnts <- cnts[, coldata$SampleName]
     if (all(coldata$SampleName == colnames(cnts))) { # if this then proceed
         ref <- which(coldata$Class == levels(as.factor(coldata$Class))[1])
@@ -177,8 +171,6 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
     } else {
         message("make sure pheno file have only samples analysed")
     }
-    
-    
     if (keep_tmp == FALSE) {
         message("deleting aligned bam files, bam file index and log files")
         unlink(list.files(file.path(outdir, "aligned_bam", 
@@ -186,7 +178,6 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
         full.names = TRUE
         ))
     }
-    
     if (!file.exists(file.path(deseq2.dir, "Volcano_deseq2.tiff",
                             fsep = .Platform$file.sep))) {
         message("STEP 5a ; running differential analysis using DESeq2")
@@ -200,7 +191,6 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
         exp.fcncnts.deseq2 <- deseq2.res.df$log2FoldChange
         names(exp.fcncnts.deseq2) <- rownames(deseq2.res.df)
     }
-    
     if (!file.exists(file.path(edger.dir, "Volcano_edgeR.tiff",
                             fsep = .Platform$file.sep))) {
         message("STEP 5b ; running differential analysis using edgeR")
@@ -214,16 +204,14 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
         exp.fcncnts.edger <- edger.res.df$logFC
         names(exp.fcncnts.edger) <- rownames(edger.res.df)
     }
-    
     if (diff.tool == "DESeq2") {
         exp.fc <- exp.fcncnts.deseq2
     } else {
         exp.fc <- exp.fcncnts.edger
     }
-    
     if (!file.exists(file.path(gage.dir , "KEGG.sig.txt",
                             fsep = .Platform$file.sep))) {
-        message("STEP 6 : running gene pathway analysis using GAGE")
+        message("STEP 7 : running gene pathway analysis using GAGE")
         message(paste0(compare, "this is from pathviewwrap", collapse = ""))
         res_gage_gene <-run_pathway(entity, exp.fc, compare, gage.dir, 
                                     cnts, grp.idx)
@@ -233,10 +221,9 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
         gage_out <- res_gage_gene[3]
         gsets <- res_gage_gene[4]
     }
-    
     if(!file.exists(file.path(cset_dir, "CKEGG.sig.txt",
                             fsep = .Platform$file.sep )) & !is.na(cdatapath)){
-        message("STEP 7: running compound set analysis using GAGE")
+        message("STEP 8: running compound set analysis using GAGE")
         res_gage_cpd <-run_cpathway(cdatapath,cpd_id, csamp,cref, 
                                     ccompare,cset_dir )
         cpath_ids <- res_gage_cpd[1]
@@ -244,15 +231,14 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
         gage_out_cpd <- res_gage_cpd[3]
         cpd_data <- res_gage_cpd[4]
     }
-    
     if (mode == "combined"){
+        message("STEP 9: running combined gene set analysis using GAGE")
         qcut <- 0.2
         path.ids <- run_combinedpath_analysis(gpath_ids, cpath_ids,gsets, 
                     pgs.gene,pgs_cpd, cset_dir, gage_out, gage_out_cpd, qcut)
         plotpathways(gage.dir,entity,path.ids, 
                     exp.fc,cpd_data = cpd_data)
     }
-    
     onexistcleanup(ref.dir, entity)
     return("The analysis is complete")
 }
