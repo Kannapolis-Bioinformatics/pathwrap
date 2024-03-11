@@ -28,7 +28,7 @@ plotpathways <- function(gage.dir,entity,path.ids, fc_matrix,cpd_data = NULL){
 		}
             
         }, error = function(e) {
-            # message(c("ERROR: Pathview failed on", pid, collapse=""))
+             message(c("ERROR: Pathview failed on", pid, collapse=""))
         }) }
     return(invisible(x=NULL))
 }
