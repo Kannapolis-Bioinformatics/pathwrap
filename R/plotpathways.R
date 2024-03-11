@@ -13,12 +13,12 @@
 plotpathways <- function(gage.dir,entity,path.ids, fc_matrix,cpd_data = NULL){
     gage.dir <- file.path(gage.dir , "KEGG",fsep = .Platform$file.sep)
     message(paste0("STEP 7: visualizing the pathway", " in ", entity,
-                   collapse=""))
+                collapse=""))
     for (pid in na.omit(path.ids[seq_len(6)])){
         tryCatch({
             message(paste0("Plotting pathview for ", pid, collapse=""))
             pathview(gene.data = fc_matrix,pathway.id = pid,
-                               species = entity,out.suffix = "pathview")
+                            species = entity,out.suffix = "pathview")
             Files <- list.files(path = getwd(),  full.names = TRUE,pattern =pid)
             if (length(Files)!=0){
                 newName <- gsub(dirname(Files), gage.dir, Files)
@@ -27,5 +27,5 @@ plotpathways <- function(gage.dir,entity,path.ids, fc_matrix,cpd_data = NULL){
         }, error = function(e) {
             # message(c("ERROR: Pathview failed on", pid, collapse=""))
         }) }
-    return(invisible(x=NULL    ))
+    return(invisible(x=NULL))
 }

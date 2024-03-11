@@ -63,6 +63,7 @@ Suggests:
     BiocManager,
     BiocStyle, 
     knitr,
-    rmarkdown
+    rmarkdown,
+    BiocGenerics
 VignetteBuilder: knitr
 VignetteEngine: knitr, rmarkdown

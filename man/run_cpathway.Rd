@@ -16,7 +16,8 @@ run_cpathway(
 \arguments{
 \item{cdatapath}{:pathway for compound data}
 
-\item{cpd_id_type}{type of compound id as compatible to ones in pathview::data(rn.list)}
+\item{cpd_id_type}{type of compound id as compatible to ones in
+pathview::data(rn.list)}
 
 \item{csamp}{column number of sample}
 

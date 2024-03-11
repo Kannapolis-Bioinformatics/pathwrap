@@ -10,8 +10,8 @@
 #' file in package
 #' @param corenum : the number of cores
 #' @param genomeFile : genomeFile or when using package, genomeFile is not used,
-#'  pkg name can be given
-#' @param entity  : the scientific name of the organism
+#' pkg name can be given
+#' @param entity : the scientific name of the organism
 #' @param outdir : directory to store output, Results is default
 #' @import GenomicFeatures
 #' @importFrom AnnotationDbi loadDb
@@ -34,63 +34,10 @@ make_txdbobj <-
                             dataSource = NA,
                             organism = entity
                         )
-           stopCluster(cl2)
+            stopCluster(cl2)
         }
         AnnotationDbi::saveDb(txdb,
-             file = file.path(outdir, paste0(gsub(" ", "", entity), "_txdbobj"),
+            file = file.path(outdir, paste0(gsub(" ", "", entity), "_txdbobj"),
             fsep = .Platform$file.sep) )
         return(txdb)
 }
-
-
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-     #   stopCluster(cl)
-       
-    #     # if (class(txdb)==  "TxDb"){
-    #     if (is(txdb, "TxDb")) {
-    #         if (!grepl("chr", seqlevels(txdb)[1])) {
-    #             # check if this is necessary
-    #             newSeqNames <- paste("Chr", seqlevels(txdb), sep = "")
-    #             names(newSeqNames) <- seqlevels(txdb)
-    #             txdb <- renameSeqlevels(txdb, newSeqNames)
-    #             # seqlevels(txdb)
-    #         }
-    #         closeAllConnections()
-    #     } else {
-    #         chrLen <- Rsamtools::scanFaIndex(genomeFile)
-    #         chrominfo <- data.frame(
-    #             chrom = as.character(seqnames(chrLen)),
-    #             length = width(chrLen),
-    #             is_circular = rep(FALSE, length(chrLen))
-    #         )
-    #         txdb <-
-    #             makeTxDbFromGFF(
-    #                 file = geneAnnotation,
-    #                 format = "gtf",
-    #                 chrominfo = chrominfo,
-    #                 dataSource = "Ensembl",
-    #                 organism = entity
-    #             )
-    #     }
-    #     AnnotationDbi::saveDb(txdb,
-    #         file = file.path(outdir, paste0(gsub(" ", "", entity), "_txdbobj"),
-    #                         fsep = .Platform$file.sep)
-    #     )
-    #     return(txdb)
-    # }

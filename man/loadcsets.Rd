@@ -10,5 +10,6 @@ loadcsets()
 compound_sets is returned
 }
 \description{
-This function list the pathways along with the list of compounds the pathway contains
+This function list the pathways along with the list of compounds all the
+pathway contains
 }

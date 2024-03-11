@@ -31,7 +31,7 @@
 #' @param cpd_id : compound id type
 #' @param csamp  : sample column of compound
 #' @param cref  : reference column of compound
-#' @param mode : how to select pathways, "auto" , "combined"=using both cpd and gene
+#' @param mode :how to select pathways,"auto","combined"=using both cpd and gene
 #' @param pid  kegg pathway ids
 #' @param cdatapath path for the tsv file of compound
 #' @param ccompare what is the comparision for sample and reference
@@ -235,9 +235,10 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
     }
     
     if(!file.exists(file.path(cset_dir, "CKEGG.sig.txt",
-                              fsep = .Platform$file.sep )) & !is.na(cdatapath)){
+                            fsep = .Platform$file.sep )) & !is.na(cdatapath)){
         message("STEP 7: running compound set analysis using GAGE")
-        res_gage_cpd <-run_cpathway(cdatapath,cpd_id, csamp,cref, ccompare,cset_dir )
+        res_gage_cpd <-run_cpathway(cdatapath,cpd_id, csamp,cref, 
+                                    ccompare,cset_dir )
         cpath_ids <- res_gage_cpd[1]
         pgs_cpd <- res_gage_cpd[2]
         gage_out_cpd <- res_gage_cpd[3]
@@ -247,9 +248,9 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
     if (mode == "combined"){
         qcut <- 0.2
         path.ids <- run_combinedpath_analysis(gpath_ids, cpath_ids,gsets, 
-                        pgs.gene,pgs_cpd, cset_dir, gage_out, gage_out_cpd, qcut)
+                    pgs.gene,pgs_cpd, cset_dir, gage_out, gage_out_cpd, qcut)
         plotpathways(gage.dir,entity,path.ids, 
-                     exp.fc,cpd_data = cpd_data)
+                    exp.fc,cpd_data = cpd_data)
     }
     
     onexistcleanup(ref.dir, entity)

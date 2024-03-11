@@ -65,7 +65,7 @@ for human and eukaryotic species}
 
 \item{cref}{: reference column of compound}
 
-\item{mode}{: how to select pathways, "auto" , "combined"=using both cpd and gene}
+\item{mode}{:how to select pathways,"auto","combined"=using both cpd and gene}
 
 \item{ccompare}{what is the comparision for sample and reference}
 
