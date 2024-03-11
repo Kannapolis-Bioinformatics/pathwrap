@@ -237,8 +237,7 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
         qcut <- 0.2
         path_ids <- run_combinedpath_analysis(gpath_ids, cpath_ids,gsets, 
                     pgs.gene,pgs_cpd, cset_dir, gage_out, gage_out_cpd, qcut)
-        path_ids <- gsub(pattern="^...", 
-                replacement  = pathview::kegg.species.code(entity),  path_ids)
+        path_ids <- gsub(pattern="^...", replacement  = "",  path_ids)
         plotpathways(combined_dir,entity,path_ids, 
                     exp.fc,cpd_data = cpd_data)
     }
