@@ -21,8 +21,10 @@ plotpathways <- function(gage.dir,entity,path.ids, fc_matrix,cpd_data = NULL){
                             species = entity,out.suffix = "pathview")
             Files <- list.files(path = getwd(),  full.names = TRUE,pattern =pid)
             if (length(Files)!=0){
-                newName <- gsub(dirname(Files), gage.dir, Files)
-                file.rename(Files, newName)
+		for (afile in Files){
+                newName <- gsub(dirname(afile), gage.dir, Files)
+                file.rename(afile, newName)
+		}
             }
         }, error = function(e) {
             # message(c("ERROR: Pathview failed on", pid, collapse=""))
