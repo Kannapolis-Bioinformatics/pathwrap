@@ -21,9 +21,8 @@ plotpathways <- function(gage.dir,entity,path.ids, fc_matrix,cpd_data = NULL){
                             species = entity,out.suffix = "pathview")
             Files <- list.files(path = getwd(),  full.names = TRUE,pattern =pid)
             if (length(Files)!=0){
-		for (afile in Files){
-                newName <- gsub(dirname(afile), gage.dir, Files)
-                file.rename(afile, newName)
+                newName <- gsub(dirname(Files)[1], gage.dir, Files)
+                file.rename(Files, newName)
 		}
             }
         }, error = function(e) {
