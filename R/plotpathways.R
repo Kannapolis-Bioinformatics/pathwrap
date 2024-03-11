@@ -12,9 +12,10 @@
 
 plotpathways <- function(gage.dir,entity,path.ids, fc_matrix,cpd_data = NULL){
     #gage.dir <- file.path(gage.dir , "KEGG",fsep = .Platform$file.sep)
-    message(paste0("STEP 7: visualizing the pathway", " in ", entity,
+    #message(paste0("STEP 7: visualizing the pathway", " in ", entity,
                 collapse=""))
     for (pid in na.omit(path.ids[seq_len(6)])){
+	message(pid)
         tryCatch({
             message(paste0("Plotting pathview for ", pid, collapse=""))
             pathview(gene.data = fc_matrix,pathway.id = pid,
