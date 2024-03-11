@@ -83,6 +83,7 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
     edger.dir <- dirlist[4]
     gage.dir <- dirlist[5]
     cset_dir <- dirlist[6]
+    combined_dir <- dirlist[7]
     
     if (!file.exists(phenofile)) { ### TO DO make sure reference is first ANum
         message("Please provide phenofile with Class information")
@@ -236,7 +237,7 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
         qcut <- 0.2
         path.ids <- run_combinedpath_analysis(gpath_ids, cpath_ids,gsets, 
                     pgs.gene,pgs_cpd, cset_dir, gage_out, gage_out_cpd, qcut)
-        plotpathways(gage.dir,entity,path.ids, 
+        plotpathways(combined_dir,entity,path.ids, 
                     exp.fc,cpd_data = cpd_data)
     }
     onexistcleanup(ref.dir, entity)
