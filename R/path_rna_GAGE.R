@@ -48,7 +48,7 @@ run_gage <- function(gsets, work.dir, same.dir,compare ,fc_matrix , entity) {
     # "fc.", anla_type,"p.greater.txt"), fsep = .Platform$file.sep))
     # visualize top 3 pathways
     if (same.dir == FALSE) { # run pathview only for KEGG pathways
-        plotpathways(gage.dir,entity,path.ids, fc_matrix)
+        plotpathways(work.dir,entity,path.ids, fc_matrix)
         }
     # kegg.sig <- sigGeneSet(fc.kegg.p,
     # outname = paste0(entity, anla_type, ".sig", basename(work.dir)
