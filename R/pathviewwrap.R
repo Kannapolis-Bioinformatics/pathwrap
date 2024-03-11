@@ -235,9 +235,11 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
     if (mode == "combined"){
         message("STEP 9: running combined gene set analysis using GAGE")
         qcut <- 0.2
-        path.ids <- run_combinedpath_analysis(gpath_ids, cpath_ids,gsets, 
+        path_ids <- run_combinedpath_analysis(gpath_ids, cpath_ids,gsets, 
                     pgs.gene,pgs_cpd, cset_dir, gage_out, gage_out_cpd, qcut)
-        plotpathways(combined_dir,entity,path.ids, 
+        path_ids <- gsub(pattern="^...", 
+                replacement  = pathview::kegg.species.code(entity),  path_ids)
+        plotpathways(combined_dir,entity,path_ids, 
                     exp.fc,cpd_data = cpd_data)
     }
     onexistcleanup(ref.dir, entity)
