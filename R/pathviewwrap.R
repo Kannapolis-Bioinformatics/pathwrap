@@ -50,7 +50,7 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
                         diff.tool = "DESeq2",keep_tmp = FALSE, 
                         startover = FALSE, cacheDir = NULL,
                         aligner = "Rhisat2", gene_id = NULL, 
-                        cpd_id = NULL,csamp= NULL, cref = NULL,
+                        cpd_id = "KEGG COMPOUND accession",csamp= NULL, cref = NULL,
                         mode="auto",ccompare=NA, pid= NULL, cdatapath=NA ) {
     on.exit(closeAllConnections())
 
