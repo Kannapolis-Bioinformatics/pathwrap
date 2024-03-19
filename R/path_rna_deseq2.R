@@ -22,10 +22,27 @@
 #' @return fold change values
 #'
 
-run_deseq2 <- function(cnts, grp.idx, deseq2.dir, entity) {
+run_deseq2 <- function(cnts, grp.idx, deseq2.dir, entity,SampleName=NULL,compare) {
+    if (compare=="paired"){
+    print("this is sampleName")
+    print(SampleName)
+    SampleName <- as.factor(SampleName)
+    print(grp.idx)
+    coldat <-  DataFrame(cbind(grp.idx, SampleName))
+    print("this is coldata")
+    print(coldat)
+    formula_string <- "~SampleName+grp.idx"
+    } else { 
     coldat <- DataFrame(grp = factor(grp.idx))
+    formula_string <- "~grp"
+    }
+   
+   
+    
+    formula_object <- as.formula(formula_string)
+    
     dds <-
-        DESeqDataSetFromMatrix(cnts, colData = coldat, design = ~grp)
+        DESeqDataSetFromMatrix(cnts, colData = coldat, design = formula_object )
     dds <- DESeq(dds)
     deseq2_res <- results(dds)
     # direction of fc, depends on levels(coldat$grp), the first level

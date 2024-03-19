@@ -10,22 +10,26 @@
 #' @param cpd_data compound data to plot
 #' @return invisiblenull
 
-plotpathways <- function(gage.dir,entity,path.ids, fc_matrix,cpd_data = NULL){
-    #gage.dir <- file.path(gage.dir , "KEGG",fsep = .Platform$file.sep)               
+plotpathways <- function(gage.dir,entity,path.ids, gene_data,cpd_data, 
+                         cpd.idtype = "kegg", gene_id_type  ="entrez"){
+    #gage.dir <- file.path(gage.dir , "KEGG",fsep = .Platform$file.sep)
+    species_code <- kegg.species.code(entity)
+    
     for (pid in na.omit(path.ids[seq_len(6)])){
-	message(pid)
         tryCatch({
+            #pid <- str_remove(pid, "^...")
             message(paste0("Plotting pathview for ", pid, collapse=""))
-            pathview(gene.data = fc_matrix,pathway.id = pid,
-                            species = entity,out.suffix = "pathview")
+            download.kegg(kegg.dir =gage.dir, pathway.id = pid, species = species_code)
+            pathview(gene.data = gene_data,pathway.id = pid,
+                            species = species_code,out.suffix = "pathview", 
+                     kegg.dir = gage.dir, cpd.data = cpd_data,
+                     cpd.idtype = cpd.idtype, gene_id_type  = gene_id_type )
             Files <- list.files(path = getwd(),  full.names = TRUE,pattern =pid)
             if (length(Files)!=0){
                 newName <- gsub(dirname(Files)[1], gage.dir, Files)
-		print(paste0("renaming file", Files, " to ", newName ))
-
+                print(paste0("renaming file", Files, " to ", newName))
                 file.rename(Files, newName)
-		}
-            
+            }
         }, error = function(e) {
              message(c("ERROR: Pathview failed on ", pid, collapse=""))
         }) }

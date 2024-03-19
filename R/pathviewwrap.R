@@ -45,12 +45,12 @@
 #'
 #' @export
 pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
-                        entity = "Mus musculus",
+                        entity = "Mus musculus",cref = NULL,
                         corenum = 2, compare = "unpaired",
                         diff.tool = "DESeq2",keep_tmp = FALSE, 
                         startover = FALSE, cacheDir = NULL,
                         aligner = "Rhisat2", gene_id = NULL, 
-                        cpd_id = "KEGG COMPOUND accession",csamp= NULL, cref = NULL,
+                        cpd_id = "KEGG COMPOUND accession",csamp= NULL, 
                         mode="auto",ccompare=NA, pid= NULL, cdatapath=NA ) {
     on.exit(closeAllConnections())
 
@@ -125,6 +125,8 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
                     endness, trim.dir, corenum)
         }
     }
+    print("this is from wrapper")
+    print(filenames)
     sampleFile <- writesampleFile(outdir, filenames,
             SampleName, trim.dir, endness)
     # make txdb from annotation
@@ -160,9 +162,14 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
     } else {
         cnts <- as.data.frame(readRDS(file.path(
             outdir, "combinedcount.trimmed.RDS", fsep = .Platform$file.sep
-        )))
+        ))) }
+    
+    if (compare == "paired"){
+        coldata$SampleName <-  paste0("s", seq_len(length(coldata$SampleName))
+                                , "_", coldata$SampleName)
     }
     cnts <- cnts[, coldata$SampleName]
+    
     if (all(coldata$SampleName == colnames(cnts))) { # if this then proceed
         ref <- which(coldata$Class == levels(as.factor(coldata$Class))[1])
         samp <- which(coldata$Class == levels(as.factor(coldata$Class))[2])
@@ -171,18 +178,21 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
         grp.idx[samp] <- "sample"
     } else {
         message("make sure pheno file have only samples analysed")
-    }
+    }     
     if (keep_tmp == FALSE) {
         message("deleting aligned bam files, bam file index and log files")
         unlink(list.files(file.path(outdir, "aligned_bam", 
         fsep = .Platform$file.sep), pattern = ".bam$|.bai$", 
         full.names = TRUE
-        ))
-    }
+        ))}
     if (!file.exists(file.path(deseq2.dir, "Volcano_deseq2.tiff",
                             fsep = .Platform$file.sep))) {
         message("STEP 5a ; running differential analysis using DESeq2")
-        exp.fcncnts.deseq2 <- run_deseq2(cnts, grp.idx, deseq2.dir, entity)
+        print("before")
+        print(grp.idx)
+        exp.fcncnts.deseq2 <- run_deseq2(cnts, grp.idx, deseq2.dir, entity, 
+                                         SampleName,compare)
+        
     } else {
             deseq2.res.df <- read.table(
             file.path(deseq2.dir, "DESEQ2_logfoldchange.txt", 
@@ -214,31 +224,45 @@ pathviewwrap <- function(ref.dir = NA, phenofile = NA, outdir = "results",
                             fsep = .Platform$file.sep))) {
         message("STEP 7 : running gene pathway analysis using GAGE")
         message(paste0(compare, "this is from pathviewwrap", collapse = ""))
-        res_gage_gene <-run_pathway(entity, exp.fc, compare, gage.dir, 
-                                    cnts, grp.idx)
+        res_gage_gene <-run_pathway(entity, exp.fc, compare, gage.dir, cnts)
+        
         #return transfer properly TO DO
-        gpath_ids <- res_gage_gene[1]
-        pgs.gene <- res_gage_gene[2]
-        gage_out <- res_gage_gene[3]
-        gsets <- res_gage_gene[4]
+        saveRDS(res_gage_gene, file.path(gage.dir,"gene_gageresults.rds"))
+    } else {
+        res_gage_gene <-readRDS(file.path(cset_dir,"gene_gageresults.rds"))
     }
+        gpath_ids <- res_gage_gene$pathways_selected
+        pgs.gene <- res_gage_gene$pgs.gene
+        gage_out <- res_gage_gene$gage_result
+        gsets <- res_gage_gene$gene_sets
+        print("this is geneset ids")
+        #print(gpath_ids)
+
+    
     if(!file.exists(file.path(cset_dir, "CKEGG.sig.txt",
                             fsep = .Platform$file.sep )) & !is.na(cdatapath)){
         message("STEP 8: running compound set analysis using GAGE")
-        res_gage_cpd <-run_cpathway(cdatapath,cpd_id, csamp,cref, 
-                                    ccompare,cset_dir )
-        cpath_ids <- res_gage_cpd[1]
-        pgs_cpd <- res_gage_cpd[2]
-        gage_out_cpd <- res_gage_cpd[3]
-        cpd_data <- res_gage_cpd[4]
+        res_gage_cpd <-run_cpathway(cdatapath,cpd_id, csamp,cref,
+                                    ccompare,cset_dir, entity )
+        saveRDS(res_gage_gene, file = file.path(cset_dir,"cpd_gageresults.rds"))
+    } else {
+        res_gage_cpd <-readRDS(file.path(cset_dir,"cpd_gageresults.rds"))
     }
+        cpath_ids <- res_gage_cpd$pathways_selected
+        pgs_cpd <- res_gage_cpd$pgs.gene
+        gage_out_cpd <- res_gage_cpd$gage_result
+        cpd_data <- res_gage_cpd$data_used
+        print("this is compound set ids")
+        print(cpath_ids)
+
     if (mode == "combined"){
         message("STEP 9: running combined gene set analysis using GAGE")
         qcut <- 0.2
-        path_ids <- run_combinedpath_analysis(gpath_ids, cpath_ids,gsets, 
-                    pgs.gene,pgs_cpd, cset_dir, gage_out, gage_out_cpd, qcut)
-        path_ids <- gsub(pattern="^...", replacement  = "",  path_ids)
-        plotpathways(combined_dir,entity,path_ids, 
+        path_ids <- run_combinedpath_analysis(gpath_ids, cpath_ids,gsets,
+                    pgs.gene,pgs_cpd, combined_dir, gage_out, gage_out_cpd,qcut)
+        print("this is me checking before")
+        print(path_ids)
+        plotpathways(combined_dir,entity,path_ids,
                     exp.fc,cpd_data = cpd_data)
     }
     onexistcleanup(ref.dir, entity)

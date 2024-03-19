@@ -19,7 +19,9 @@ run_combinedpath_analysis<- function(gpath_ids, cpath_ids,gsets, pgs.gene,
     nsig.c<-0
     if(!is.null(gpath_ids) & !is.null(cpath_ids)){
         pnames<-names(gsets)
+        print(pgs.gene)
         pmat<-cbind(pgs.gene[pnames], pgs.cpd[pnames])
+        print(pmat)
         log.pmat<--log(pmat)
         nc <- apply(log.pmat,1, function(x) sum(!is.na(x)))
         sg.glob <- apply(log.pmat, 1, sum, na.rm=TRUE)

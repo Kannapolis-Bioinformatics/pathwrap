@@ -28,7 +28,7 @@ run_qCount <- function(aligned_proj, corenum, result.dir, txdb, entity) {
     # library(Rsamtools) #scanFaIndex
     cl2 <- makeCluster(corenum)
     geneLevels <- QuasR::qCount(aligned_proj, txdb,
-        reportLevel = "gene",
+        reportLevel = "gene",collapseBySample=FALSE,
         clObj = cl2
     )
     stopCluster(cl2)
