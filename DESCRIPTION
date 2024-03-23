@@ -1,12 +1,12 @@
 Package: pathwrap
-Title: Wrapper for RNASeq Data analysis and pathway visualization
+Title: Wrapper for Automated RNASeq Data analysis and pathway visualization
 Version: 0.99.0
 Authors@R: 
     person("Eliza", "Dhungel","", "elidhungel@gmail.com", 
     role = c("aut", "cre"),
     comment = c(ORCID = "0000-0002-7246-9452"))
 Description:
-    Pathviewwrap is a RNASeq analysis tool that provides a wrapper
+    Pathwrap is a RNASeq analysis tool that provides a wrapper
     for the processing of RNASeq datasets from quality control of raw
     reads to the visualization of enriched pathways obtained from processing 
     the datasets. This tool runs all the essential steps of RNASeq processing
@@ -16,6 +16,9 @@ Description:
     all essential steps of RNASeq analysis till pathway visualization. It has
     the ability to continue the analysis if it is halted at any stage and 
     generate quality pictures and generate comprehensive analysis of the data.
+    Results of metabolomics experiment generating quantitative compound 
+    information can be integrated with RNAseq data analysis and pathway 
+    visualization.
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 URL: https://github.com/Kannapolis-Bioinformatics/pathwrap
@@ -38,6 +41,7 @@ Imports:
     ShortRead,
     pathview,
     QuasR,
+    tools,
     Rsamtools,
     Rhisat2,
     AnnotationDbi,
@@ -57,7 +61,9 @@ biocViews:
     RNASeq,
     ChIPSeq,
     GeneExpression, 
-    Transcription
+    Transcription,
+    ExperimentalDesign,
+    Metabolomics
 Suggests:
     RUnit,
     BiocManager,

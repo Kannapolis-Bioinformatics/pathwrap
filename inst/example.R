@@ -1,11 +1,14 @@
-# This code creates the phenofile and runs the pathviewrap
+# This code creates the phenofile and runs the pathwrap
 
 # install pathwrap from github or bioconductor and load library
 # BiocManager::install("Kannapolis-Bioinformatics/pathwrap",
 # force  = TRUE)
 library(pathwrap)
 # create directory to store results
-Results <- tempdir()
+#Results <- "/Users/edhungel/Documents/Research/myresults"
+#phenofile <- "/Users/edhungel/Research/Documents/myphenofile.txt"
+#provide actual path like above
+Results <- tempdir() 
 phenofile <- tempfile()
 
 # create columns for phenofile, this is for SE data
@@ -36,14 +39,20 @@ write.table(as.data.frame(cbind(SampleName, FileName, Class)),
     file = phenofile, sep = "\t", row.names = FALSE,
     col.names = TRUE, quote = FALSE
 )
-
-
+csamp <- c(1,2)
+cref <- c(3,4)
+cpath <- file.path(system.file(package = "pathwrap", "extdata"), 
+                   "example_cpd_data.tsv")
+                   
 message("this is the phenofile ", phenofile)
-system.time({
-    pathviewwrap(
-    ref.dir = NA, phenofile = phenofile,
+\donttest{ system.time({
+    pathwrap(
+    ref.dir = NA, phenofile = phenofile,mode = "combined", 
     outdir = Results, entity = "Mus musculus", corenum = 16,
     compare = "as.group",  keep_tmp = TRUE,
-    startover = TRUE, diff.tool = "DESeq2", aligner = "Rhisat2"
+    startover = TRUE, diff.tool = "DESeq2", aligner = "Rhisat2",
+    cdatapath = cpath, cref= cref, csamp = csamp, ccompare = "paired",
+    is.test= TRUE
     )
-})
+})}
+

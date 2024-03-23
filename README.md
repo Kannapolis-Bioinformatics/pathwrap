@@ -2,7 +2,7 @@
 
 ## Overview
 
-Pathwrap is an analysis tool for the processing of RNAseq datasets from raw data to data visualizations. Pathwrap is built on pathway enrichment tool GAGE (Generally Applicable Gene-set Enrichment for Pathway Analysis) and pathway visualization using pathview.  Features include all the essential steps of RNAseq processing including read quality control (e.g., trimming and filtering), read mapping,  read summarization/quantification, statistical differential abundance analysis (DESeq2 and edgeR), pathway enrichment (GAGE using KEGG KO), and pathway visualization (pathview). Pathwrap provides a start to finish automatic pipeline within the R framework for comprehensive analysis of RNAseq data.  
+Pathwrap is an analysis tool for the processing of RNAseq datasets from raw data to data visualizations. Pathwrap is built on pathway enrichment tool GAGE (Generally Applicable Gene-set Enrichment for Pathway Analysis) and pathway visualization using pathview.  Features include all the essential steps of RNAseq processing including read quality control (e.g., trimming and filtering), read mapping,  read summarization/quantification, statistical differential abundance analysis (DESeq2 and edgeR), pathway enrichment (GAGE using KEGG KO), and pathway visualization (pathview). Pathwrap provides a start to finish automatic pipeline within the R framework for comprehensive analysis of RNAseq data. In addition it allows seamless integration of pathway analysis and visualization of RNAseq data with quantitative metabolomics data.
 
 ## Installation
 In order to install pathwrap, open R (version "4.3") and write
@@ -10,7 +10,7 @@ In order to install pathwrap, open R (version "4.3") and write
 ```r
 if (!require("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
-BiocManager::install("Kannapolis-Bioinformatics/pathwrap", force = TRUE, build_vignette = TRUE)
+BiocManager::install("pathwrap")
 ```
 
 Also you can find the latest annotation and genome package useful for analysis by running following code.
@@ -28,7 +28,7 @@ BiocManager::install(anntpkg)
 Just run the pathwrap function with as much argument as possible for complete analysis. You will need phenofile which has information about the path in which the raw files are stored and the class or category each sample belong to.
 
 ``` r
-# This code creates the phenofile and runs the pathviewrap
+# This code creates the phenofile and runs the wrapper for pathview
 #this is a demo and phenofile can be created in any way.
 
 #create directory to store results
@@ -56,15 +56,18 @@ Class <- c("A", "B", "A", "B")
 write.table(as.data.frame(cbind(SampleName, FileName, Class)), 
             file = phenofile, sep = "\t", row.names = FALSE, 
             col.names = TRUE, quote = FALSE)
+cdatapath <- file.path(system.file(package = "pathwrap"), "extdata", 
+                         "example_cpd_data.tsv")
 
 message("this is the phenofile ", phenofile )
 library(pathwrap)
 system.time({
     pathwrap(
-        ref.dir = NA, phenofile = phenofile,
-        outdir = Results, entity = "Mus musculus", corenum = 16,
-        compare = "as.group",  keep_tmp = TRUE,
-        startover = TRUE, diff.tool = "DESeq2", aligner = "Rhisat2"
+            ref.dir = NA, phenofile = phenofile,mode = "gene", 
+    outdir = Results, entity = "Mus musculus", corenum = 16,
+    compare = "as.group",  keep_tmp = TRUE,
+    startover = TRUE, diff.tool = "DESeq2", aligner = "Rhisat2",
+    cdatapath = cpath, cref= cref, csamp = csamp, ccompare = "paired"
     )
 })
 
@@ -116,7 +119,7 @@ After the differential gene analysis the wrapper runs generally applicable gene 
 
 ## STEP 7: visualizing the pathway using Pathview
 
-Finally the top enriched pathways with "q.val" < 0.1 are visualized using pathview.
+Finally the top enriched pathways with "q.val" < 0.01 are visualized using pathview.
 
 ## More information
 Please watch out for paper in making. 
