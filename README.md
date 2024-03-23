@@ -77,9 +77,7 @@ system.time({
 ## Steps run by the pathwrap
 The steps run are as follows:
 
-#test
-
-With one function, it runs all the steps listed below. 
+With one function, `pathwrap` it runs all the steps listed below. 
 
 ## STEP 1 : Quality control
 
@@ -114,7 +112,7 @@ Then the wrapper runs standard DESeq2 for differential gene expression analysis 
 
 Then the wrapper runs standard edgeR for differential gene expression analysis and plots volcano plots. The function run_deseq2 takes counts and the list indicating reference and samples and the directory where the results are stored and performs the DESeq2 analysis. The output is result table with columns of genes and log2FoldChange from result of DESeq2 analysis and a volcanoplot.
 
-## STEP 6 : running pathway analysis using GAGE 
+## STEP 6 : running pathway analysis using GAGE for gene and compound
 
 After the differential gene analysis the wrapper runs generally applicable gene set enrichment for pathway analysis, GAGE based upon the user supplied comparision method for the species specified. The biological process, cellular component and molecular function analysis for GO terms are done seperately. Also, KEGG disease and KEGG signalling and metabolism pathways are analysed seperately. 
 
