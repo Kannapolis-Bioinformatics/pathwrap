@@ -48,7 +48,8 @@ library(stringr)
 FileName <- list.files(file.path(system.file(
     package = "pathwrap"), "extdata"), pattern = "fastq.gz",
     full.names = TRUE)
-
+#SampleName can be a vector of the name of choice, two samples
+#may have same name if analysis is paired
 SampleName <-str_remove_all( basename(FileName), ".fastq.gz")
 #patternmy <- c(dirname( FileName[1]) , "_sub.fastq.gz")
 
