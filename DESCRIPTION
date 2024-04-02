@@ -70,6 +70,8 @@ Suggests:
     BiocStyle, 
     knitr,
     rmarkdown,
-    BiocGenerics
+    BiocGenerics,
+    TxDb.Mmusculus.UCSC.mm39.refGene,
+    BSgenome.Mmusculus.UCSC.mm39
 VignetteBuilder: knitr
 VignetteEngine: knitr, rmarkdown
