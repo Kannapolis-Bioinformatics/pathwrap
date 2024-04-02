@@ -2,7 +2,7 @@
 
 ## Overview
 
-Pathwrap is an analysis tool for the processing of RNAseq datasets from raw data to data visualizations. Pathwrap is built on pathway enrichment tool GAGE (Generally Applicable Gene-set Enrichment for Pathway Analysis) and pathway visualization using pathview.  Features include all the essential steps of RNAseq processing including read quality control (e.g., trimming and filtering), read mapping,  read summarization/quantification, statistical differential abundance analysis (DESeq2 and edgeR), pathway enrichment (GAGE using KEGG KO), and pathway visualization (pathview). Pathwrap provides a start to finish automatic pipeline within the R framework for comprehensive analysis of RNAseq data. In addition it allows seamless integration of pathway analysis and visualization of RNAseq data with quantitative metabolomics data.
+Pathwrap is an analysis tool for the processing of RNAseq datasets from raw data to data visualizations. Pathwrap is built on pathway enrichment tool GAGE (Generally Applicable Gene-set Enrichment for Pathway Analysis) and pathway visualization using Pathview.  Features include all the essential steps of RNAseq processing including read quality control (e.g., trimming and filtering), read mapping,  read summarization/quantification, statistical differential abundance analysis (DESeq2 and edgeR), pathway enrichment (GAGE using KEGG KO), and pathway visualization (Pathview). Pathwrap provides a start to finish automatic pipeline within the R framework for comprehensive analysis of RNAseq data. In addition it allows seamless integration of pathway analysis and visualization of RNAseq data with quantitative metabolomics data.
 
 ## Installation
 In order to install pathwrap, open R (version "4.3") and write
@@ -20,15 +20,16 @@ library(pathwrap)
 data(anntpkglist)
 genomepkg <- anntpkglist$genome[which(anntpkglist$species=="Mus musculus")]
 anntpkg <- anntpkglist$annotation[which(anntpkglist$species=="Mus musculus")]
-BiocManager::install(genomepkg)
-BiocManager::install(anntpkg)
+#run codes below to install the packages
+#BiocManager::install(genomepkg)
+#BiocManager::install(anntpkg)
 ```
 
 ## Quick start with demo data 
 Just run the pathwrap function with as much argument as possible for complete analysis. You will need phenofile which has information about the path in which the raw files are stored and the class or category each sample belong to.
 
 ``` r
-# This code creates the phenofile and runs the wrapper for pathview
+# This code creates the phenofile and runs the wrapper for Pathview
 #this is a demo and phenofile can be created in any way.
 
 #create directory to store results
@@ -48,8 +49,7 @@ library(stringr)
 FileName <- list.files(file.path(system.file(
     package = "pathwrap"), "extdata"), pattern = "fastq.gz",
     full.names = TRUE)
-#SampleName can be a vector of the name of choice, two samples
-#may have same name if analysis is paired
+
 SampleName <-str_remove_all( basename(FileName), ".fastq.gz")
 #patternmy <- c(dirname( FileName[1]) , "_sub.fastq.gz")
 
@@ -62,7 +62,7 @@ cdatapath <- file.path(system.file(package = "pathwrap"), "extdata",
 
 message("this is the phenofile ", phenofile )
 library(pathwrap)
-system.time({
+if(interactive()){ system.time({
     pathwrap(
             ref.dir = NA, phenofile = phenofile,mode = "gene", 
     outdir = Results, entity = "Mus musculus", corenum = 16,
@@ -70,14 +70,16 @@ system.time({
     startover = TRUE, diff.tool = "DESeq2", aligner = "Rhisat2",
     cdatapath = cpath, cref= cref, csamp = csamp, ccompare = "paired"
     )
-})
+})}
 
 ```
 
 ## Steps run by the pathwrap
 The steps run are as follows:
 
-With one function, `pathwrap` it runs all the steps listed below. 
+#test
+
+With one function, it runs all the steps listed below. 
 
 ## STEP 1 : Quality control
 
@@ -112,13 +114,13 @@ Then the wrapper runs standard DESeq2 for differential gene expression analysis 
 
 Then the wrapper runs standard edgeR for differential gene expression analysis and plots volcano plots. The function run_deseq2 takes counts and the list indicating reference and samples and the directory where the results are stored and performs the DESeq2 analysis. The output is result table with columns of genes and log2FoldChange from result of DESeq2 analysis and a volcanoplot.
 
-## STEP 6 : running pathway analysis using GAGE for gene and compound
+## STEP 6 : running pathway analysis using GAGE 
 
 After the differential gene analysis the wrapper runs generally applicable gene set enrichment for pathway analysis, GAGE based upon the user supplied comparision method for the species specified. The biological process, cellular component and molecular function analysis for GO terms are done seperately. Also, KEGG disease and KEGG signalling and metabolism pathways are analysed seperately. 
 
 ## STEP 7: visualizing the pathway using Pathview
 
-Finally the top enriched pathways with "q.val" < 0.01 are visualized using pathview.
+Finally the top enriched pathways with "q.val" < 0.01 are visualized using Pathview.
 
 ## More information
 Please watch out for paper in making. 
