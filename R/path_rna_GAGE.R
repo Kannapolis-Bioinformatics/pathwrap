@@ -60,8 +60,8 @@ run_gage <- function(gsets, work.dir, same.dir,compare ,cpd_data, entity,
                     col.names=NA, quote = FALSE)
         gpath_ids<-rownames(gage.out.sig)
     } else {
-        message(paste0("No gene set selected in GAGE test, top 3 ", datatype, 
-        " instead!", collapse = ""))
+        message(paste0("No ", datatype,  " set selected in GAGE test, top 3 ", 
+                    datatype,  "set plotted instead!", collapse = ""))
     gsel<-gage.out[,"set.size"]>0
     if(sum(gsel)>0) gpath_ids<-rownames(gage.out)[seq_len(min(sum(gsel),3))] }
     gpath_ids <- substr(gpath_ids, start = 4, stop = 8)
