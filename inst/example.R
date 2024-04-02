@@ -1,8 +1,12 @@
 # This code creates the phenofile and runs the pathwrap
-
+#Make sure required packages are installed if reference directory is not specified
+#library(pathwrap)
+#data(anntpkglist)
+#genomepkg <- anntpkglist$genome[which(anntpkglist$species=="Mus musculus")]
+#anntpkg <- anntpkglist$annotation[which(anntpkglist$species=="Mus musculus")]
+#BiocManager::install(genomepkg)
+#BiocManager::install(anntpkg)
 # install pathwrap from github or bioconductor and load library
-# BiocManager::install("Kannapolis-Bioinformatics/pathwrap",
-# force  = TRUE)
 library(pathwrap)
 # create directory to store results
 #Results <- "/Users/edhungel/Documents/Research/myresults"
@@ -45,14 +49,12 @@ cpath <- file.path(system.file(package = "pathwrap", "extdata"),
                    "example_cpd_data.tsv")
                    
 message("this is the phenofile ", phenofile)
-\donttest{ system.time({
-    pathwrap(
-    ref.dir = NA, phenofile = phenofile,mode = "combined", 
+if(interactive()){ system.time({
+  pathwrap(
+    ref.dir = NA, phenofile = phenofile,mode = "gene", 
     outdir = Results, entity = "Mus musculus", corenum = 16,
     compare = "as.group",  keep_tmp = TRUE,
     startover = TRUE, diff.tool = "DESeq2", aligner = "Rhisat2",
-    cdatapath = cpath, cref= cref, csamp = csamp, ccompare = "paired",
-    is.test= TRUE
-    )
+    cdatapath = cpath, cref= cref, csamp = csamp, ccompare = "paired"
+  )
 })}
-
