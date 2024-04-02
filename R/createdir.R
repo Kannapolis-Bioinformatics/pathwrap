@@ -26,12 +26,10 @@ createdir <- function(pos =1, outdir, entity, startover, keep_tmp, is.test) {
         if (is.test != TRUE){
         ans <- readline(paste0("Are you sure you want to delete everything in ",
                                                 outdir , "? "))
-        
         if (substr(ans, 1, 1) == "n"){
             message("Make sure result directory is empty to start from beginning
                         or use startover = FALSE with same other parameters")
                 return(invisible(x=NULL))}
-        
         else {    unlink(outdir, recursive = TRUE)}}
     if (startover == FALSE){
         ans <- readline(paste0("Is this your first run and are parameters 
@@ -39,12 +37,10 @@ createdir <- function(pos =1, outdir, entity, startover, keep_tmp, is.test) {
         if (substr(ans, 1, 1) == "n"){
             message("Make sure the parameters are same as previous run or answer
                                 yes to above question ")
-        
                 return(invisible(x=NULL))}}}
         if (!file.exists(outdir)) {
                 dir.create(outdir)} # default output file
-        message(paste0("The results will be organized in ", outdir, 
-                                    collapse = "|"))
+        message(paste0("The results will be organized in ",outdir,collapse="|"))
         checkcretdir <- function(parentname, dirname) {
                 if (!file.exists(file.path(parentname, dirname,
                                                 fsep = .Platform$file.sep))) {
