@@ -14,7 +14,11 @@ loadcsets <- function() {
     compound_sets <- split(names(allpathwayncompound), 
                         unname(allpathwayncompound))
     names(compound_sets)<- str_remove(pattern = "path:",names(compound_sets) )
-    
+
+    pathway_names <- unname(keggList("pathway"))[match(names(compound_sets),
+                                                names(keggList("pathway")))]
+                            
+    names(compound_sets) <- str_replace_all(names(compound_sets), "$", 
+                                            paste0(" ",pathway_names))
     return(compound_sets)
 }
-
