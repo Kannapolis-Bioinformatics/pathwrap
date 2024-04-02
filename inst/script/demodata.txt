@@ -1,1 +1,5 @@
 This is how the data in /inst/exdata was generated. 
+The fastq files are subset of fastq files extracted from 
+https://www.ncbi.nlm.nih.gov/sra?term=SAMN03700800
+The compoud data is mock data downloaded from pathview web server. 
+
