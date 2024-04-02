@@ -62,6 +62,8 @@ cdatapath <- file.path(system.file(package = "pathwrap"), "extdata",
 
 message("this is the phenofile ", phenofile )
 library(pathwrap)
+csamp <- c(1,2)
+cref <- c(3,4)
 if(interactive()){ system.time({
     pathwrap(
             ref.dir = NA, phenofile = phenofile,mode = "gene", 
