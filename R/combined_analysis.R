@@ -15,7 +15,6 @@
 run_combinedpath_analysis<- function(gpath_ids, cpath_ids,gsets, pgs.gene,
                             pgs.cpd, somdir, gage.out, gage.out.cpd,qcut=0.01) {
 #referenced from codes for pathview web available at https://pathview.uncc.edu/
-    
     nmax <- 6
     path.ids<-c(gpath_ids,cpath_ids)
     nsig.c<-0
@@ -30,10 +29,9 @@ run_combinedpath_analysis<- function(gpath_ids, cpath_ids,gsets, pgs.gene,
         colnames(pmat)<-paste0("p.", c("gene","cpd"))
         cmat<-cbind(gage.out[pnames,c(1,2)], gage.out.cpd[,1][pnames], 
                         gage.out.cpd[,2][pnames])
-        gmat <- cmat
-        colnames(gmat)<- paste0(rep(c("stat.mean", "set.size"),2), 
+        colnames(cmat)<- paste0(rep(c("stat.mean", "set.size"),2), 
                             rep(c(".gene",".cpd"),each=2))
-        combo.out<-cbind(gmat, pmat, p.global=pvals, q.global=qvals)
+        combo.out<-cbind(cmat, pmat, p.global=pvals, q.global=qvals)
         combo.out<-combo.out[order(pvals),]
         combo.out[is.nan(combo.out)]<-NA
         write.table(combo.out,file=file.path(somdir, "combo.res.tsv"), 
