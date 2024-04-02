@@ -39,8 +39,8 @@ data(anntpkglist, package = "pathwrap")
 #replace Homo sapiens with scientific name of mouse, Mus musculus for mouse data
 genomepkg <- anntpkglist$genome[which(anntpkglist$species == "Homo sapiens")]
 anntpkg <- anntpkglist$annotate[which(anntpkglist$species == "Homo sapiens")]
-BiocManager::install(genomepkg)
-BiocManager::install(anntpkg)
+#BiocManager::install(genomepkg)
+#BiocManager::install(anntpkg)
 ```
 
 ## Documentation
@@ -51,7 +51,7 @@ browseVignettes("pathwrap")
 
 
 ## Phenofile structure
-Pathviewwrap requires an argument that denotes path to a phenofile that has 
+Pathwrap requires an argument that denotes path to a phenofile that has 
 information about the path of raw files and the class each sample belong to.
 An example of how phenofile can be created is as below.
 ```{r wrapper, eval =TRUE}
@@ -91,7 +91,7 @@ raw files and class to which each sample belong to. The phenofile for paired end
 data should be of 4 columns and for single end data should be of three columns 
 like follows:
 
-For single end experiment;
+For single end reads;
 
 <pre>
 ```{r sampleFileSingle, echo=FALSE, results="asis"}
@@ -105,13 +105,26 @@ cat(paste(
 ```
 </pre>
 
-For paired end experiment;
+For paired end reads;
 <pre>
 ```{r sampleFilePaired, echo=FALSE, results="asis"}
 cat(paste(
     readLines(system.file(
         package = "pathwrap",
         "extdata", "phenofile_PE.txt"
+    )),
+    collapse = "\n"
+))
+```
+</pre>
+
+For paired experiment design;
+</pre>
+```{r sampleFilepairedexperiment, echo = FALSE, results="asis"}
+cat(paste(
+    readLines(system.file(
+        package = "pathwrap",
+        "extdata", "phenofile_SE_paired.txt"
     )),
     collapse = "\n"
 ))
@@ -136,22 +149,27 @@ To run the wrapper,
 ```{r demorun, eval = FALSE}
 # create directory to store results
 Results <- tempdir()
-pathwrap(
+csamp <- c(1,2)
+cref <- c(3,4)
+cdatapath <- file.path(system.file(package = "pathwrap"), "extdata", 
+                         "example_cpd_data.tsv")
+if (interactive()){pathwrap(
     ref.dir = NA, phenofile = phenofile,
     outdir = Results, entity = "Mus musculus", corenum = 16,
-    compare = "as.group", keep_tmp = TRUE,
-    startover = TRUE, diff.tool = "DESeq2", aligner = "Rhisat2"
-)
+    compare = "as.group",  keep_tmp = TRUE,startover = TRUE, 
+    diff.tool = "DESeq2", aligner = "Rhisat2", mode = "combined", 
+    cdatapath = cdatapath, cref= cref, csamp = csamp, ccompare = "paired"
+)}
 ```
 
 
 ## Overview
-Pathviewwrap is a wrapper function/package that allows users to analyse the 
+Pathwrap is a wrapper function/package that allows users to analyse the 
 RNASeq data from the raw files to the pathway visualization.
 It does quality control analysis of raw files, performs adapter and quality 
 trimming, builds genome index and does alignemnet , counts genes perfoms 
 differential gene expression analysis, does gene enrichment test using GAGE and
-visualize the enriched pathways using pathview all using one wrapper function.
+visualize the enriched pathways using Pathview all using one wrapper function.
 It has the ability to continue the analysis if it is halted at any stage and 
 generate quality pictures and generate comprehensive analysis of the data.
 
@@ -222,16 +240,23 @@ set enrichment for pathway analysis, GAGE based upon the user supplied
 comparison method for the species specified. The biological process, cellular 
 component and molecular function analysis for GO terms are done separately. 
 Also, KEGG disease and KEGG signalling and metabolism pathways are analysed 
-separately.
+separately. Compound sets can also be analysed when path to compound data with 
+KEGG compound id is provided. Combined analysis of gene and compound based 
+enrichment is run when mode="combined".
 
 **STEP 7: Visualizing the pathway using Pathview**
 
 Finally the top enriched pathways with "q.val" < 0.1 are visualized using 
-pathview.
+Pathview. 
+
+There is check at each step, so that if analysis fails at any stage due to any
+reason, result of previous analysis is saved and new run can be run starting 
+from the halted step.
 
 
 ## Acknowledgements
-This wrapper would not have been successful without the help of Steven Blanchard
+The wrapper would not have been successful without the help of Steven Blanchard,
+Kevin Lambirth, Cory Brouwer and Richard Allen White.
 
 
 ## References
@@ -243,6 +268,11 @@ doi:10.1093/bioinformatics/btt285
 * Luo, W., Friedman, M.S., Shedden, K. et al. GAGE: generally applicable gene 
 set enrichment for pathway analysis. BMC Bioinformatics 10, 161 (2009).
 https://doi.org/10.1186/1471-2105-10-161
+
+* Luo W, Pant G, Bhavnasi YK, Blanchard SG Jr, Brouwer C. Pathview Web: 
+user friendly pathway visualization and data integration. Nucleic Acids Res. 
+2017 Jul 3;45(W1):W501-W508. doi: 10.1093/nar/gkx372. PMID: 28482075; 
+PMCID: PMC5570256
 
 ## Funding
 This project has been funded by NSF grant 1565030.
