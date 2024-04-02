@@ -343,17 +343,17 @@ genecptsetanalysis <- function(outdir, entity,exp.fc, compare,  cnts,
         res_gage_gene <-readRDS(file.path(gage.dir,"gene_gageresults.rds"))
     }
     gpath_ids <- res_gage_gene$pathways_selected
-    pgs.gene <- res_gage_gene$pgs.gene
+    pgs_gene <- res_gage_gene$pgs.gene
     gage_out <- res_gage_gene$gage_result
     gsets <- res_gage_gene$gene_sets
     if (mode != "gene" ){
         if (mode == "compound_only" | mode == "combined"){
-    if(!file.exists(file.path(cset_dir,"cpd_gageresults.rds",
+            if(!file.exists(file.path(cset_dir,"cpd_gageresults.rds",
                             fsep = .Platform$file.sep )) & !is.na(cdatapath)){
-        message("STEP 8: running compound set analysis using GAGE")
-        res_gage_cpd <-run_cpathway(cdatapath,cpd_id, csamp,cref,
+            message("STEP 8: running compound set analysis using GAGE")
+            res_gage_cpd <-run_cpathway(cdatapath,cpd_id, csamp,cref,
                                     ccompare,cset_dir, entity )
-        saveRDS(res_gage_gene, file = file.path(cset_dir,"cpd_gageresults.rds"))
+        saveRDS(res_gage_cpd, file = file.path(cset_dir,"cpd_gageresults.rds"))
     } else {
         res_gage_cpd <-readRDS(file.path(cset_dir,"cpd_gageresults.rds"))
     }
@@ -364,9 +364,9 @@ genecptsetanalysis <- function(outdir, entity,exp.fc, compare,  cnts,
         }
     if (mode == "combined"){
         message("STEP 9: running combined gene set analysis using GAGE")
-        qcut <- 0.2
+        qcut <- 0.01
         path_ids <- run_combinedpath_analysis(gpath_ids, cpath_ids,gsets,
-                pgs.gene,pgs_cpd, combined_dir, gage_out, gage_out_cpd,qcut)
+                pgs_gene,pgs_cpd, combined_dir, gage_out, gage_out_cpd,qcut)
         plotpathways(combined_dir,entity,path_ids,
                     gene_data= exp.fc,cpd_data = cpd_data)
     }
