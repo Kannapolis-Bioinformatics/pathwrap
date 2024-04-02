@@ -1,0 +1,6 @@
+SampleName	FileName	Class
+sample1	~/fullpathto/sample1_sub.fastq.gz	A
+sample3	~/fullpathto/sample3_sub.fastq.gz	B
+sample1	~/fullpathto/sample4_sub.fastq.gz	A
+sample3	~/fullpathto/sample2_sub.fastq.gz	B
+
