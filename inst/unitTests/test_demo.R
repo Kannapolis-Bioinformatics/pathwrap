@@ -41,14 +41,14 @@ test_divideBy <- function() {
                          "example_cpd_data.tsv")
   csamp <- c(1,2)
   cref <- c(3,4)
-  # path.res <- pathwrap(
-  #   ref.dir = NA, phenofile = phenofile,
-  #   outdir = Results, entity = "Mus musculus", corenum = 16,
-  #   compare = "as.group",  keep_tmp = TRUE,
-  #   startover = FALSE, diff.tool = "DESeq2", aligner = "Rhisat2", 
-  #   mode = "combined", cdatapath = cdatapath, cref= cref, csamp = csamp, 
-  #   ccompare = "paired", is.test = TRUE
-  # )
+  path.res <- pathwrap(
+   ref.dir = NA, phenofile = phenofile,
+    outdir = Results, entity = "Mus musculus", corenum = 16,
+    compare = "as.group",  keep_tmp = TRUE,
+    startover = FALSE, diff.tool = "DESeq2", aligner = "Rhisat2", 
+    mode = "combined", cdatapath = cdatapath, cref= cref, csamp = csamp, 
+    ccompare = "paired", is.test = TRUE
+  )
   path.res <- "The analysis is complete"
 
  identical(goodtestresultmessage, path.res)
