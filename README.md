@@ -5,12 +5,12 @@
 Pathwrap is an analysis tool for the processing of RNAseq datasets from raw data to data visualizations. Pathwrap is built on pathway enrichment tool GAGE (Generally Applicable Gene-set Enrichment for Pathway Analysis) and pathway visualization using Pathview.  Features include all the essential steps of RNAseq processing including read quality control (e.g., trimming and filtering), read mapping,  read summarization/quantification, statistical differential abundance analysis (DESeq2 and edgeR), pathway enrichment (GAGE using KEGG KO), and pathway visualization (Pathview). Pathwrap provides a start to finish automatic pipeline within the R framework for comprehensive analysis of RNAseq data. In addition it allows seamless integration of pathway analysis and visualization of RNAseq data with quantitative metabolomics data.
 
 ## Installation
-In order to install pathwrap, open R (version "4.3") and write
+In order to install pathwrap, open R (version "4.4") and write
 
 ```r
 if (!require("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
-BiocManager::install("pathwrap")
+BiocManager::install("Kannapolis-Bioinformatics/pathwrap")
 ```
 
 Also you can find the latest annotation and genome package useful for analysis by running following code.
