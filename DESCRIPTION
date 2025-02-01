@@ -51,7 +51,7 @@ Imports:
     SummarizedExperiment,
     KEGGREST
 Depends: 
-    R (>= 4.3.0)
+    R (>= 4.4.0)
 License: MIT + file LICENSE
 biocViews: 
     Alignment,
