@@ -5,6 +5,7 @@
 #' directory where the results are stored and performs the deseq2 analysis
 #' The output is result table with columns of genes and log2FoldChange from
 #' result of deseq2 analysis and a volcanoplot.
+#' For a paired experiment, sample name of the pair should be same but their class is different
 #' It returns the log2foldChange to be used by GAGE for gene set analysis.
 #'
 #' @param cnts :counts of gene
