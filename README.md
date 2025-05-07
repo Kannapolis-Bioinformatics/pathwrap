@@ -34,9 +34,9 @@ Just run the pathwrap function with as much argument as possible for complete an
 
 #create directory to store results
 Results <- tempdir()
-#Make sure research is path to the location where you can see
+#Make sure results is path to the location where you can see
 #the data and explore it ; like
-#>Results <- "/Users/edhungel/Research/Documents/myresults
+#>Results <- "/Users/edhungel/Research/Documents/myresults"
   
 #phenofile should be path to some file not temporary file
 phenofile <-tempfile("hellotmpphenofile.txt")
@@ -49,7 +49,7 @@ library(stringr)
 FileName <- list.files(file.path(system.file(
     package = "pathwrap"), "extdata"), pattern = "fastq.gz",
     full.names = TRUE)
-
+#is the sample reference or experiment? make sure this matches the row 
 SampleName <-str_remove_all( basename(FileName), ".fastq.gz")
 #patternmy <- c(dirname( FileName[1]) , "_sub.fastq.gz")
 

@@ -23,7 +23,6 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 URL: https://github.com/Kannapolis-Bioinformatics/pathwrap
 BugReports: https://github.com/Kannapolis-Bioinformatics/pathwrap/issues
-RoxygenNote: 7.3.1
 Imports:
     stats,
     utils,
@@ -49,10 +48,13 @@ Imports:
     S4Vectors,
     ComplexHeatmap,
     SummarizedExperiment,
-    KEGGREST
+    KEGGREST,
+    dplyr,
+    reshape2,
+    scales
 Depends: 
     R (>= 4.4.0)
-License: MIT + file LICENSE
+License: MIT 
 biocViews: 
     Alignment,
     Pathways,
@@ -75,3 +77,4 @@ Suggests:
     BSgenome.Mmusculus.UCSC.mm39
 VignetteBuilder: knitr
 VignetteEngine: knitr, rmarkdown
+RoxygenNote: 7.3.2
