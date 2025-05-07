@@ -72,10 +72,10 @@ run_qc <- function(fq.dir, outdir, corenum) {
     
     
         all_fail_samples <- qc %>%
-                 group_by(sample) %>%
-                 summarize(all_fail = all(status == "FAIL")) %>%
-                 filter(all_fail) %>%
-             pull(sample)
+            group_by(sample) %>%
+            filter(all(status == "FAIL")) %>%
+            distinct(sample) %>%
+            pull(sample)
         
         if (length(all_fail_samples)>0){
             return(invisible(NULL))
