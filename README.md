@@ -5,7 +5,7 @@
 Pathwrap is an analysis tool for the processing of RNAseq datasets from raw data to data visualizations. Pathwrap is built on pathway enrichment tool GAGE (Generally Applicable Gene-set Enrichment for Pathway Analysis) and pathway visualization using Pathview.  Features include all the essential steps of RNAseq processing including read quality control (e.g., trimming and filtering), read mapping,  read summarization/quantification, statistical differential abundance analysis (DESeq2 and edgeR), pathway enrichment (GAGE using KEGG KO), and pathway visualization (Pathview). Pathwrap provides a start to finish automatic pipeline within the R framework for comprehensive analysis of RNAseq data. In addition it allows seamless integration of pathway analysis and visualization of RNAseq data with quantitative metabolomics data.
 
 ## Installation
-In order to install pathwrap, open R (version "4.4") and write
+1. In order to install pathwrap, open R (version "4.4") and write
 
 ```r
 if (!require("BiocManager", quietly = TRUE))
@@ -13,20 +13,24 @@ if (!require("BiocManager", quietly = TRUE))
 BiocManager::install("Kannapolis-Bioinformatics/pathwrap")
 ```
 
-Also you can find the latest annotation and genome package useful for analysis by running following code.
+2. You can find the latest annotation and genome package useful for analysis by running following code.
 
 ```r 
 library(pathwrap)
 data(anntpkglist)
+#change Mus musculus to Homo sapiens if you are analysing human reads
 genomepkg <- anntpkglist$genome[which(anntpkglist$species=="Mus musculus")]
 anntpkg <- anntpkglist$annotation[which(anntpkglist$species=="Mus musculus")]
+
 #run codes below to install the packages
+#this is necessary if path to reference directory is not provided
 #BiocManager::install(genomepkg)
 #BiocManager::install(anntpkg)
 ```
 
-We need a phenofile for any run of pathwrap. The phenofile should be tab delimited file with information about the path of
-raw files and class to which each sample belong to. Phenofile for single ended reads looks like this.
+If path to reference directory is provided using argument ref.dir, the path should be writable to create indexes and it should contain both genome reference (.fa,/.fasta) and genome annotaion file (.gtf/.gff). 
+
+3. A phenofile is necessary for any run of pathwrap. The phenofile should be tab delimited file with information about the path of raw files and class to which each sample belong to. Phenofile for single ended reads looks like this.
 ```{r sampleFileSingle, echo=FALSE, results='asis'}
 SampleName	FileName	Class
 sample1	/Library/Frameworks/R.framework/Versions/4.3-x86_64/Resources/library/pathwrap/extdata/sample1_sub.fastq.gz	A
@@ -35,7 +39,8 @@ sample5	/Library/Frameworks/R.framework/Versions/4.3-x86_64/Resources/library/pa
 sample6	/Library/Frameworks/R.framework/Versions/4.3-x86_64/Resources/library/pathwrap/extdata/sample6_sub.fastq.gz	B
 
 ```
-Phenofile for paired end reads have at least 4 columns with column names as: SampleName    FileName1    FileName2	Class 
+Phenofile for paired end reads have at least 4 columns with column names as: SampleName    FileName1    FileName2	Class.
+
 In case of paired experiment design, the phenofile should have extra column named PairedInfo to indicate sample pairs. 
 
 
@@ -44,7 +49,8 @@ To run pathwrap, minimum required arguments are path to phenofile and scientic n
 
 ```r
 library(pathwrap)
-pathwrap(phenofile, "Mus musculus")
+pathwrap(phenofile=file.path(system.file(package = "pathwrap"), "extdata", "phenofile_SE.txt"),
+                    entity= "Mus musculus")
 ```
 
 An example of how phenofile can be created is as follows. 
@@ -97,8 +103,6 @@ if(interactive()){ system.time({
 
 ## Steps run by the pathwrap
 The steps run are as follows:
-
-#test
 
 With one function, it runs all the steps listed below. 
 
