@@ -10,7 +10,8 @@ Pathwrap is an analysis tool for the processing of RNAseq datasets from raw data
 ```r
 if (!require("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
-BiocManager::install("Kannapolis-Bioinformatics/pathwrap")
+    BiocManager::install("remotes")
+BiocManager::install("Kannapolis-Bioinformatics/pathwrap@simplified_beta")
 ```
 
 2. You can find the latest annotation and genome package useful for analysis by running following code.
