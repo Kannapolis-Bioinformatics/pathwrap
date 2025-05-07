@@ -25,9 +25,29 @@ anntpkg <- anntpkglist$annotation[which(anntpkglist$species=="Mus musculus")]
 #BiocManager::install(anntpkg)
 ```
 
-## Quick start with demo data 
-Just run the pathwrap function with as much argument as possible for complete analysis. You will need phenofile which has information about the path in which the raw files are stored and the class or category each sample belong to.
+We need a phenofile for any run of pathwrap. The phenofile should be tab delimited file with information about the path of
+raw files and class to which each sample belong to. Phenofile for single ended reads looks like this.
+```{r sampleFileSingle, echo=FALSE, results='asis'}
+SampleName	FileName	Class
+sample1	/Library/Frameworks/R.framework/Versions/4.3-x86_64/Resources/library/pathwrap/extdata/sample1_sub.fastq.gz	A
+sample3	/Library/Frameworks/R.framework/Versions/4.3-x86_64/Resources/library/pathwrap/extdata/sample3_sub.fastq.gz	B
+sample5	/Library/Frameworks/R.framework/Versions/4.3-x86_64/Resources/library/pathwrap/extdata/sample5_sub.fastq.gz	A
+sample6	/Library/Frameworks/R.framework/Versions/4.3-x86_64/Resources/library/pathwrap/extdata/sample6_sub.fastq.gz	B
 
+```
+Phenofile for paired end reads have at least 4 columns with column names as: SampleName    FileName1    FileName2	Class 
+In case of paired experiment design, the phenofile should have extra column named PairedInfo to indicate sample pairs. 
+
+
+## Quick start with demo data 
+To run pathwrap, minimum required arguments are path to phenofile and scientic name of the species of interest. 
+
+```r
+library(pathwrap)
+pathwrap(phenofile, "Mus musculus")
+```
+
+An example of how phenofile can be created is as follows. 
 ``` r
 # This code creates the phenofile and runs the wrapper for Pathview
 #this is a demo and phenofile can be created in any way.
@@ -66,11 +86,10 @@ csamp <- c(1,2)
 cref <- c(3,4)
 if(interactive()){ system.time({
     pathwrap(
-            ref.dir = NA, phenofile = phenofile,mode = "gene", 
-    outdir = Results, entity = "Mus musculus", corenum = 16,
-    compare = "as.group",  keep_tmp = TRUE,
-    startover = TRUE, diff.tool = "DESeq2", aligner = "Rhisat2",
-    cdatapath = cpath, cref= cref, csamp = csamp, ccompare = "paired"
+     phenofile = phenofile,
+    entity = "Mus musculus", 
+    cdatapath=cdatapath, 
+    csamp=csamp,cref=cref
     )
 })}
 
@@ -111,6 +130,7 @@ After aligning the reads to reference genome, the wrapper generates the count of
 
 Then the wrapper runs standard DESeq2 for differential gene expression analysis and plots volcano plots. The function run_deseq2 takes counts and the list indicating reference and samples and the directory where the results are stored and performs the deseq2 analysis. The output is result table with columns of genes and log2FoldChange from result of deseq2 analysis and a volcanoplot.
 
+Or
 
 ## STEP 5b ; running differential gene analysis using edgeR
 
