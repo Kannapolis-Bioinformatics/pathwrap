@@ -27,7 +27,9 @@ To install pathwrap package, start R(version > "4.3") and enter:
 if (!require("BiocManager", quietly = TRUE)) {
     install.packages("BiocManager")
 }
-BiocManager::install("Kannapolis-Bioinformatics/pathwrap")
+#install remotes if not already
+BiocManager::install("remotes")
+BiocManager::install("Kannapolis-Bioinformatics/pathwrap@simplified_beta")
 ```
 
 Based on the species you want to analyse, you can install the bioconductor 
