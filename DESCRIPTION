@@ -74,7 +74,8 @@ Suggests:
     rmarkdown,
     BiocGenerics,
     TxDb.Mmusculus.UCSC.mm39.refGene,
-    BSgenome.Mmusculus.UCSC.mm39
+    BSgenome.Mmusculus.UCSC.mm39,
+    markdown
 VignetteBuilder: knitr
 VignetteEngine: knitr, rmarkdown
 RoxygenNote: 7.3.2
