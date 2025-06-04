@@ -14,7 +14,7 @@ utils::globalVariables(c(
     "fastp_results", "gage_results", "pathway_analysis",
     "edgeR", "DESeq2", "KEGG", "GO", "bods", "anntpkglist",
     "PairedInfo" ,"all_fail", "genomeofsamples", "phenofile", "prop",
-    "proportion","read_type", "typesofdata", "value"
+    "proportion","read_type", "typesofdata", "value", "status"
 ))
 
 
