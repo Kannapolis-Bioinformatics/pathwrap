@@ -49,7 +49,6 @@ Imports:
     ComplexHeatmap,
     SummarizedExperiment,
     KEGGREST,
-    dplyr,
     reshape2,
     scales
 Depends: 
