@@ -10,7 +10,6 @@
 #' @param outdir : the directory in which results of quality check are stored
 #' @param corenum : the number of cores used for running quality check
 #' @return message of fastqc
-#' @import dplyr
 #' @import ggplot2
 #' @import fastqcr
 #' @importFrom grDevices dev.off
@@ -63,21 +62,19 @@ run_qc <- function(fq.dir, outdir, corenum) {
             units = "in", width = 11,
             height = dim(qc)[2], res = 300
         )
-        #message("first status found")
+        
         g <- ggplot(qc, aes(x = module, y = sample, fill = status)) +
             geom_tile() +
             theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1,size= 15,face = "bold"))+
             theme(axis.text.y = element_text(face = "bold"))
         plot(g)
         dev.off()
-    message("first status found")
-    qc <- as_tibble(qc, rownames = "sample") 
-        all_fail_samples <- qc %>%
-            group_by(sample) %>%
-            filter(all(status == "FAIL")) %>%
-            distinct(sample) %>%
-            pull(sample)
-        message("second status found")
+       
+       # First, ensure qc is a data.frame
+        qc <- as.data.frame(qc)
+
+        # Aggregate to find whether all statuses for each sample are "FAIL"
+        all_fail_samples <- unique(qc$sample[sapply(split(qc$status, qc$sample), function(x) all(x == "FAIL"))])
         if (length(all_fail_samples)>0){
             return(invisible(NULL))
         }
