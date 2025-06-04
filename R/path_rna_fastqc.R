@@ -71,10 +71,10 @@ run_qc <- function(fq.dir, outdir, corenum) {
         plot(g)
         dev.off()
     message("first status found")
-    
+    qc <- as_tibble(qc, rownames = "sample") 
         all_fail_samples <- qc %>%
             group_by(sample) %>%
-            filter(all(qc$status == "FAIL")) %>%
+            filter(all(status == "FAIL")) %>%
             distinct(sample) %>%
             pull(sample)
         message("second status found")
