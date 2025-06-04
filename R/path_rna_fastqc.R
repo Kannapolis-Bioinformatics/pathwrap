@@ -74,7 +74,7 @@ run_qc <- function(fq.dir, outdir, corenum) {
     
         all_fail_samples <- qc %>%
             group_by(sample) %>%
-            filter(all(status == "FAIL")) %>%
+            filter(all(.data$status == "FAIL")) %>%
             distinct(sample) %>%
             pull(sample)
         message("second status found")
