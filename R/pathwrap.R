@@ -42,7 +42,7 @@ pathwrap <- function(  phenofile,entity,corenum=detectCores(),ref.dir=NULL, cach
                      cdatapath=NA,cpd_id_type= "KEGG COMPOUND accession",csamp=NULL,
                      
                      cref=NULL, ccompare="unpaired" ,  qcut=0.01, pathids="04110",
-                     nchunks=1, keep_tmp = TRUE,  cpd.idtype = "kegg"){
+                     nchunks=1, keep_tmp = TRUE,  cpd.idtype = "KEGG"){
     
     on.exit(closeAllConnections())
     #A. PREPARE DIRECTORIES
