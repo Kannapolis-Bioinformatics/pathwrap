@@ -50,8 +50,9 @@ To run pathwrap, minimum required arguments are path to phenofile and scientic n
 
 ```r
 library(pathwrap)
-pathwrap(phenofile=file.path(system.file(package = "pathwrap"), "extdata", "phenofile_SE.txt"),
-                    entity= "Mus musculus")
+pathwrap(phenofile=file.path(system.file(package = "pathwrap"),
+                            "extdata", "phenofile_SE.txt"),
+                            entity= "Mus musculus")
 ```
 
 An example of how phenofile can be created is as follows. 
