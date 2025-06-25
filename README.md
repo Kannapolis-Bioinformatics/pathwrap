@@ -112,7 +112,7 @@ if(interactive()){ system.time({
 
 | Parameter | Description | Default  | 
 |--------|--------|--------|
-| outdir | main directory for storing output of the process | "./Results" |
+| outdir | main directory for storing output of the process | NULL, "./results" |
 | startover |  do you want to start from beginning, | FALSE |
 |corenum  | number of cores avaialble for run | detectCores() |
 | ref.dir |path to reference directory which contain reference file(*.fa) and annotation file(*.gtf) | NA |
