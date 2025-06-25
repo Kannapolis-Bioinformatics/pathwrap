@@ -102,7 +102,7 @@ if(interactive()){ system.time({
 })}
 
 ```
-## Parameter to run pathwrap 
+## Parameter Description
 ## Required
 | Parameter | Description | Example |
 |--------|--------|--------|
