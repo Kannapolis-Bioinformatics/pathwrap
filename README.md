@@ -113,7 +113,7 @@ if(interactive()){ system.time({
 | Parameter | Description | Default  | 
 |--------|--------|--------|
 | outdir | main directory for storing output of the process | "./Results" |
-| startover |  do you want to start from beginning, | False |
+| startover |  do you want to start from beginning, | FALSE |
 |corenum  | number of cores avaialble for run | detectCores() |
 | ref.dir |path to reference directory which contain reference file(*.fa) and annotation file(*.gtf) | NA |
 | cacheDir | directory where temporary files created during alignment | tempdir() |
@@ -129,7 +129,7 @@ if(interactive()){ system.time({
 |qcut |threshold for pathway selection | 0.01 |
 |pathids |pathway of interest only necessary if enrichment is not run | "04110" |
 |nchunks | default 1, in how many chunks you want to run alignment | 1 |
-|keep_tmp |weather to store aligned bam files and trimmed fastq files | True | 
+|keep_tmp |weather to store aligned bam files and trimmed fastq files | TRUE | 
 |diff.tool | weather to use "DESeq2" or edgeR for differential gene analysis | "DESeq2" |
 
 
