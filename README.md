@@ -104,14 +104,14 @@ if(interactive()){ system.time({
 ## Parameter to run pathwrap 
 ## Required
 | Parameter | Description | Example |
-|:--------|:--------:|:--------:|
+|--------|--------|--------|
 |phenofile | file where the path of raw data is stored | "/usr/document/myrawfile" |
 |entity | Scientific name of species whose RNA is being analyzed | "Homo sapiens " |
 
 ## Optional
 
 | Parameter | Description | Default  | 
-|:--------|:--------:|--------:|
+|--------|--------|--------|
 | outdir | main directory for storing output of the process | "./Results" |
 | startover |  do you want to start from beginning, | False |
 |corenum  | number of cores avaialble for run | detectCores() |
