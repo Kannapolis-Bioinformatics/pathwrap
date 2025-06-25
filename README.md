@@ -101,6 +101,38 @@ if(interactive()){ system.time({
 })}
 
 ```
+## Parameter to run pathwrap 
+## Required
+| Parameter | Description | Example |
+|:--------|:--------:|:--------:|
+|phenofile | file where the path of raw data is stored | "/usr/document/myrawfile" |
+|entity | Scientific name of species whose RNA is being analyzed | "Homo sapiens " |
+
+## Optional
+
+| Parameter | Description | Default  | 
+|:--------|:--------:|--------:|
+| outdir | main directory for storing output of the process | "./Results" |
+| startover |  do you want to start from beginning, | False |
+|corenum  | number of cores avaialble for run | detectCores() |
+| ref.dir |path to reference directory which contain reference file(*.fa) and annotation file(*.gtf) | NA |
+| cacheDir | directory where temporary files created during alignment | tempdir() |
+|aligner |One of "Rhisat2" or "Rbowtie2"; Rbowtie2 can be very slow for human and eukaryotic species | "Rhisat2" |
+| gcompare |how the comparision is done for transcripts/genes | "unpaired"  | 
+| npca |number of genes to use for pca | 19 |
+|nheatmap |number of genes for heatmap | 10 |
+|cdatapath |data path for compound data | NA |
+|cpd_id_type | "KEGG COMPOUND accession" | "KEGG COMPOUND accession" |
+|csamp |index/row number where sample files are ex: c(5,6,4) | NULL |
+|cref |index/row number where references are, ex: c(1,2,3) | NULL  |
+|ccompare | how the compound data is compared |   paired | 
+|qcut |threshold for pathway selection | 0.01 |
+|pathids |pathway of interest only necessary if enrichment is not run | "04110" |
+|nchunks | default 1, in how many chunks you want to run alignment | 1 |
+|keep_tmp |weather to store aligned bam files and trimmed fastq files | True | 
+|diff.tool | weather to use "DESeq2" or edgeR for differential gene analysis | "DESeq2" |
+
+
 
 ## Steps run by the pathwrap
 The steps run are as follows:
