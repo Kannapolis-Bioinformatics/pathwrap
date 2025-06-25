@@ -125,7 +125,7 @@ if(interactive()){ system.time({
 |cpd_id_type | "KEGG COMPOUND accession" | "KEGG COMPOUND accession" |
 |csamp |index/row number where sample files are ex: c(5,6,4) | NULL |
 |cref |index/row number where references are, ex: c(1,2,3) | NULL  |
-|ccompare | how the compound data is compared |   paired | 
+|ccompare | how the compound data is compared |   "paired" | 
 |qcut |threshold for pathway selection | 0.01 |
 |pathids |pathway of interest only necessary if enrichment is not run | "04110" |
 |nchunks | default 1, in how many chunks you want to run alignment | 1 |
