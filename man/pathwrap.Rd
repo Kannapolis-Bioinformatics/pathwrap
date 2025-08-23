@@ -27,7 +27,8 @@ pathwrap(
   qcut = 0.01,
   pathids = "04110",
   nchunks = 1,
-  keep_tmp = TRUE
+  keep_tmp = TRUE,
+  cpd.idtype = "KEGG"
 )
 }
 \arguments{

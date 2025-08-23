@@ -12,7 +12,7 @@ run_gage(
   cpd_data,
   entity,
   gene_data,
-  cpd.idtype = "kegg",
+  cpd.idtype,
   gene_id_type = "entrez"
 )
 }
