@@ -65,34 +65,34 @@ pathwrap <- function(  phenofile,entity,corenum=detectCores(),ref.dir=NULL, cach
     aligned_obj_n_cnts <- do_alignment_ncounting(phenofile, ref.dir, outdir, entity, cacheDir, 
                                                  aligner, corenum,nchunks)
     message("STEP 1c: ALIGNMENT AND COUNTING complete" )
-    print("this is cnts")
-    print(dim(as.data.frame(aligned_obj_n_cnts$cnts)))
+    #print("this is cnts")
+    #print(dim(as.data.frame(aligned_obj_n_cnts$cnts)))
     #cnts can be filename of cnts
     #phenofile can contain only samplename and class
-    gene_data <- run_differerntial_gene_analysis(cnts = as.data.frame(aligned_obj_n_cnts$cnts), phenofile, outdir, entity,  gcompare, npca, nheatmap, diff.tool = diff.tool)
-    if(is.null(gene_data)){
-        return(invisible(NULL))
-    }
-    message("STEP 2a: DIFFERENTIAL ANALYSIS complete using ", diff.tool)
-    if (!keep_tmp){
-        delete_tmp_files(file.path(outdir, "fastp_results"))
-        delete_tmp_files(file.path(outdir, "aligned_bam"))
+    # gene_data <- run_differerntial_gene_analysis(cnts = as.data.frame(aligned_obj_n_cnts$cnts), phenofile, outdir, entity,  gcompare, npca, nheatmap, diff.tool = diff.tool)
+    # if(is.null(gene_data)){
+    #     return(invisible(NULL))
+    # }
+    # message("STEP 2a: DIFFERENTIAL ANALYSIS complete using ", diff.tool)
+    # if (!keep_tmp){
+    #     delete_tmp_files(file.path(outdir, "fastp_results"))
+    #     delete_tmp_files(file.path(outdir, "aligned_bam"))
         
-    }
-    #check from here
-    run_gene_gsets_analysis(fc_matrix = gene_data$logfoldchange , as.data.frame(aligned_obj_n_cnts$cnts), outdir, entity,  gcompare,phenofile)#, use.fold=TRUE)
+    # }
+    # #check from here
+    # run_gene_gsets_analysis(fc_matrix = gene_data$logfoldchange , as.data.frame(aligned_obj_n_cnts$cnts), outdir, entity,  gcompare,phenofile)#, use.fold=TRUE)
     
-    if (!is.na(cdatapath)){
-        gage.out.cpd_res <- run_compound_kegg_gsets(cdatapath,cpd_id_type= cpd.idtype,csamp,
-                                                    cref, ccompare="paired" , outdir, entity)
+    # if (!is.na(cdatapath)){
+    #     gage.out.cpd_res <- run_compound_kegg_gsets(cdatapath,cpd_id_type= cpd.idtype,csamp,
+    #                                                 cref, ccompare="paired" , outdir, entity)
         
-        #determine how you want to combine 
-        pathids<- run_combinedpath_analysis(outdir, gene_data$logfoldchange, entity, gcompare,gage.out.cpd_res$gage.out.cpd,qcut=qcut)
+    #     #determine how you want to combine 
+    #     pathids<- run_combinedpath_analysis(outdir, gene_data$logfoldchange, entity, gcompare,gage.out.cpd_res$gage.out.cpd,qcut=qcut)
         
-        plotpathways(kegg.dir = file.path(outdir, "gage_results", "combined_analysis_kegg"), entity, pathids , 
-                     cpd_data = gage.out.cpd_res$cpd_data, gene_data =gene_data$logfoldchange ,
-                     gene_id_type ="entrez", cpd_id_type=cpd.idtype)
-    }
+    #     plotpathways(kegg.dir = file.path(outdir, "gage_results", "combined_analysis_kegg"), entity, pathids , 
+    #                  cpd_data = gage.out.cpd_res$cpd_data, gene_data =gene_data$logfoldchange ,
+    #                  gene_id_type ="entrez", cpd_id_type=cpd.idtype)
+    # }
     return("the analysis complete successfully")
     
     
