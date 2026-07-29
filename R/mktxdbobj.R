@@ -13,6 +13,7 @@
 #' @import GenomicFeatures
 #' @importFrom AnnotationDbi loadDb
 #' @importFrom AnnotationDbi saveDb
+#' @import txdbmaker
 #' @return txdb object that is returned
 #'
 
