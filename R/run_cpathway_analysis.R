@@ -45,7 +45,7 @@ run_compound_kegg_gsets<- function( cdatapath,cpd_id_type= "KEGG COMPOUND access
     names(csets)<-str_replace_all(names(csets),"^map",kegg.species.code(entity))
     gpath_ids <- run_gage2(gsets = csets,  same.dir = FALSE,
             compare = ccompare,gene_data= cpd_data, 
-            , ref=NULL, samp=NULL, work.dir=cset_dir)
+            , ref=NULL, samp=NULL, work.dir=cset_dir, gene_id_type = "KEGG")
     
     
     
