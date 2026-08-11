@@ -12,7 +12,8 @@ run_gage2(
   work.dir,
   gene_id_type = "ENTREZ",
   ref = NULL,
-  samp = NULL
+  samp = NULL,
+  q_cutoff
 )
 }
 \arguments{
@@ -31,6 +32,8 @@ run_gage2(
 \item{ref}{reference index for gene/cpd data}
 
 \item{samp}{sample index for gene/cpd data}
+
+\item{q_cutoff}{cutoff of q value for pathway selection}
 }
 \value{
 nothing returned

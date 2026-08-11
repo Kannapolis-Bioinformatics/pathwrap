@@ -18,6 +18,7 @@
 #' @param cacheDir directory where temporary files created during alignment
 #' @param aligner One of "Rhisat2" or "Rbowtie2"; Rbowtie2 can be very slow
 #'    for human and eukaryotic species
+#' @param cpd.idtype compound id type
 #' @param gcompare how the comparision is done for transcripts/genes
 #' @param npca number of genes to use for pca
 #' @param nheatmap number of genes for heatmap
@@ -27,12 +28,12 @@
 #' @param csamp index/row number where sample files are ex: c(5,6,4)
 #' @param cref index/row number where references are, ex: c(1,2,3)
 #' @param ccompare how the compound data is compared, default paired
-#' @param qcut threshold for pathway selection, default 0.01
 #' @param pathids pathway of interest only necessary if enrichment is not run
 #' @param nchunks default 1, in how many chunks you want to run alignment
 #' @param keep_tmp weather to store aligned bam files and trimmed fastq files default True
 #' @param diff.tool weather to use "DESeq2" or edgeR for differential gene analysis
 #' @param cnts file path to the cnts per gene from other analysis
+#' @param q_cutoff cutoff for q value for pathway selection
 #' @return returns message if analysis complete successfully
 #' @export
 pathwrap <- function(  phenofile,entity,corenum=detectCores(),ref.dir=NULL, cacheDir=tempdir(), 
@@ -40,12 +41,10 @@ pathwrap <- function(  phenofile,entity,corenum=detectCores(),ref.dir=NULL, cach
                      aligner="Rhisat2",diff.tool = "DESeq2", cnts=NA,   gcompare="unpaired", 
                      npca= 19, nheatmap=10,fc_matrix=NA, 
                      cdatapath=NA,cpd_id_type= "KEGG COMPOUND accession",csamp=NULL,
-                     
-                     cref=NULL, ccompare="unpaired" ,  qcut=0.01, pathids="04110",
-                     nchunks=1, keep_tmp = TRUE,  cpd.idtype = "KEGG"){
+                     cref=NULL, ccompare="unpaired" ,  pathids="04110",
+                     nchunks=1, keep_tmp = TRUE,  cpd.idtype = "KEGG",q_cutoff = 0.1){
     
     on.exit(closeAllConnections())
-    #A. PREPARE DIRECTORIES
     
     
     outdir <- createdir(pos =1, outdir, startover)
@@ -80,18 +79,27 @@ pathwrap <- function(  phenofile,entity,corenum=detectCores(),ref.dir=NULL, cach
         
      }
     # #check from here
-     run_gene_gsets_analysis(fc_matrix = gene_data$logfoldchange , as.data.frame(aligned_obj_n_cnts$cnts), outdir, entity,  gcompare,phenofile)#, use.fold=TRUE)
-    
+     run_gene_gsets_analysis(gene_data = gene_data, outdir, entity,  gcompare,phenofile,q_cutoff)#, use.fold=TRUE)
+    message("this is dim of log fold change")
+    print(dim( gene_data$logfoldchange))
+    print(gene_data$logfoldchange)
+    #? load compound set here and do analysis
      if (!is.na(cdatapath)){
-         gage.out.cpd_res <- run_compound_kegg_gsets(cdatapath,cpd_id_type= cpd.idtype,csamp,
-                                                     cref, ccompare="paired" , outdir, entity)
+         message("run_compound_kegg_gsets is running")
+         gage.out.cpd_res <- run_compound_kegg_gsets(cdatapath,cpd_id_type= cpd.idtype,csamp,keggorgcode = unname(gene_data$keggorgcode),
+                                                     cref, ccompare="paired" , outdir, q_cutoff )
         
          #determine how you want to combine 
-         pathids<- run_combinedpath_analysis(outdir, gene_data$logfoldchange, entity, gcompare,gage.out.cpd_res$gage.out.cpd,qcut=qcut)
-        
+         #gene_data = gene_data$normalized_count
+         pathids<- run_combinedpath_analysis(outdir, gene_data$logfoldchange, entity, gcompare,gage.out.cpd_res$gage.out.cpd,q_cutoff=q_cutoff)
+         
+         cpd_toplot <- as.matrix(gage.out.cpd_res$cpd_data,rownames.force=TRUE)
+         names(cpd_toplot) <- rownames(cpd_toplot)
          plotpathways(kegg.dir = file.path(outdir, "gage_results", "combined_analysis_kegg"), entity, pathids , 
-                      cpd_data = gage.out.cpd_res$cpd_data, gene_data =gene_data$logfoldchange ,
+                      gene_data = gene_data$logfoldchange , cpd_data = cpd_toplot, 
                       gene_id_type ="entrez", cpd_id_type=cpd.idtype)
+         
+         
      }
     return("the analysis complete successfully")
     

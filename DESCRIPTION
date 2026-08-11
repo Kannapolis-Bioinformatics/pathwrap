@@ -51,7 +51,8 @@ Imports:
     KEGGREST,
     reshape2,
     txdbmaker,
-    scales
+    scales,
+    dplyr
 Depends: 
     R (>= 4.4.0)
 License: MIT 
@@ -79,4 +80,4 @@ Suggests:
     GenomeInfoDbData
 VignetteBuilder: knitr
 VignetteEngine: knitr, rmarkdown
-RoxygenNote: 7.3.2
+Config/roxygen2/version: 8.0.0

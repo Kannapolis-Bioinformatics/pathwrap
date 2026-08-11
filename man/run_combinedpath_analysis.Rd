@@ -11,7 +11,7 @@ run_combinedpath_analysis(
   entity,
   gcompare,
   gage.out.cpd_res,
-  qcut
+  q_cutoff
 )
 }
 \arguments{
@@ -25,7 +25,7 @@ run_combinedpath_analysis(
 
 \item{gage.out.cpd_res}{the out object of cpound analysis}
 
-\item{qcut}{threshold for pathway selection}
+\item{q_cutoff}{threshold for pathway selection}
 }
 \value{
 pathids important pathways of interest

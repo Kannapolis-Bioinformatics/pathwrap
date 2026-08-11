@@ -14,7 +14,7 @@ combinedpath_analysis(
   somdir,
   gage.out,
   gage.out.cpd,
-  qcut = 0.01
+  q_cutoff
 )
 }
 \arguments{
@@ -34,7 +34,7 @@ combinedpath_analysis(
 
 \item{gage.out.cpd}{retsult from gage analysis of compound}
 
-\item{qcut}{the threshold value to determine significance of gene/cpd sets}
+\item{q_cutoff}{the threshold value to determine significance of gene/cpd sets}
 }
 \value{
 path.ids significant pathids from combined analysis

@@ -9,11 +9,11 @@
 #' @param gsets pathways on which analysis is based
 #' @param gage.out retsult from gage analysis of gene
 #' @param gage.out.cpd retsult from gage analysis of compound
-#' @param qcut the threshold value to determine significance of gene/cpd sets
+#' @param q_cutoff the threshold value to determine significance of gene/cpd sets
 #' @return path.ids significant pathids from combined analysis
 
 combinedpath_analysis<- function(gpath_ids, cpath_ids,gsets, pgs.gene,
-                            pgs.cpd, somdir, gage.out, gage.out.cpd,qcut=0.01) {
+                            pgs.cpd, somdir, gage.out, gage.out.cpd,q_cutoff) {
 #referenced from codes for pathview web available at https://pathview.uncc.edu/
     nmax <- 6
     path.ids<-c(gpath_ids,cpath_ids)
@@ -36,7 +36,7 @@ combinedpath_analysis<- function(gpath_ids, cpath_ids,gsets, pgs.gene,
         combo.out[is.nan(combo.out)]<-NA
         write.table(combo.out,file=file.path(somdir, "combo.res.tsv"), 
                     sep="\t",  col.names=NA,  quote=TRUE)
-        sig.c<-combo.out[,"q.global"]<qcut & !is.na(combo.out[,"q.global"])
+        sig.c<-combo.out[,"q.global"]<q_cutoff & !is.na(combo.out[,"q.global"])
         nsig.c<-sum(sig.c, na.rm=TRUE)
         if(nsig.c>0){
             combo.out.sig<-data.frame(combo.out)[sig.c,]

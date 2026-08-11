@@ -30,6 +30,8 @@ run_deseq2 <- function(cnts, outdir, entity,  formula_object,coldat,npca, nheatm
     
     
     deseq2.dir <- file.path(outdir, "differential_analysis" , "DESeq2")
+    kegg.gs.species <- kegg.gsets(entity)
+    orgcode <- kegg.species.code(entity)
     volcanoplotfilepath <- file.path(deseq2.dir, "Volcano_deseq2.tiff",fsep = .Platform$file.sep)
     if(!file.exists(volcanoplotfilepath)){
         dds <- DESeqDataSetFromMatrix(cnts, colData = coldat, 
@@ -50,8 +52,7 @@ run_deseq2 <- function(cnts, outdir, entity,  formula_object,coldat,npca, nheatm
             file.path(deseq2.dir, "DESEQ2_logfoldchange.txt",
                       fsep = .Platform$file.sep),
             sep = "\t", col.names = NA,     row.names = TRUE,    quote = FALSE)
-        kegg.gs.species <- kegg.gsets(entity)
-        orgcode <- kegg.species.code(entity)
+        
         
         # if(!all(rownames(cnts)%in% unlist(unname(kegg.gs.species$kg.sets))))
         # { #check if the use of "all" is appropriate
@@ -114,10 +115,12 @@ run_deseq2 <- function(cnts, outdir, entity,  formula_object,coldat,npca, nheatm
        exp.fc <-  exp_table[,2]
        names(exp.fc) <- rownames(exp_table)
        norm_counts <- data.matrix(read.table(file.path(deseq2.dir, "normalized_count.txt"),header = T, row.names = 1, quote=""))
+       print("this isthe size of log fold change being read")
+       print(dim(exp.fc))
        #vsd_matrix <- read.table(file.path(deseq2.dir, "vsd_count.txt"),header = T, row.names = 1, quote="")
     }
     
-    return(list("logfoldchange"=exp.fc, "normalized_count"=norm_counts))#, "vsd_count"= vsd_matrix))
+    return(list("logfoldchange"=exp.fc, "normalized_count"=norm_counts, "keggorgcode" = orgcode))#, "vsd_count"= vsd_matrix))
 }
 
 #' plot the result of result of deseq2    

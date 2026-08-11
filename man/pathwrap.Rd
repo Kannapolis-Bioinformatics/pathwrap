@@ -24,11 +24,11 @@ pathwrap(
   csamp = NULL,
   cref = NULL,
   ccompare = "unpaired",
-  qcut = 0.01,
   pathids = "04110",
   nchunks = 1,
   keep_tmp = TRUE,
-  cpd.idtype = "KEGG"
+  cpd.idtype = "KEGG",
+  q_cutoff = 0.1
 )
 }
 \arguments{
@@ -72,13 +72,15 @@ for human and eukaryotic species}
 
 \item{ccompare}{how the compound data is compared, default paired}
 
-\item{qcut}{threshold for pathway selection, default 0.01}
-
 \item{pathids}{pathway of interest only necessary if enrichment is not run}
 
 \item{nchunks}{default 1, in how many chunks you want to run alignment}
 
 \item{keep_tmp}{weather to store aligned bam files and trimmed fastq files default True}
+
+\item{cpd.idtype}{compound id type}
+
+\item{q_cutoff}{cutoff for q value for pathway selection}
 }
 \value{
 returns message if analysis complete successfully

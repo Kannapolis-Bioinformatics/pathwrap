@@ -69,7 +69,7 @@ run_differerntial_gene_analysis <- function(cnts, phenofile, outdir, entity, gco
         gene_data <- run_deseq2(cnts, 
                         outdir, entity,  formula_object,coldat, npca=npca, nheatmap=nheatmap ) 
     } else {
-        gene_data <- run_edgeR(cnts,  outdir,grp.idx )
+        gene_data <- run_edgeR(cnts,  outdir,grp.idx,entity  )
     }
 
 return(gene_data)

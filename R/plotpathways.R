@@ -30,14 +30,17 @@ plotpathways <- function(kegg.dir, entity, path.ids, gene_data, cpd_data,
                 pathview(gene.data = gene_data, pathway.id = pid, #.pathview is written in getwd()
                          species = species_code,
                          out.suffix = "pathview", kegg.dir = kegg.dir, 
-                         cpd.data = cpd_data,
-                         cpd.idtype = cpd_id_type, gene_id_type = gene_id_type)
+                         cpd.data = cpd_data)
+                #,keys.align="y",match.data=F,multi.state= T, 
+                 #        same.layer=T,  cpd.idtype = cpd_id_type, gene_id_type = gene_id_type,kegg.native= TRUE, split.group=TRUE
+                 #       )
                 
             }, error = function(w) {
                 check_and_warn(TRUE, paste("Pathview failed on", pid))
             })
             Files <- list.files(path = getwd() ,pattern=".pathview.", full.names = TRUE, 
                                 )
+            print(Files)
             
             if (length(Files) != 0) {
                 newName <- gsub(dirname(Files)[1], kegg.dir, Files)

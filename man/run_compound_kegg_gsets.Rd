@@ -8,10 +8,11 @@ run_compound_kegg_gsets(
   cdatapath,
   cpd_id_type = "KEGG COMPOUND accession",
   csamp,
+  keggorgcode,
   cref,
   ccompare = "paired",
   outdir,
-  entity
+  q_cutoff
 )
 }
 \arguments{
@@ -22,13 +23,15 @@ pathview::data(rn.list)}
 
 \item{csamp}{column number of sample}
 
+\item{keggorgcode}{three char code for kegg organism}
+
 \item{cref}{column number of reference}
 
-\item{ccompare}{comparision type for sample}
+\item{ccompare}{comparison type for sample}
 
 \item{outdir}{directory where results of compound set analysis is stored}
 
-\item{entity}{scientific name of the organism of study}
+\item{q_cutoff}{q value cutoff for selecting pathway}
 }
 \value{
 gage_return_obj_c return object from run_gage for compound

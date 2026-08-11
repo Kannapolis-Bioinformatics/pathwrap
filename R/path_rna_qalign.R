@@ -22,7 +22,7 @@
 #' @import Rhisat2
 #' @importFrom grDevices tiff
 #' @import ggplot2
-#'
+#' @import dplyr
 #' @return R object generated from the alignment step
 #'
 

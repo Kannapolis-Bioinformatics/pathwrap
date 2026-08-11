@@ -4,12 +4,17 @@
 \alias{run_gene_gsets_analysis}
 \title{Run GAGE and Pathview}
 \usage{
-run_gene_gsets_analysis(fc_matrix, cnts, outdir, entity, compare, phenofile)
+run_gene_gsets_analysis(
+  gene_data,
+  outdir,
+  entity,
+  compare,
+  phenofile,
+  q_cutoff
+)
 }
 \arguments{
-\item{fc_matrix}{: log fold expression values}
-
-\item{cnts}{: counts of genes to use in pathview}
+\item{gene_data}{: gene data with gene_data$logfoldchange #log fold expression values}
 
 \item{outdir}{: directory in which GAGE will be run}
 
@@ -18,13 +23,15 @@ run_gene_gsets_analysis(fc_matrix, cnts, outdir, entity, compare, phenofile)
 \item{compare}{: how the comparison is done for GAGE, see gage for details}
 
 \item{phenofile}{: path to the phenofile where raw data files path is stored}
+
+\item{q_cutoff}{q val for pathway selection}
 }
 \value{
 gage_return_obj gage_return_obj which is list is returned
 }
 \description{
 \code{run_pathway} runs GAGE for pathway analysis
-GAGE is based upon the user supplied comparision
+GAGE is based upon the user supplied comparison
 method for the species specified.
 The biological process, cellular component and
 molecular function analysis for GO terms are done separately.

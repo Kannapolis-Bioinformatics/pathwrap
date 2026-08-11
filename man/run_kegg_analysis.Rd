@@ -4,16 +4,33 @@
 \alias{run_kegg_analysis}
 \title{run KEGG enrichmnet analysis}
 \usage{
-run_kegg_analysis(gene_data, outdir, entity, compare)
+run_kegg_analysis(
+  logfoldchange,
+  normalized_cnts,
+  outdir,
+  entity,
+  compare,
+  mref,
+  msamp,
+  q_cutoff
+)
 }
 \arguments{
-\item{gene_data}{dataframe or matrix or list of genes}
+\item{logfoldchange}{dataframe or matrix or list of genes}
+
+\item{normalized_cnts}{normalized cnts to plot gene data}
 
 \item{outdir}{directory to store output}
 
 \item{entity}{organism of interest}
 
 \item{compare}{how the comparision is made}
+
+\item{mref}{reference  colums for plotting gene data}
+
+\item{msamp}{sample columns for plotting gene data}
+
+\item{q_cutoff}{q value for pathway selection}
 }
 \description{
 This function runs go enrichment analysis for KEGG disease, metabolism and signalling.

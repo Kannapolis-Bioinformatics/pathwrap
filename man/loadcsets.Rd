@@ -4,7 +4,10 @@
 \alias{loadcsets}
 \title{Function to generate compound set for pathway analysis}
 \usage{
-loadcsets()
+loadcsets(entitycode)
+}
+\arguments{
+\item{entitycode}{three char code of organism for kegg}
 }
 \value{
 compound_sets is returned

@@ -6,18 +6,17 @@
 \usage{
 run_go_set_analysis(
   gene_data,
-  cnts,
   outdir,
   entity,
   compare,
-  use.fold,
-  phenofile
+  use.fold = T,
+  mref,
+  msamp,
+  q_cutoff
 )
 }
 \arguments{
-\item{gene_data}{logfold change, names should be genes}
-
-\item{cnts}{gene counts}
+\item{gene_data}{object returned from prev names should be genes}
 
 \item{outdir}{main directory for storing output of the process}
 
@@ -27,7 +26,11 @@ run_go_set_analysis(
 
 \item{use.fold}{if fold change should be used instead}
 
-\item{phenofile}{file where the path of raw data is stored, used to generate ref and samp index}
+\item{mref}{reference  colums for plotting gene data}
+
+\item{msamp}{sample columns for plotting gene data}
+
+\item{q_cutoff}{q value for pathway selection}
 }
 \description{
 This function runs go enrichment analysis for biological process, cellular component and metabolic function separately

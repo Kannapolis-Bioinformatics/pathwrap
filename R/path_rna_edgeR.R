@@ -7,16 +7,20 @@
 #' edgeR analysis and a volcanoplot.
 #' It returns the logFC to be used by GAGE for gene set analysis.
 #'
-#'
+#' @param entity name of organism whose analysis is being done
 #' @param cnts : counts of genes
 #' @param grp.idx : index of the reference and sample for differential analysis as factor
 #' @param outdir the  parent directory in which edgeR results will be stored
 #' @import edgeR
-#'
+#' @import pathview
+#' @import gage
 #' @return log fold expression values
 #'
 
-run_edgeR <- function(cnts, outdir, grp.idx){ 
+run_edgeR <- function(cnts, outdir, grp.idx, entity){ 
+    kegg.gs.species <- kegg.gsets(entity)
+    orgcode <- kegg.species.code(entity)
+    
     edger.dir <- file.path(outdir, "differential_analysis", "edgeR")
     if(!inherits(cnts)=="data.frame"){
         if (file.exists(cnts)){
@@ -67,7 +71,8 @@ run_edgeR <- function(cnts, outdir, grp.idx){
         )
         dev.off()
     }
-    return(list("logfoldchange"=exp.fc))
+    print("cnts are not normalized")
+    return(list("logfoldchange"=exp.fc,"normalized_count"=cnts, "keggorgcode" = orgcode))
 
     ######
 }

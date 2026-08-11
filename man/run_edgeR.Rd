@@ -5,7 +5,7 @@
 \title{Run standard edgeR2 for differential gene expression analysis and
 plot volcano plots}
 \usage{
-run_edgeR(cnts, outdir, grp.idx)
+run_edgeR(cnts, outdir, grp.idx, entity)
 }
 \arguments{
 \item{cnts}{: counts of genes}
@@ -13,6 +13,8 @@ run_edgeR(cnts, outdir, grp.idx)
 \item{outdir}{the  parent directory in which edgeR results will be stored}
 
 \item{grp.idx}{: index of the reference and sample for differential analysis as factor}
+
+\item{entity}{name of organism whose analysis is being done}
 }
 \value{
 log fold expression values
