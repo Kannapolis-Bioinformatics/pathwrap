@@ -26,7 +26,7 @@ plot_genedata <- function( gene_data, gage.out, gset, outdir, mref, msamp, compa
     if(sum(sel)==0){
         sel <- c(1,2,3,4,5,6)
     }
-    top_ids <- na.omit(rownames(fc.kegg.p$greater)[sel])
+    top_ids <- na.omit(rownames(fc.kegg.p$greater)[sel][1:6])
     gs      <- unique(unlist(gset[top_ids]))
     essData <- essGene(gs, gene_data, ref=mref, samp=msamp, compare=compare)
     #gs can be name of gene set , or gene id vector
@@ -52,7 +52,7 @@ plot_genedata <- function( gene_data, gage.out, gset, outdir, mref, msamp, compa
         if(sum(sel)==0){
             sel <- c(1,2,3,4,5,6)
         }
-        top_ids <- na.omit(rownames(fc.kegg.p$less)[sel])
+        top_ids <- na.omit(rownames(fc.kegg.p$less)[sel][1:6])
         gs      <- unique(unlist(gset[top_ids]))
         essData <- essGene(gs, gene_data, ref=mref, samp=msamp, compare=compare)
         #gs can be name of gene set , or gene id vector
