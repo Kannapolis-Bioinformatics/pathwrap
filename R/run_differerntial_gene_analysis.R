@@ -9,7 +9,7 @@
 #' @param gcompare : if the experiment is paired or unpaired
 #' @param npca number of genes to use for pca
 #' @param nheatmap number of genes for heatmap
-#' @param phenofile the file that contain information about class
+#' @param phenofile_res returned object from process_phenofile
 #' @param diff.tool either DeSeq2 or edgeR
 #' @import EnhancedVolcano EnhancedVolcano
 #' @importFrom DESeq2 DESeqDataSetFromMatrix
@@ -22,7 +22,7 @@
 #' @return fold change values
 #' @export 
 
-run_differerntial_gene_analysis <- function(cnts, phenofile, outdir, entity, gcompare, npca, nheatmap, diff.tool = "DeSeq2"){
+run_differerntial_gene_analysis <- function(cnts, phenofile_res, outdir, entity, gcompare, npca, nheatmap, diff.tool = "DeSeq2"){
     
     if(!inherits(cnts, "data.frame")){
         if (file.exists(cnts)){
@@ -33,11 +33,10 @@ run_differerntial_gene_analysis <- function(cnts, phenofile, outdir, entity, gco
     }
 
     cnts[cnts == 0] <- NA
-    cnts <- as.data.frame(na.omit(cnts))
-    
+    cnts <- as.data.frame(na.omit(cnts))    
     
     #find the two group
-    phenofile_res <- process_phenofile(phenofile)
+    #phenofile_res <- process_phenofile(phenofile)
     coldata <- phenofile_res$coldata
     SampleName <- phenofile_res$SampleName
     #filenames <- phenofile_res$FileName
