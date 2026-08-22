@@ -29,6 +29,7 @@
 run_qAlign <-function(phenofile, cacheDir, aligner, references, outdir,corenum,nchunks){
     # does ref.dir also have ref index, if not make indexes
     aligned_bam<- file.path(outdir, "aligned_bam")
+    setwd(aligned_bam)
     sampleFile_lst <- writesampleFile(outdir, phenofile,nchunks)
     
     genomeFile <- references$genomeFile
