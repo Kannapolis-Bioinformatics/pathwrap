@@ -14,7 +14,7 @@
 #' @param compare : how the comparison is done for GAGE, see gage for details
 #' @param outdir : directory in which GAGE will be run
 #' @param entity organism of interest, scientific name
-#' @param phenofile : path to the phenofile where raw data files path is stored 
+#' @param phenofile_res : object returned by process_phenofile, see process phenofile for details 
 #' @param q_cutoff q val for pathway selection
 #' @import stats
 #' @import utils
@@ -25,13 +25,13 @@
 #' @export
 
 run_gene_gsets_analysis <- function(gene_data, outdir, entity, compare, 
-                                         phenofile,q_cutoff  ) {   
+                                         phenofile_res,q_cutoff  ) {   
     
   fc_matrix <- gene_data$logfoldchange
     ####
   plot.genedata = TRUE
   if (plot.genedata == TRUE) {
-    phenofile_res <- process_phenofile(phenofile)
+    #phenofile_res <- process_phenofile(phenofile)
     coldata <- phenofile_res$coldata
     sampleName <- phenofile_res$sampleName
     filenames <- phenofile_res$FileName
