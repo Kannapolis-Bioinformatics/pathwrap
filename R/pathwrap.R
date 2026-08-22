@@ -61,14 +61,14 @@ pathwrap <- function(  phenofile,entity,corenum=detectCores(),ref.dir=NULL, cach
     
     run_fastp(phenofile, outdir, corenum)
     message("STEP 1b: FASTP complete")
-    aligned_obj_n_cnts <- do_alignment_ncounting(phenofile, ref.dir, outdir, entity, cacheDir, 
+    aligned_obj_n_cnts <- do_alignment_ncounting(phenofile_res, ref.dir, outdir, entity, cacheDir, 
                                                  aligner, corenum,nchunks)
     message("STEP 1c: ALIGNMENT AND COUNTING complete" )
     print("this is cnts")
     print(dim(as.data.frame(aligned_obj_n_cnts$cnts)))
     #cnts can be filename of cnts
     #phenofile can contain only samplename and class
-     gene_data <- run_differerntial_gene_analysis(cnts = as.data.frame(aligned_obj_n_cnts$cnts), phenofile, outdir, entity,  gcompare, npca, nheatmap, diff.tool = diff.tool)
+     gene_data <- run_differerntial_gene_analysis(cnts = as.data.frame(aligned_obj_n_cnts$cnts), phenofile_res, outdir, entity,  gcompare, npca, nheatmap, diff.tool = diff.tool)
      if(is.null(gene_data)){
          return(invisible(NULL))
      }
@@ -79,7 +79,7 @@ pathwrap <- function(  phenofile,entity,corenum=detectCores(),ref.dir=NULL, cach
         
      }
     # #check from here
-     run_gene_gsets_analysis(gene_data = gene_data, outdir, entity,  gcompare,phenofile,q_cutoff)#, use.fold=TRUE)
+     run_gene_gsets_analysis(gene_data = gene_data, outdir, entity,  gcompare,phenofile_res,q_cutoff)#, use.fold=TRUE)
     message("this is dim of log fold change")
     print(dim( gene_data$logfoldchange))
     print(gene_data$logfoldchange)
