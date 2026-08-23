@@ -6,10 +6,18 @@
 \item RUN THE ANALYSIS # Alignment and counting
 }}
 \usage{
-run_qAlign(phenofile, cacheDir, aligner, references, outdir, corenum, nchunks)
+run_qAlign(
+  phenofile_res,
+  cacheDir,
+  aligner,
+  references,
+  outdir,
+  corenum,
+  nchunks
+)
 }
 \arguments{
-\item{phenofile}{: path to the phenofile where raw data files path is stored}
+\item{phenofile_res}{: obje of process phenofile}
 
 \item{cacheDir}{: directory where temporary files generated during alignment
 are store}

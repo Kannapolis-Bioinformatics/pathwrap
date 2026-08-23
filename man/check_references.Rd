@@ -4,12 +4,10 @@
 \alias{check_references}
 \title{function to make sure things are good}
 \usage{
-check_references(ref.dir, outdir, entity)
+check_references(ref.dir, entity)
 }
 \arguments{
 \item{ref.dir}{: directory for reference files}
-
-\item{outdir}{: directory for result}
 
 \item{entity}{: scientific name of species of interest}
 }

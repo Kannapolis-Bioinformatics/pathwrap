@@ -1,6 +1,6 @@
-SampleName  FileName    Class   PairedInfo
-sample1 ~/fullpathto/sample1_sub.fastq.gz   A   1A
-sample3	~/fullpathto/sample3_sub.fastq.gz	B   1A
-sample1	~/fullpathto/sample4_sub.fastq.gz	A   2A
-sample3	~/fullpathto/sample2_sub.fastq.gz	B   2A
+SampleName	FileName	Class	PairedInfo
+sample1	~/fullpathto/sample1_sub.fastq.gz	A	1A
+sample3	~/fullpathto/sample3_sub.fastq.gz	B	1A
+sample1	~/fullpathto/sample4_sub.fastq.gz	A	2A
+sample3	~/fullpathto/sample2_sub.fastq.gz	B	2A
 

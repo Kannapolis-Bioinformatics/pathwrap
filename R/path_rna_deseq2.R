@@ -99,7 +99,7 @@ run_deseq2 <- function(cnts, outdir, entity,  formula_object,coldat,npca, nheatm
         tiff(volcanoplotfilepath,
              units = "in", width = 15,height = 15, res = 300)
         #plot has ensembl/gencode geneids
-        plot(
+        print(
             EnhancedVolcano::EnhancedVolcano(deseq2_res,
                                              x = "log2FoldChange", y = "pvalue",lab = labstoplot))
         dev.off()
@@ -115,8 +115,8 @@ run_deseq2 <- function(cnts, outdir, entity,  formula_object,coldat,npca, nheatm
        exp.fc <-  exp_table[,2]
        names(exp.fc) <- rownames(exp_table)
        norm_counts <- data.matrix(read.table(file.path(deseq2.dir, "normalized_count.txt"),header = T, row.names = 1, quote=""))
-       print("this isthe size of log fold change being read")
-       print(dim(exp.fc))
+       #print("this is the size of log fold change being read")
+       #print(dim(exp.fc))
        #vsd_matrix <- read.table(file.path(deseq2.dir, "vsd_count.txt"),header = T, row.names = 1, quote="")
     }
     
@@ -164,7 +164,7 @@ plotdeseqheatmap <- function(deseq2_res,dds,deseq2.dir,npca, nheatmap){
                 axis.title.y = element_text(size = 20)   # x-axis title
             )
         
-        plot(g)
+        print(g)
         dev.off()
     }
     df.top <- na.omit(df.top[order(df.top$log2FoldChange,
@@ -184,7 +184,7 @@ plotdeseqheatmap <- function(deseq2_res,dds,deseq2.dir,npca, nheatmap){
                       show_rownames=TRUE,cluster_cols=FALSE,fontsize = 15, 
                       heatmap_legend_param = list(column_names_rot=45))
             
-        plot(g)#+ theme(axis.text.x = element_text(angle = 45, vjust = 1))
+        print(g)#+ theme(axis.text.x = element_text(angle = 45, vjust = 1))
         dev.off()
     }
     message("plot return function vsd_matrix")

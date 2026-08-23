@@ -48,13 +48,13 @@ run_compound_kegg_gsets<- function( cdatapath,cpd_id_type= "KEGG COMPOUND access
     gpath_ids <- run_gage2(gsets = csets,  same.dir = FALSE,
             compare = ccompare,gene_data= cpd_data, 
             , ref=NULL, samp=NULL, work.dir=cset_dir,q_cutoff=q_cutoff)
-    print("these are gpaths_ids")
-    print("finally ok for c pathway")
-    print("gpath_ids")
+   
+    
+    
     
     plotpathways(kegg.dir =cset_dir, keggorgcode, gpath_ids$pids , 
                  cpd_data = cpd_data, gene_data = NULL ,
                  cpd_id_type= "kegg")
-    #names(cpd_data) <- rownames(cpd_data)
+    
     return(list("pids"= gpath_ids$pids, "cpd_data"=cpd_data, "gage.out.cpd" = gpath_ids$gage.out))
 }

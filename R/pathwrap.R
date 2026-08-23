@@ -61,14 +61,24 @@ pathwrap <- function(  phenofile,entity,corenum=detectCores(),ref.dir=NULL, cach
     
     run_fastp(phenofile, outdir, corenum)
     message("STEP 1b: FASTP complete")
-    aligned_obj_n_cnts <- do_alignment_ncounting(phenofile_res, ref.dir, outdir, entity, cacheDir, 
+    aligned_obj_n_cnts <- do_alignment_ncounting(phenofile_res, ref.dir, outdir,
+                                                 entity, cacheDir, 
                                                  aligner, corenum,nchunks)
+    if (!is.null(aligned_obj_n_cnts)){
     message("STEP 1c: ALIGNMENT AND COUNTING complete" )
+    } else {
+        message("alignment did not ran")
+        message("is reference packages ok?")
+        return (invisible(NULL))
+    }
     print("this is cnts")
     print(dim(as.data.frame(aligned_obj_n_cnts$cnts)))
     #cnts can be filename of cnts
     #phenofile can contain only samplename and class
-     gene_data <- run_differerntial_gene_analysis(cnts = as.data.frame(aligned_obj_n_cnts$cnts), phenofile_res, outdir, entity,  gcompare, npca, nheatmap, diff.tool = diff.tool)
+     gene_data <- run_differerntial_gene_analysis(cnts = 
+                    as.data.frame(aligned_obj_n_cnts$cnts), phenofile_res, 
+                    outdir, entity,  gcompare, npca, nheatmap, 
+                    diff.tool = diff.tool)
      if(is.null(gene_data)){
          return(invisible(NULL))
      }
@@ -79,23 +89,31 @@ pathwrap <- function(  phenofile,entity,corenum=detectCores(),ref.dir=NULL, cach
         
      }
     # #check from here
-     run_gene_gsets_analysis(gene_data = gene_data, outdir, entity,  gcompare,phenofile_res,q_cutoff)#, use.fold=TRUE)
+     run_gene_gsets_analysis(gene_data = gene_data, outdir, entity, 
+                             gcompare,phenofile_res,q_cutoff)#, use.fold=TRUE)
     message("this is dim of log fold change")
     print(dim( gene_data$logfoldchange))
     print(gene_data$logfoldchange)
     #? load compound set here and do analysis
      if (!is.na(cdatapath)){
          message("run_compound_kegg_gsets is running")
-         gage.out.cpd_res <- run_compound_kegg_gsets(cdatapath,cpd_id_type= cpd.idtype,csamp,keggorgcode = unname(gene_data$keggorgcode),
-                                                     cref, ccompare="paired" , outdir, q_cutoff )
+         gage.out.cpd_res <- run_compound_kegg_gsets(
+             cdatapath,cpd_id_type= cpd.idtype,csamp,
+             keggorgcode = unname(gene_data$keggorgcode),
+            cref, ccompare="paired" , outdir, q_cutoff )
         
          #determine how you want to combine 
          #gene_data = gene_data$normalized_count
-         pathids<- run_combinedpath_analysis(outdir, gene_data$logfoldchange, entity, gcompare,gage.out.cpd_res$gage.out.cpd,q_cutoff=q_cutoff)
+         pathids<- run_combinedpath_analysis(
+             outdir, 
+            gene_data$logfoldchange, entity, gcompare,
+            gage.out.cpd_res$gage.out.cpd,q_cutoff=q_cutoff)
          
          cpd_toplot <- as.matrix(gage.out.cpd_res$cpd_data,rownames.force=TRUE)
          names(cpd_toplot) <- rownames(cpd_toplot)
-         plotpathways(kegg.dir = file.path(outdir, "gage_results", "combined_analysis_kegg"), entity, pathids , 
+         plotpathways(
+             kegg.dir=file.path(outdir,"gage_results","combined_analysis_kegg"),
+             entity, pathids , 
                       gene_data = gene_data$logfoldchange , cpd_data = cpd_toplot, 
                       gene_id_type ="entrez", cpd_id_type=cpd.idtype)
          

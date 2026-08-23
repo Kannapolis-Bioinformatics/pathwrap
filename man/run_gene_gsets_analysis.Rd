@@ -9,7 +9,7 @@ run_gene_gsets_analysis(
   outdir,
   entity,
   compare,
-  phenofile,
+  phenofile_res,
   q_cutoff
 )
 }
@@ -22,7 +22,7 @@ run_gene_gsets_analysis(
 
 \item{compare}{: how the comparison is done for GAGE, see gage for details}
 
-\item{phenofile}{: path to the phenofile where raw data files path is stored}
+\item{phenofile_res}{: object returned by process_phenofile, see process phenofile for details}
 
 \item{q_cutoff}{q val for pathway selection}
 }

@@ -52,12 +52,13 @@ run_qc <- function(fq.dir, outdir, corenum) {
             units = "in",width = dim(qc)[2], height = dim(qc)[2], res = 300 )
         
         g <- ggplot(qc, aes(x = sample, y = tot.seq)) +
-            geom_bar(stat = "identity", position = "dodge", fill = "steelblue") +
-            theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1,face = "bold"))+
+            geom_bar(stat = "identity", position = "dodge", fill = "steelblue")+
+            theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1,
+                                             face = "bold"))+
             theme(axis.text.y = element_text(face = "bold"))
-        plot(g)
+        print(g)#plot(g)
         dev.off()
-        # # pdf(file.path(qc.dir,"qc_heatmap.pdf"), width=15, height=15, res=300)
+        ## pdf(file.path(qc.dir,"qc_heatmap.pdf"), width=15, height=15, res=300)
         tiff(file.path(qc.dir, "qc_heatmap.tiff",fsep = .Platform$file.sep),
             units = "in", width = 11,
             height = dim(qc)[2], res = 300
@@ -65,17 +66,21 @@ run_qc <- function(fq.dir, outdir, corenum) {
         
         g <- ggplot(qc, aes(x = module, y = sample, fill = status)) +
             geom_tile() +
-            theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1,size= 15,face = "bold"))+
+            theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1,
+                                             size= 15,face = "bold"))+
             theme(axis.text.y = element_text(face = "bold"))
-        plot(g)
+        print(g)
         dev.off()
        
        # First, ensure qc is a data.frame
         qc <- as.data.frame(qc)
+        all_fail_samples<-qc[qc$module =="Basic Statistics" & qc$status=="FAIL",
+                            "sample"]
 
-        # Aggregate to find whether all statuses for each sample are "FAIL"
-        all_fail_samples <- unique(qc$sample[sapply(split(qc$status, qc$sample), function(x) all(x == "FAIL"))])
         if (length(all_fail_samples)>0){
+            message(all_fail_samples)
+            message("above samples fail basic statistics of qc")
+            message("Pleasse remove them from before running pathwrap")
             return(invisible(NULL))
         }
     }

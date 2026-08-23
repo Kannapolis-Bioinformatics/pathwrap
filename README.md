@@ -2,10 +2,10 @@
 
 ## Overview
 
-Pathwrap is an analysis tool for the processing of RNAseq datasets from raw data to data visualizations. Pathwrap is built on pathway enrichment tool GAGE (Generally Applicable Gene-set Enrichment for Pathway Analysis) and pathway visualization using Pathview.  Features include all the essential steps of RNAseq processing including read quality control (e.g., trimming and filtering), read mapping,  read summarization/quantification, statistical differential abundance analysis (DESeq2 and edgeR), pathway enrichment (GAGE using KEGG KO), and pathway visualization (Pathview). Pathwrap provides a start to finish automatic pipeline within the R framework for comprehensive analysis of RNAseq data. In addition it allows seamless integration of pathway analysis and visualization of RNAseq data with quantitative metabolomics data.
+Pathwrap is an analysis tool for the processing of RNASeq data sets from raw data to data visualizations. Pathwrap is built on pathway enrichment tool GAGE (Generally Applicable Gene-set Enrichment for Pathway Analysis) and pathway visualization using Pathview.  Features include all the essential steps of RNASeq processing including read quality control (e.g., trimming and filtering), read mapping,  read summarization/quantification, statistical differential abundance analysis (DESeq2 and edgeR), pathway enrichment (GAGE using KEGG KO), and pathway visualization (Pathview). Pathwrap provides a start to finish automatic pipeline within the R framework for comprehensive analysis of RNAseq data. In addition it allows seamless integration of pathway analysis and visualization of RNAseq data with quantitative metabolomics data.
 
 ## Installation
-1. In order to install pathwrap, open R (version "4.4") and write
+1. In order to install pathwrap, open R (version "4.4") or more and write
 
 ```r
 if (!require("BiocManager", quietly = TRUE))
@@ -29,7 +29,7 @@ anntpkg <- anntpkglist$annotation[which(anntpkglist$species=="Mus musculus")]
 #BiocManager::install(anntpkg)
 ```
 
-If path to reference directory is provided using argument ref.dir, the path should be writable to create indexes and it should contain both genome reference (.fa,/.fasta) and genome annotaion file (.gtf/.gff). 
+If path to reference directory is provided using argument ref.dir, the path should be writable to create indexes and it should contain both genome reference (.fa,/.fasta) and genome annotaion file (.gtf/.gff). <br>
 
 3. A phenofile is necessary for any run of pathwrap. The phenofile should be tab delimited file with information about the path of raw files and class to which each sample belong to. Phenofile for single ended reads looks like this.
 ```{r sampleFileSingle, echo=FALSE, results='asis'}
@@ -132,6 +132,8 @@ if(interactive()){ system.time({
 |nchunks | default 1, in how many chunks you want to run alignment | 1 |
 |keep_tmp |weather to store aligned bam files and trimmed fastq files | TRUE | 
 |diff.tool | weather to use "DESeq2" or edgeR for differential gene analysis | "DESeq2" |
+|cpd.idtype | id type of compound data to match | KEGG |
+|q_cutoff |cutoff for q value for pathway selection | 0.1 |
 
 
 
@@ -140,54 +142,73 @@ The steps run are as follows:
 
 With one function, it runs all the steps listed below. 
 
-## STEP 1 : Quality control
+## STEP 1 : Quality control<br>
 
-# STEP 1a: running fastqc
+# STEP 1a: running fastqc<br>
 
-It runs fastqc analysis in R using fastqcR. If fastqc is not available in system to run by R, this function is capable of downloading the fastqc tools before running the quality check. The results are standard html files where the quality of each fastq files can be examined.
+It runs fastqc analysis in R using fastqcR. If fastqc is not available in system
+to run by R, this function is capable of downloading the fastqc tools before 
+running the quality check. The results are standard html files where the quality
+of each fastq files can be examined.<br>
 
-# STEP 1b : running fastp
+# STEP 1b : running fastp<br>
 
-After running fastqc, it runs fastp. The function takes name of the samples and for each sample does the quality and adapter trimming for Illumina and long read sequencing. It works for both PE and SE data. HTML files are generated for each fastq files that has information/figures of quality control before and after quality trimming.
+After running fastqc, it runs fastp. The function takes name of the samples 
+and for each sample does the quality and adapter trimming for Illumina and long 
+read sequencing. It works for both PE and SE data. HTML files are generated for 
+each fastq files that has information/figures of quality control before and after
+quality trimming.<br>
 
-## STEP 2: making txdb obj
+## STEP 2: making txdb obj<br>
 
-The wrapper then makes TxDb object either from annnotation file or by loading from the annotation package. Make_txdbobj uses the makeTxDbFromGFF to make TxDb object from transcript annotations available in gtf file in ref.dir or if ref.dir is NA, it makes txdb object fromt the annotaion package
+The wrapper then makes TxDb object either from annotation file or by loading from the annotation package. Make_txdbobj uses the makeTxDbFromGFF to make TxDb object from transcript annotations available in gtf file in ref.dir or if ref.dir is NA, it makes txdb object fromt the annotaion package
 
-## STEP 3 : Alignmnet and counting 2 
+## STEP 3 : Alignment and counting 2 <br>
 
-After the txdb object is formed, the wrapper runs the Rhisat2 or Rbowtie for alignment on paired or single end mode depending on data. It saves the alignment object in RDS file which can be loaded in R for further analysis. If the reference index is not found in the reference directory, it creates reference index before running alignment. If the refernece genome is a package the reference index is created as R package. It generates the barplot of mapped and unmapped sequence reads.
+After the txdb object is formed, the wrapper runs the Rhisat2 or Rbowtie for alignment on paired or single end mode depending on data. It saves the alignment object in RDS file which can be loaded in R for further analysis. If the reference index is not found in the reference directory, it creates reference index before running alignment. If the refernece genome is a package the reference index is created as R package. It generates the barplot of mapped and unmapped sequence reads.<br>
 
-## STEP 4: counting aligned sequences
+## STEP 4: counting aligned sequences<br>
 
-After aligning the reads to reference genome, the wrapper generates the count of gene and store it in a table with genes in row and counts in columns. The table is stored as a RDS file that can be loaded into R for future analysis and if gene id is ensembl, the wrapper converts it to entrez to match with genes names for gene set analysis. 
+After aligning the reads to reference genome, the wrapper generates the count of gene and store it in a table with genes in row and counts in columns. The table is stored as a RDS file that can be loaded into R for future analysis and if gene id is ensembl, the wrapper converts it to entrez to match with genes names for gene set analysis. <br>
 
-# Differential gene analysis
+# Differential gene analysis<br>
 
-## STEP 5a ; running differential gene analysis using DESeq2
+## STEP 5a : running differential gene analysis using DESeq2<br>
 
-Then the wrapper runs standard DESeq2 for differential gene expression analysis and plots volcano plots. The function run_deseq2 takes counts and the list indicating reference and samples and the directory where the results are stored and performs the deseq2 analysis. The output is result table with columns of genes and log2FoldChange from result of deseq2 analysis and a volcanoplot.
+Then the wrapper runs standard DESeq2 for differential gene expression analysis 
+and plots volcano plots. The function run_deseq2 takes counts and the list 
+indicating reference and samples and the directory where the results are stored 
+and performs the deseq2 analysis. The output is result table with columns of 
+genes and log2FoldChange from result of deseq2 analysis and a volcanoplot.<br>
 
-Or
+Or<br>
 
-## STEP 5b ; running differential gene analysis using edgeR
+## STEP 5b ; running differential gene analysis using edgeR<br>
 
-Then the wrapper runs standard edgeR for differential gene expression analysis and plots volcano plots. The function run_deseq2 takes counts and the list indicating reference and samples and the directory where the results are stored and performs the DESeq2 analysis. The output is result table with columns of genes and log2FoldChange from result of DESeq2 analysis and a volcanoplot.
+Then the wrapper runs standard edgeR for differential gene expression analysis 
+and plots volcano plots. The function run_edgeR takes counts and the list 
+indicating reference and samples and the directory where the results are stored 
+and performs the DESeq2 analysis. The output is result table with columns of 
+genes and log2FoldChange from result of edgeR analysis and a volcanoplot.<br>
 
-## STEP 6 : running pathway analysis using GAGE 
+## STEP 6 : running pathway analysis using GAGE <br>
 
-After the differential gene analysis the wrapper runs generally applicable gene set enrichment for pathway analysis, GAGE based upon the user supplied comparision method for the species specified. The biological process, cellular component and molecular function analysis for GO terms are done seperately. Also, KEGG disease and KEGG signalling and metabolism pathways are analysed seperately. 
+After the differential gene analysis the wrapper runs generally applicable
+gene set enrichment for pathway analysis, GAGE based upon the user supplied 
+comparison method for the species specified. The biological process, 
+cellular component and molecular function analysis for GO terms are done 
+separately. Also, KEGG disease and KEGG signalling and metabolism pathways are analysed separately. <br>
 
-## STEP 7: visualizing the pathway using Pathview
+## STEP 7: visualizing the pathway using Pathview<br>
 
-Finally the top enriched pathways with "q.val" < 0.01 are visualized using Pathview.
+Finally the top enriched pathways with "q.val" < 0.1 are visualized using Pathview.
 
-## More information
-Please watch out for paper in making. 
+## More information<br>
+Please watch out for paper in making. <br>
 https://docs.google.com/document/d/1bacr4yY1f1hw1o3T5eUOCvPJupiOv2zu3jUUobRa1-g/edit?tab=t.0
 
 
-Thank you for your interest.
+Thank you for your interest.<br>
 
 Please send all queries to [Dr. Richard Allen White III](mailto:rwhit101@uncc.edu)<br />
 [Eliza Dhungel](mailto:edhungel@uncc.ed) <br /> 

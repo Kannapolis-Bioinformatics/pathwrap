@@ -7,7 +7,7 @@ volcano plots}
 \usage{
 run_differerntial_gene_analysis(
   cnts,
-  phenofile,
+  phenofile_res,
   outdir,
   entity,
   gcompare,
@@ -19,7 +19,7 @@ run_differerntial_gene_analysis(
 \arguments{
 \item{cnts}{:counts of gene as data.frame or filename of count of gene,one count per sample per gene , sample in row}
 
-\item{phenofile}{the file that contain information about class}
+\item{phenofile_res}{returned object from process_phenofile}
 
 \item{outdir}{: directory to store results of deseq2}
 

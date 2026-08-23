@@ -13,7 +13,7 @@
 #' @import gage
 
 run_kegg_analysis <- function(logfoldchange, normalized_cnts , outdir, entity, compare, mref, msamp, q_cutoff){
-    ##download gene set 
+
         kegg.gs <- kegg.gsets(entity, check.new = TRUE)
         signmetinkegg <- kegg.gs$kg.sets[kegg.gs$sigmet.idx]
         diseaseinkegg <- kegg.gs$kg.sets[kegg.gs$dise.idx]
@@ -21,17 +21,9 @@ run_kegg_analysis <- function(logfoldchange, normalized_cnts , outdir, entity, c
         metainkegg <- kegg.gs$kg.sets[kegg.gs$met.idx]
         gene_sets = list( diseaseinkegg, metainkegg,signmetinkegg,siginkegg) #this is arranged/ordered
     
-    ###run gage for different genesets
+
     outdir_list <- list.files(file.path(outdir, "gage_results", "KEGG"), full.names = T)
     for (i in 1:length(gene_sets)) {
-        #run gage
-        #names(gene_data$logfoldchange)<- rownames(gene_data$logfoldchange)
-        #gpath_ids <- run_gage2( gene_data = gene_data$logfoldchange, gene_sets[[i]], work.dir = outdir_list[i], same.dir = FALSE,
-        #        compare = compare,gene_id_type = "ENTREZ",  ref=NULL, samp=NULL)
-        #print(gpath_ids["pids"])
-        #plot sig pathways
-        
-        
         
         gpath_ids <- run_gage2( gene_data = logfoldchange, gene_sets[[i]], work.dir = outdir_list[i], same.dir = FALSE,
                                 compare = compare,gene_id_type = "ENTREZ",  ref=NULL, samp=NULL, q_cutoff=q_cutoff)
@@ -40,13 +32,6 @@ run_kegg_analysis <- function(logfoldchange, normalized_cnts , outdir, entity, c
         plotpathways(kegg.dir = outdir_list[i], entity, gpath_ids$pids[1:6] , 
                      cpd_data = NULL, gene_data =logfoldchange ,
                      gene_id_type ="entrez")
-     
-        
-        print("this is ref col")
-        print(mref)
-        print("this is sam col")
-        print(msamp)
-        
         
        plot_genedata( gene_data = normalized_cnts, gpath_ids, 
                                      gset =gene_sets[[i]], outdir = outdir_list[i], 

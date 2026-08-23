@@ -3,20 +3,20 @@
 #' This function creates the sampleFile to run qAlign
 #' @import stringr
 #' @param outdir path to result dir where the file is written
-#' @param phenofile : path to the phenofile where raw data files path is stored 
+#' @param phenofile_res : object of process phenofile
 #' @param nchunks how many pieces should the phenofile be cut to
 #' @import tools
 #' @import stringr
 #' @return sampleFile sampleFile path to be used by qAlign
 
-writesampleFile <- function(outdir, phenofile,nchunks){
+writesampleFile <- function(outdir, phenofile_res,nchunks){
     trim.dir <- file.path(outdir , "fastp_results")
     
-    phenofile_res <- process_phenofile(phenofile)
+    #phenofile_res <- process_phenofile(phenofile)
     if(nchunks>1){
         chunk_indices <- cut(seq_along(phenofile_res$SampleName), breaks = nchunks, labels = FALSE)
         index_chunks <- split(seq_along(phenofile_res$SampleName), chunk_indices)
-        print(index_chunks)
+        message(index_chunks)
     } else{
         index_chunks<- list(seq_along(phenofile_res$SampleName))
     }
@@ -24,7 +24,7 @@ writesampleFile <- function(outdir, phenofile,nchunks){
     for (val in 1:length(index_chunks)){
         file.remove(list.files(tempdir()), recursive = TRUE)
         idxchunk<- index_chunks[[val]]
-        print(idxchunk)
+        message(idxchunk)
         sampleFile <- file.path(outdir, paste0( "sampleFile_", idxchunk[1] , "_", idxchunk[length(idxchunk)], ".txt"), 
                                 fsep = .Platform$file.sep)
         sampleFile_lst<- append(sampleFile_lst,sampleFile)
@@ -39,8 +39,7 @@ writesampleFile <- function(outdir, phenofile,nchunks){
                                               str_replace_all(file_path_sans_ext(file_path_sans_ext(
                                                   file_path_sans_ext(basename(filenames$FileName)))),
                                                   pattern = "$", replacement = "_R1.fastq.gz"))
-                ##print("this is being written in writefilesample")
-                ##print(FileNametowrite)
+              
                 write.table(file = sampleFile, sep = "\t",
                             as.data.frame(cbind(as.data.frame(FileNametowrite), 
                                                 SampleName)),col.names = c("FileName", "SampleName"),

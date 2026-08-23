@@ -33,16 +33,22 @@ import(stringr)
 import(tools)
 import(txdbmaker)
 import(utils)
-importFrom(AnnotationDbi,loadDb)
-importFrom(AnnotationDbi,saveDb)
+importFrom(AnnotationDbi,
+  loadDb,
+  saveDb
+)
 importFrom(ComplexHeatmap,pheatmap)
 importFrom(DESeq2,DESeqDataSetFromMatrix)
-importFrom(QuasR,qAlign)
-importFrom(QuasR,qCount)
+importFrom(QuasR,
+  qAlign,
+  qCount
+)
 importFrom(Rsamtools,scanFaIndex)
 importFrom(S4Vectors,DataFrame)
 importFrom(SummarizedExperiment,assay)
-importFrom(grDevices,dev.off)
-importFrom(grDevices,tiff)
+importFrom(grDevices,
+  dev.off,
+  tiff
+)
 importFrom(methods,is)
 importFrom(stringr,str_replace_all)

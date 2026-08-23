@@ -7,7 +7,7 @@
 #' alignment. If the reference genome is a package the reference index is
 #' created as R package.It generates the barplot for number of mapped and 
 #' unmapped sequence reads.
-#' @param phenofile : path to the phenofile where raw data files path is stored 
+#' @param phenofile_res : obje of process phenofile
 #' @param corenum : the number of cores used during alignment
 #' @param nchunks the number of segment you want to run the alignemnt
 #' @param references : the list of references genome file and gene ananotaion used for 
@@ -26,11 +26,11 @@
 #' @return R object generated from the alignment step
 #'
 
-run_qAlign <-function(phenofile, cacheDir, aligner, references, outdir,corenum,nchunks){
+run_qAlign <-function(phenofile_res , cacheDir, aligner, references, outdir,corenum,nchunks){
     # does ref.dir also have ref index, if not make indexes
     aligned_bam<- file.path(outdir, "aligned_bam")
     setwd(aligned_bam)
-    sampleFile_lst <- writesampleFile(outdir, phenofile,nchunks)
+    sampleFile_lst <- writesampleFile(outdir, phenofile_res,nchunks)
     
     genomeFile <- references$genomeFile
     geneAnnotation <- references$geneAnnotation
@@ -111,7 +111,7 @@ plotalignmentstats <- function(data_to_plot, aligned_bam){
             xlab("samples") +
             theme(legend.title = element_blank()) +
             theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
-        plot(g)
+        print(g)
         dev.off()
     }
         return(invisible(NULL)) 

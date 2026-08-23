@@ -4,12 +4,12 @@
 \alias{writesampleFile}
 \title{Write sampleFile to run qAlign}
 \usage{
-writesampleFile(outdir, phenofile, nchunks)
+writesampleFile(outdir, phenofile_res, nchunks)
 }
 \arguments{
 \item{outdir}{path to result dir where the file is written}
 
-\item{phenofile}{: path to the phenofile where raw data files path is stored}
+\item{phenofile_res}{: object of process phenofile}
 
 \item{nchunks}{how many pieces should the phenofile be cut to}
 }

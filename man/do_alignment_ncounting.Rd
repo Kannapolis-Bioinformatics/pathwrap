@@ -7,7 +7,7 @@ This function identifies the type of data(SE or PE), creates sampleFile neccessa
 checks if references are okay for alignement and counting, runs qAlign and qcount}
 \usage{
 do_alignment_ncounting(
-  phenofile,
+  phenofile_res,
   ref.dir,
   outdir,
   entity,
@@ -18,7 +18,7 @@ do_alignment_ncounting(
 )
 }
 \arguments{
-\item{phenofile}{: path to the phenofile where raw data files path is stored}
+\item{phenofile_res}{: object of phenofile res}
 
 \item{ref.dir}{directory where reference genome and annotation is stored}
 

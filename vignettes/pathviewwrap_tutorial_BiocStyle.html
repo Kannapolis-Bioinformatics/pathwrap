@@ -358,11 +358,14 @@ package</h1>
 
 <div id="installation" class="section level2">
 <h2>Installation</h2>
-<p>To install pathwrap package, start R(version “4.3”) and enter:</p>
+<p>To install pathwrap package, start R(version &gt; “4.3”) and
+enter:</p>
 <pre class="r"><code>if (!require(&quot;BiocManager&quot;, quietly = TRUE)) {
     install.packages(&quot;BiocManager&quot;)
 }
-BiocManager::install(&quot;pathwrap&quot;)</code></pre>
+#install remotes if not already
+BiocManager::install(&quot;remotes&quot;)
+BiocManager::install(&quot;Kannapolis-Bioinformatics/pathwrap@simplified_beta&quot;)</code></pre>
 <p>Based on the species you want to analyse, you can install the
 bioconductor annotation and genome package. For example, for human
 species</p>
@@ -370,9 +373,11 @@ species</p>
 data(anntpkglist, package = &quot;pathwrap&quot;)
 #replace Homo sapiens with scientific name of mouse, Mus musculus for mouse data
 genomepkg &lt;- anntpkglist$genome[which(anntpkglist$species == &quot;Homo sapiens&quot;)]
-anntpkg &lt;- anntpkglist$annotate[which(anntpkglist$species == &quot;Homo sapiens&quot;)]
-#BiocManager::install(genomepkg)
-#BiocManager::install(anntpkg)</code></pre>
+anntpkg &lt;- anntpkglist$annotate[which(anntpkglist$species == &quot;Homo sapiens&quot;)]</code></pre>
+<p>Install the pacakge using BiocManager</p>
+<pre class="r"><code>
+BiocManager::install(genomepkg)
+BiocManager::install(anntpkg)</code></pre>
 </div>
 <div id="documentation" class="section level2">
 <h2>Documentation</h2>
@@ -383,7 +388,36 @@ anntpkg &lt;- anntpkglist$annotate[which(anntpkglist$species == &quot;Homo sapie
 <h2>Phenofile structure</h2>
 <p>Pathwrap requires an argument that denotes path to a phenofile that
 has information about the path of raw files and the class each sample
-belong to. An example of how phenofile can be created is as below.</p>
+belong to.</p>
+<p>The phenofile should be tab delimited file with information about the
+path of raw files and class to which each sample belong to. The
+phenofile for paired end data should be of 4 columns and for single end
+data should be of three columns like follows:</p>
+<p>For single end reads;</p>
+<pre>
+SampleName  FileName    Class
+sample1 /Library/Frameworks/R.framework/Versions/4.3-x86_64/Resources/library/pathwrap/extdata/sample1_sub.fastq.gz A
+sample3 /Library/Frameworks/R.framework/Versions/4.3-x86_64/Resources/library/pathwrap/extdata/sample3_sub.fastq.gz B
+sample5 /Library/Frameworks/R.framework/Versions/4.3-x86_64/Resources/library/pathwrap/extdata/sample5_sub.fastq.gz A
+sample6 /Library/Frameworks/R.framework/Versions/4.3-x86_64/Resources/library/pathwrap/extdata/sample6_sub.fastq.gz B
+</pre>
+For paired end reads;
+<pre>
+SampleName  FileName1   FileName2   PairedInfo  Class
+sample1 ~/full_path_to_read_1_sample1   ~/full_path_to_read_2_sample1   1A  A
+sample3 ~/full_path_to_read_1_sample3   ~/full_path_to_read_2_sample3   1A  B
+sample5 ~/full_path_to_read_1_sample5   ~/full_path_to_read_2_sample5   2A  A
+sample6 ~/full_path_to_read_1_sample6   ~/full_path_to_read_2_sample6   2A  B
+</pre>
+<p>For paired experiment design;</p>
+<pre>
+SampleName  FileName    Class   PairedInfo
+sample1 ~/fullpathto/sample1_sub.fastq.gz   A   1A
+sample3 ~/fullpathto/sample3_sub.fastq.gz   B   1A
+sample1 ~/fullpathto/sample4_sub.fastq.gz   A   2A
+sample3 ~/fullpathto/sample2_sub.fastq.gz   B   2A
+</pre>
+<p>An example of how phenofile can be created is as below.</p>
 <pre class="r"><code># create a phenofile
 phenofile &lt;- tempfile(&quot;hellotmpphenofile.txt&quot;)
 # create columns for phenofile, this is for SE data
@@ -412,59 +446,46 @@ write.table(as.data.frame(cbind(SampleName, FileName, Class)),
     file = phenofile, sep = &quot;\t&quot;, row.names = FALSE,
     col.names = TRUE, quote = FALSE
 )</code></pre>
-<p>The phenofile should be tab delimited file with information about the
-path of raw files and class to which each sample belong to. The
-phenofile for paired end data should be of 4 columns and for single end
-data should be of three columns like follows:</p>
-<p>For single end reads;</p>
-<pre>
-SampleName  FileName    Class
-sample1 /Library/Frameworks/R.framework/Versions/4.3-x86_64/Resources/library/pathwrap/extdata/sample1_sub.fastq.gz A
-sample3 /Library/Frameworks/R.framework/Versions/4.3-x86_64/Resources/library/pathwrap/extdata/sample3_sub.fastq.gz B
-sample5 /Library/Frameworks/R.framework/Versions/4.3-x86_64/Resources/library/pathwrap/extdata/sample5_sub.fastq.gz A
-sample6 /Library/Frameworks/R.framework/Versions/4.3-x86_64/Resources/library/pathwrap/extdata/sample6_sub.fastq.gz B
-</pre>
-For paired end reads;
-<pre>
-SampleName  FileName1   FileName2   Class
-sample1 full_path_to_read_1_sample1 full_path_to_read_2_sample1 A
-sample3 full_path_to_read_1_sample3 full_path_to_read_2_sample3 B
-sample5 full_path_to_read_1_sample5 full_path_to_read_2_sample5 A
-sample6 full_path_to_read_1_sample6 full_path_to_read_2_sample6 B
-</pre>
-For paired experiment design;
-</pre>
-SampleName FileName Class sample1 ~/fullpathto/sample1_sub.fastq.gz A
-sample3 ~/fullpathto/sample3_sub.fastq.gz B sample1
-~/fullpathto/sample4_sub.fastq.gz A sample3
-~/fullpathto/sample2_sub.fastq.gz B
-</pre>
 </div>
 <div id="demo-run" class="section level2">
 <h2>Demo run</h2>
 <p>To run you can create a results folder and give that as argument in
-the function If argument to outdir is not given, a result directory is
+the function. If argument to outdir is not given, a result directory is
 created in the present working directory of R.</p>
 <p>Also, when ref.dir = NA, it uses the reference annotation and genome
 package provided by bioconductor and installed in the system. To provide
 reference files the location to the directory where files are stored
-should be provided. <em>NOTES:</em> Please make sure that any path does
-not have trailing “/” at the end. For example: ref=”~/Reference/mouse/”
-#Wrong ref=”~/Reference/mouse” #Right</p>
+should be provided.</p>
+<p><em>NOTES:</em> Please make sure that any path does not have trailing
+“/” at the end.</p>
+<p>For example: ref=”~/Reference/mouse/” #Wrong ref=”~/Reference/mouse”
+#Right</p>
 <p>To run the wrapper,</p>
 <pre class="r"><code># create directory to store results
-Results &lt;- tempdir()
+
+if (interactive()){
+    pathwrap(
+     phenofile = phenofile,
+    entity = &quot;Mus musculus&quot;
+    )
+    }
+</code></pre>
+<p>To plot compound data as well using pathwrap</p>
+<pre class="r"><code>#which column has refererence sample and which has experiment
 csamp &lt;- c(1,2)
 cref &lt;- c(3,4)
+#provide path to compound data
 cdatapath &lt;- file.path(system.file(package = &quot;pathwrap&quot;), &quot;extdata&quot;, 
                          &quot;example_cpd_data.tsv&quot;)
-if (interactive()){pathwrap(
-    ref.dir = NA, phenofile = phenofile,
-    outdir = Results, entity = &quot;Mus musculus&quot;, corenum = 16,
-    compare = &quot;as.group&quot;,  keep_tmp = TRUE,startover = TRUE, 
-    diff.tool = &quot;DESeq2&quot;, aligner = &quot;Rhisat2&quot;, mode = &quot;combined&quot;, 
-    cdatapath = cdatapath, cref= cref, csamp = csamp, ccompare = &quot;paired&quot;
-)}</code></pre>
+#run pathwrap
+if (interactive()){
+    pathwrap(
+     phenofile = phenofile,
+    entity = &quot;Mus musculus&quot;, 
+    cdatapath=cdatapath, 
+    csamp=csamp,cref=cref
+    )
+    }</code></pre>
 </div>
 <div id="overview" class="section level2">
 <h2>Overview</h2>
@@ -498,7 +519,7 @@ loading from the annotation package. Make_txdbobj uses the
 makeTxDbFromGFF to make TxDb object from transcript annotations
 available in gtf file in ref.dir or if ref.dir is NA, it makes txdb
 object fromt the annotaion package</p>
-<p><strong>STEP 3 : Alignmnet and counting</strong></p>
+<p><strong>STEP 3 : Alignment and counting</strong></p>
 <p>After the txdb object is formed, the wrapper runs the Rhisat2 or
 Rbowtie for alignment on paired or single end mode depending on data. It
 saves the alignment object in RDS file which can be loaded in R for
@@ -573,13 +594,13 @@ Acids Res. 2017 Jul 3;45(W1):W501-W508. doi: 10.1093/nar/gkx372. PMID:
 <div id="session-info" class="section level1">
 <h1>Session info</h1>
 <pre class="r"><code>sessionInfo()
-#&gt; R version 4.4.2 (2024-10-31)
+#&gt; R version 4.6.1 (2026-06-24)
 #&gt; Platform: x86_64-apple-darwin20
-#&gt; Running under: macOS Sequoia 15.4.1
+#&gt; Running under: macOS Tahoe 26.5.1
 #&gt; 
 #&gt; Matrix products: default
-#&gt; BLAS:   /Library/Frameworks/R.framework/Versions/4.4-x86_64/Resources/lib/libRblas.0.dylib 
-#&gt; LAPACK: /Library/Frameworks/R.framework/Versions/4.4-x86_64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0
+#&gt; BLAS:   /Library/Frameworks/R.framework/Versions/4.6-x86_64/Resources/lib/libRblas.0.dylib 
+#&gt; LAPACK: /Library/Frameworks/R.framework/Versions/4.6-x86_64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.1
 #&gt; 
 #&gt; locale:
 #&gt; [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
@@ -591,15 +612,16 @@ Acids Res. 2017 Jul 3;45(W1):W501-W508. doi: 10.1093/nar/gkx372. PMID:
 #&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     
 #&gt; 
 #&gt; other attached packages:
-#&gt; [1] stringr_1.5.1
+#&gt; [1] stringr_1.6.0
 #&gt; 
 #&gt; loaded via a namespace (and not attached):
-#&gt;  [1] digest_0.6.37     R6_2.6.1          fastmap_1.2.0     xfun_0.52        
-#&gt;  [5] magrittr_2.0.3    glue_1.8.0        cachem_1.1.0      knitr_1.50       
-#&gt;  [9] htmltools_0.5.8.1 rmarkdown_2.29    lifecycle_1.0.4   cli_3.6.5        
-#&gt; [13] vctrs_0.6.5       sass_0.4.10       jquerylib_0.1.4   compiler_4.4.2   
-#&gt; [17] rstudioapi_0.17.1 tools_4.4.2       evaluate_1.0.3    bslib_0.9.0      
-#&gt; [21] yaml_2.3.10       rlang_1.1.6       jsonlite_2.0.0    stringi_1.8.7</code></pre>
+#&gt;  [1] digest_0.6.39     R6_2.6.1          fastmap_1.2.0     xfun_0.60        
+#&gt;  [5] magrittr_2.0.5    glue_1.8.1        cachem_1.1.0      knitr_1.51       
+#&gt;  [9] htmltools_0.5.9   rmarkdown_2.31    lifecycle_1.0.5   cli_3.6.6        
+#&gt; [13] vctrs_0.7.3       sass_0.4.10       jquerylib_0.1.4   compiler_4.6.1   
+#&gt; [17] rstudioapi_0.19.0 tools_4.6.1       evaluate_1.0.5    bslib_0.12.0     
+#&gt; [21] yaml_2.3.12       otel_0.2.0        jsonlite_2.0.0    rlang_1.3.0      
+#&gt; [25] stringi_1.8.9</code></pre>
 </div>
 
 

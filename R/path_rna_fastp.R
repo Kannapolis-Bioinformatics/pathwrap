@@ -90,7 +90,7 @@ plottrimresult<- function(trim.dir,df_t ){
         geom_text(
             aes(label = ifelse(proportion > 0.05, percent(proportion, accuracy = 1), "")),
             position = position_fill(vjust = 0.5),
-            size = 3,
+            linewidth = 3,
             color = "white"
         ) +
         scale_y_continuous(labels = percent) +
@@ -98,7 +98,7 @@ plottrimresult<- function(trim.dir,df_t ){
         theme_minimal() +
         theme(axis.text.x = element_text(angle = 45, hjust = 1,face = "bold"))+
         theme(axis.text.y = element_text(face = "bold"))
-    plot(p)
+    print(p)
     dev.off()
     return(invisible(NULL))
 }

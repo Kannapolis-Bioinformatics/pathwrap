@@ -68,8 +68,8 @@ run_gage2 <- function(gene_data, gsets,  same.dir, compare, work.dir, gene_id_ty
         path.ids2 <-  str_sub( path.ids , 4,8)
         }
     
-    message("this is returned from gage")
-    print(path.ids2)
+    message("this is path ids found by gage")
+    message(path.ids2)
     return(list("pids"= path.ids2, "gage.out" = fc.kegg.p ))
     
     # return(list("pathways_selected"= gpath_ids,"pgs.gene" = pgs.gene,
