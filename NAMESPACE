@@ -19,7 +19,6 @@ import(Rfastp)
 import(Rhisat2)
 import(Rsamtools)
 import(ShortRead)
-import(dplyr)
 import(edgeR)
 import(fastqcr)
 import(gage)
@@ -46,6 +45,11 @@ importFrom(QuasR,
 importFrom(Rsamtools,scanFaIndex)
 importFrom(S4Vectors,DataFrame)
 importFrom(SummarizedExperiment,assay)
+importFrom(dplyr,
+  group_by,
+  mutate,
+  select
+)
 importFrom(grDevices,
   dev.off,
   tiff

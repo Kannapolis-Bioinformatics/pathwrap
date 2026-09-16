@@ -13,7 +13,7 @@
 #' @param entity : scientific name of organism to convert gene to symbol
 #' @param coldat the dataframe for phenotype information of all sample
 #' @param npca number of genes to use for pca
-#' @param nheatmap number of genes for heatmap
+#' @param nheatmap number of genes for heatmap 
 #' @param formula_object string denoting formula
 #' @import EnhancedVolcano EnhancedVolcano
 #' @importFrom DESeq2 DESeqDataSetFromMatrix
@@ -93,8 +93,8 @@ run_deseq2 <- function(cnts, outdir, entity,  formula_object,coldat,npca, nheatm
         deseq2.fc <- deseq2_res$log2FoldChange
         names(deseq2.fc) <- rownames(deseq2_res)
         exp.fc <- deseq2.fc
-        write.table(deseq2_res, file.path(deseq2.dir, "DESEQ2_logfoldchange.txt",
-                                          fsep = .Platform$file.sep), row.names=T, col.names  =T, sep ="\t")
+        write.table(deseq2_res, file.path(deseq2.dir, "DESEQ2_logfoldchange_entrez.txt",
+                                          fsep = .Platform$file.sep), row.names=T, col.names  =NA, sep ="\t") #changed col.names = NA.
         
         tiff(volcanoplotfilepath,
              units = "in", width = 15,height = 15, res = 300)
@@ -110,9 +110,9 @@ run_deseq2 <- function(cnts, outdir, entity,  formula_object,coldat,npca, nheatm
         #write.table(vsd_matrix, file= file.path(deseq2.dir, "vsd_count.txt"),col.names = T, row.names = T, quote=FALSE)
         
     } else {
-        exp_table <- read.table( file.path(deseq2.dir, "DESEQ2_logfoldchange.txt",
+        exp_table <- read.table( file.path(deseq2.dir, "DESEQ2_logfoldchange_entrez.txt",
                                         fsep = .Platform$file.sep), row.names=1, header =T, sep = "\t")
-       exp.fc <-  exp_table[,2]
+       exp.fc <-  exp_table[,2] #logfoldchange
        names(exp.fc) <- rownames(exp_table)
        norm_counts <- data.matrix(read.table(file.path(deseq2.dir, "normalized_count.txt"),header = T, row.names = 1, quote=""))
        #print("this is the size of log fold change being read")
@@ -136,12 +136,13 @@ plotdeseqheatmap <- function(deseq2_res,dds,deseq2.dir,npca, nheatmap){
     sigs <- na.omit(deseq2_res)
     df <- as.data.frame(sigs)
     df.top <- df[(df$padj < 0.05) & (abs(df$log2FoldChange) > 2), ]
-    message("total number of differentially expressed gene, padj<0.05 and logfoldchange>2 is  ", dim(df.top)[1])
+    n_sig <- dim(df.top)[1]
+    message("total number of differentially expressed gene, padj<0.05 and logfoldchange>2 is  ", n_sig)
     vsd_matrix<-NULL
     ######################################
     message("Principle Componenet Analysis using VST from DESeq2")
     a <- try({
-        vsd <- vst(dds, blind = TRUE, nsub =dim(df.top)[1] )
+        vsd <- vst(dds, blind = TRUE)#, nsub =n_sig )
     }, silent = TRUE)
     loadError <- (is(a, "try-error") | is(a, "error"))
     if (loadError == TRUE) {
@@ -150,13 +151,24 @@ plotdeseqheatmap <- function(deseq2_res,dds,deseq2.dir,npca, nheatmap){
     }
     vsd_matrix<- assay(vsd)
     
-    if (dim(df.top)[1] >npca) {
-        message("Now we are plotting PCA")
+    if (n_sig >=npca) {
+        message("Enough significant genes (", n_sig, ") for PCA; using top ", npca,
+                " by adjusted p-value.")
+        df.top.pca <- df.top[order(df.top$padj), ]
+        pca_genes  <- rownames(df.top.pca)[seq_len(npca)]
+        pca_genes_present <- intersect(pca_genes, rownames(vsd_matrix))
+        if (length(pca_genes_present) < npca) {
+            warning("Only ", length(pca_genes_present), " of the requested ", npca,
+                    " genes were found in the VST matrix; PCA will use ",
+                    length(pca_genes_present), " genes.")
+        }
+        
+        newvsd <- vsd[pca_genes_present, ]
         tiff(
             file.path(deseq2.dir, "PCA_vst.tiff",fsep = .Platform$file.sep),
-            units = "in",  width = dim(df.top)[2], height = dim(df.top)[2],  res = 300)
+            units = "in",  width = 15, height =15,  res = 300)
         
-        g <- plotPCA(vsd, intgroup = c("grp.idx")) +
+        g <- plotPCA(newvsd, intgroup = c("grp.idx"), ntop = length(pca_genes_present)) +
             theme(
                 axis.text.x = element_text(size = 14),     # x-axis tick labels
                 axis.title.x = element_text(size = 20),   # x-axis title
@@ -166,15 +178,24 @@ plotdeseqheatmap <- function(deseq2_res,dds,deseq2.dir,npca, nheatmap){
         
         print(g)
         dev.off()
+    } else{
+        message("Skipping PCA plot: only ", n_sig,
+                " significant gene(s) found (padj<0.05, |log2FC|>2), which is fewer than npca = ",
+                npca, ". Increase sample size/power, or lower npca, to enable PCA.")
     }
+    #---------------------------------------------#
+       # HEATMAP
+    #---------------------------------------------#
+    
     df.top <- na.omit(df.top[order(df.top$log2FoldChange,
-                                   decreasing = TRUE )[seq_len(20)], ])
-    if (dim(df.top)[1] > nheatmap) {
-        rowstoselect <- match(rownames(df.top)[seq_len(nheatmap+1)], 
+                                   decreasing = TRUE ), ])
+    n_top <- min(nrow(df.top), nheatmap) 
+    if (n_top >= nheatmap) {
+        rowstoselect <- match(rownames(df.top)[seq_len(nheatmap)], 
                               rownames(assay(vsd)))
         mat <- assay(vsd)[rowstoselect , ]  
         message(
-            "Also plotting heatmap of vst count of top 20 genes with
+            "Also plotting heatmap of vst count of top", nheatmap, "genes with
                 LFC more than 2 and padj less than 0.05"
         )
         tiff(
@@ -186,6 +207,8 @@ plotdeseqheatmap <- function(deseq2_res,dds,deseq2.dir,npca, nheatmap){
             
         print(g)#+ theme(axis.text.x = element_text(angle = 45, vjust = 1))
         dev.off()
+    } else{
+        message("Skipping heatmap")
     }
     message("plot return function vsd_matrix")
     return(vsd_matrix)

@@ -72,48 +72,49 @@ plot_genedata <- function( gene_data, gage.out, gset, outdir, mref, msamp, compa
                      scatterplot = T)
         } 
     }
+}
     
     
     
     ###
-    non_redunant = FALSE
-    if (non_redunant){
-    
-    check_and_warn <- function(condition, message) {
-        if (condition) {
-            warning(message)
-        }
-    }
-
-            tryCatch({
-                coreset <- esset.grp(gage.out$gage.out$greater, gene_data,gsetm ,  ref=mref, samp=msamp, compare=compare, use.q = T, cutoff = q_cutoff)
-                for (id in na.omit(rownames(gage.out$gage.out$greater)[1:12])) {
-                    genes_in_term=unique(unlist(gsetm[id]))
-                    outname <- file.path(outdir,  paste0("core", gsub(" |:|/", "_", id) ) )
-                    core_genes <- coreset$coreGeneSets[[id]]
-                    
-                    message("length of genes selected in pathway")
-                    message(length(genes_in_term))
-                    message(sum(genes_in_term %in% rownames(gene_data)))
-                    message("above is common genes found")
-                    if (sum(genes_in_term %in% rownames(gene_data)) < 3) {
-                        message(paste("Skipping", id, "- not enough genes (less than 3) found."))
-                        next
-                    }
-                    message("this is dim of essData")
-                    message(dim(essData))
-                    #exprs = gene_data [ names(gene_data)%in%coreset$coreGeneSets,]
-                    geneData(genes = core_genes, exprs = gene_data, ref = mref, 
-                             samp = msamp, outname = outname, txt = T, heatmap = T, limit = 3, 
-                             scatterplot = T)
-                    
-                }
-            }, error = function(w) {
-                check_and_warn(TRUE,"there are no significant gene set, try lowering q val")
-            })
-    }
-}
-            
+#     non_redunant = FALSE
+#     if (non_redunant){
+#     
+#     check_and_warn <- function(condition, message) {
+#         if (condition) {
+#             warning(message)
+#         }
+#     }
+# 
+#             tryCatch({
+#                 coreset <- esset.grp(gage.out$gage.out$greater, gene_data,gsetm ,  ref=mref, samp=msamp, compare=compare, use.q = T, cutoff = q_cutoff)
+#                 for (id in na.omit(rownames(gage.out$gage.out$greater)[1:12])) {
+#                     genes_in_term=unique(unlist(gsetm[id]))
+#                     outname <- file.path(outdir,  paste0("core", gsub(" |:|/", "_", id) ) )
+#                     core_genes <- coreset$coreGeneSets[[id]]
+#                     
+#                     message("length of genes selected in pathway")
+#                     message(length(genes_in_term))
+#                     message(sum(genes_in_term %in% rownames(gene_data)))
+#                     message("above is common genes found")
+#                     if (sum(genes_in_term %in% rownames(gene_data)) < 3) {
+#                         message(paste("Skipping", id, "- not enough genes (less than 3) found."))
+#                         next
+#                     }
+#                     message("this is dim of essData")
+#                     message(dim(essData))
+#                     #exprs = gene_data [ names(gene_data)%in%coreset$coreGeneSets,]
+#                     geneData(genes = core_genes, exprs = gene_data, ref = mref, 
+#                              samp = msamp, outname = outname, txt = T, heatmap = T, limit = 3, 
+#                              scatterplot = T)
+#                     
+#                 }
+#             }, error = function(w) {
+#                 check_and_warn(TRUE,"there are no significant gene set, try lowering q val")
+#             })
+#     }
+# }
+#             
     
     
 #         

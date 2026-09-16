@@ -7,7 +7,7 @@
 pathwrap(
   phenofile,
   entity,
-  corenum = detectCores(),
+  corenum = parallel::detectCores(),
   ref.dir = NULL,
   cacheDir = tempdir(),
   outdir = NULL,
@@ -20,11 +20,10 @@ pathwrap(
   nheatmap = 10,
   fc_matrix = NA,
   cdatapath = NA,
-  cpd_id_type = "KEGG COMPOUND accession",
   csamp = NULL,
   cref = NULL,
-  ccompare = "unpaired",
-  pathids = "04110",
+  ccompare = "paired",
+  pathids = NA,
   nchunks = 1,
   keep_tmp = TRUE,
   cpd.idtype = "KEGG",
@@ -32,65 +31,65 @@ pathwrap(
 )
 }
 \arguments{
-\item{phenofile}{file where the path of raw data is stored.}
+\item{phenofile}{file where the path of raw data is stored, its class and pair labels}
 
-\item{entity}{Scientific name of species whose RNA is being analyzed}
+\item{entity}{Scientific name of species ("Homo sapiens" or "Mus musculus")}
 
-\item{corenum}{number of cores avaialble for run}
+\item{corenum}{number of cores available for run}
 
-\item{ref.dir}{path to reference directory which contain
-reference file(\emph{.fa) and annotation file(}.gtf), can be NA}
+\item{ref.dir}{path to reference directory (*.fa and *.gtf); can be NULL or NA}
 
-\item{cacheDir}{directory where temporary files created during alignment}
+\item{cacheDir}{directory where temporary files created during alignment are stored}
 
 \item{outdir}{main directory for storing output of the process}
 
-\item{startover}{do you want to start from beginning, default =False}
+\item{startover}{force complete rerun from beginning, default FALSE}
 
-\item{aligner}{One of "Rhisat2" or "Rbowtie2"; Rbowtie2 can be very slow
-for human and eukaryotic species}
+\item{aligner}{One of "Rhisat2" or "Rbowtie2"; Rbowtie2 can be very slow for
+eukaryotic species}
 
-\item{diff.tool}{weather to use "DESeq2" or edgeR for differential gene analysis}
+\item{diff.tool}{Differential expression tool to use: "DESeq2" or "edgeR"}
 
-\item{cnts}{file path to the cnts per gene from other analysis}
+\item{cnts}{optional file path or pre-computed count matrix to skip alignment}
 
-\item{gcompare}{how the comparision is done for transcripts/genes}
+\item{gcompare}{comparison design for genes ("unpaired" or "paired")}
 
-\item{npca}{number of genes to use for pca}
+\item{npca}{number of top significant genes (by adjusted p-value) used for PCA}
 
 \item{nheatmap}{number of genes for heatmap}
 
-\item{fc_matrix}{logfold change for gage if deseq2 is not run}
+\item{fc_matrix}{logfold change matrix, used in place of running differential
+expression analysis when supplied \link{not currently implemented}}
 
-\item{cdatapath}{data path for compound data}
+\item{cdatapath}{data path for compound/metabolite data}
 
-\item{cpd_id_type}{"KEGG COMPOUND accession"}
+\item{csamp}{index/row numbers for samples, e.g. c(4, 5, 6)}
 
-\item{csamp}{index/row number where sample files are ex: c(5,6,4)}
+\item{cref}{index/row numbers for references, e.g. c(1, 2, 3)}
 
-\item{cref}{index/row number where references are, ex: c(1,2,3)}
+\item{ccompare}{compound comparison design ("unpaired" or "paired")}
 
-\item{ccompare}{how the compound data is compared, default paired}
+\item{pathids}{pathway(s) of interest besides those enriched, e.g. c("04110"),
+c("04110", "04120"); set to NA to skip}
 
-\item{pathids}{pathway of interest only necessary if enrichment is not run}
+\item{nchunks}{number of chunks to run alignment, default 1}
 
-\item{nchunks}{default 1, in how many chunks you want to run alignment}
+\item{keep_tmp}{whether to keep trimmed fastq and intermediate BAM files, default TRUE}
 
-\item{keep_tmp}{weather to store aligned bam files and trimmed fastq files default True}
+\item{cpd.idtype}{compound id type (e.g., "KEGG COMPOUND accession", "KEGG")}
 
-\item{cpd.idtype}{compound id type}
-
-\item{q_cutoff}{cutoff for q value for pathway selection}
+\item{q_cutoff}{cutoff for q-value used in pathway selection}
 }
 \value{
-returns message if analysis complete successfully
+(invisibly) a list with elements:
+\code{status}, \code{outdir}, \code{gene_data}, \code{gene_path_results},
+\code{compound_data}, \code{manifest}
 }
 \description{
-wrapper that does quality control analysis of raw files, performs adapter and
-quality trimming, builds genome index and does alignment , counts genes
-perfoms differential gene expression analysis,does gene enrichment test using
-GAGE and visualize the enriched pathways using pathview all using one
-wrapper function. It has the ability to continue the analysis if it is
-halted at any stage and generate quality pictures and generate comprehensive
-analysis of the data.
+Wrapper that does quality control analysis of raw files, performs adapter and
+quality trimming, builds genome index and does alignment, counts genes,
+performs differential gene expression analysis, does gene enrichment testing using
+GAGE, and visualizes enriched pathways using pathview, all in one
+wrapper function. It can resume analysis if halted at any stage, generate
+quality pictures, and produce comprehensive analysis of the data.
 }

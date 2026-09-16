@@ -34,6 +34,8 @@ run_compound_kegg_gsets<- function( cdatapath,cpd_id_type= "KEGG COMPOUND access
         cpd_idmap<-cpd_idmap[!didx,]
         cpd_data <-mol.sum(cpd_data, cpd_idmap)}
     
+    compare_for_gage <- if (!is.null(cref)) "as.group" else ccompare
+    
     # same.dir if to test for changes in a gene set toward a single direction
     if(!is.null(cref)){
         ncsamp<-length(csamp)
@@ -46,8 +48,8 @@ run_compound_kegg_gsets<- function( cdatapath,cpd_id_type= "KEGG COMPOUND access
     #names(csets)<-str_replace_all(names(csets),"^map",kegg.species.code(entity))
     message("gage running submitted for compound")
     gpath_ids <- run_gage2(gsets = csets,  same.dir = FALSE,
-            compare = ccompare,gene_data= cpd_data, 
-            , ref=NULL, samp=NULL, work.dir=cset_dir,q_cutoff=q_cutoff)
+            compare = compare_for_gage,gene_data= cpd_data, 
+             ref=NULL, samp=NULL, work.dir=cset_dir,q_cutoff=q_cutoff)
    
     
     

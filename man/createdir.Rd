@@ -4,17 +4,15 @@
 \alias{createdir}
 \title{create the directories for saving the result}
 \usage{
-createdir(pos = 1, outdir, startover)
+createdir(outdir, startover)
 }
 \arguments{
-\item{pos}{enviromental}
+\item{outdir}{where the directory and its subfolders will be created}
 
-\item{outdir}{where the directory and its subfolder will be created}
-
-\item{startover}{: if the run is again?}
+\item{startover}{if TRUE, previous results in outdir (if any) are cleared}
 }
 \value{
-list of folder names
+the resolved outdir path (invisible NULL if the user declines)
 }
 \description{
 create the directories for saving the result

@@ -28,21 +28,31 @@ run_go_set_analysis <- function(gene_data, outdir,entity,compare,use.fold=T, mre
     go.mf <- go.gs$go.sets[go.gs$go.subs$MF]
     go.cc <- go.gs$go.sets[go.gs$go.subs$CC]
     
-    go_gene_sets <- list("biological_process" = go.bp, "cellular_component"=go.cc, "molecular_function" = go.mf)
-    outdir_list <- list.files(file.path(outdir, "gage_results", "GO"), full.names = TRUE)
+    go_gene_sets <- list("biological_process" = go.bp, "cellular_component"=go.cc, 
+                         "molecular_function" = go.mf)
+    go_folder_map <- c("biological_process" = "biological_process",
+                       "cellular_component" = "cellular_component",
+                       "molecular_function" = "molecular_function")
+    go_base <- file.path(outdir, "gage_results", "GO")
+    #go_all_results <- vector("list", length(go_gene_sets))
+    #names(go_all_results) <- names(go_gene_sets)
     
     #run gage for different go ontologies
-    for (i in 1:length(go_gene_sets )){
-      message("running for ", names(go_gene_sets)[i] )
-      gage.out  <- run_gage2(gene_data = gene_data$logfoldchange, go_gene_sets[[i]], 
-                              work.dir = outdir_list[i], same.dir = TRUE,
+    for (category in names(go_gene_sets)) {
+      message("running for ", category )
+      work_dir <- file.path(go_base, go_folder_map[[category]])
+      
+      gage.out  <- run_gage2(gene_data = gene_data$logfoldchange, 
+                             go_gene_sets[[category]], 
+                              work.dir = work_dir ,same.dir = TRUE,
                                    compare = compare,gene_id_type = "ENTREZ", 
                               ref=NULL, samp=NULL,q_cutoff)
       
     
       plot_genedata( gene_data = gene_data$normalized_count, gage.out, 
-                     gset =go_gene_sets[[i]] , outdir = outdir_list[i], 
+                     gset =go_gene_sets[[category]] , outdir = work_dir ,
                      mref=mref, msamp = msamp, compare= compare,q_cutoff )
+      #go_all_results[[category]] <- gage.out
       }
 }
 

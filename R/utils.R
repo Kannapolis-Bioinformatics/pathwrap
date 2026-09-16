@@ -21,7 +21,7 @@ check_references <- function(ref.dir, entity){
         pkg.on <- requireNamespace(annotate_pkg,lib.loc = .libPaths()[1],
                                    quietly = TRUE)
         if (!pkg.on) {
-            try.on  <- try( BiocManager::install( annotate_pkg, 
+            try.on  <- try( BiocManager::install( c(annotate_pkg, genome_pkg),
                                                   force = TRUE,
                                                   lib = .libPaths()[1] , 
                                                   ask= FALSE )

@@ -14,6 +14,10 @@
 
 plotpathways <- function(kegg.dir, entity, path.ids, gene_data, cpd_data, 
                          cpd_id_type = "kegg", gene_id_type = "entrez") {
+    if (!dir.exists(kegg.dir)) {
+        dir.create(kegg.dir, recursive = TRUE)
+    }
+    
     check_and_warn <- function(condition, message) {
         if (condition) {
             warning(message)
@@ -30,7 +34,7 @@ plotpathways <- function(kegg.dir, entity, path.ids, gene_data, cpd_data,
                 pathview(gene.data = gene_data, pathway.id = pid, #.pathview is written in getwd()
                          species = species_code,
                          out.suffix = "pathview", kegg.dir = kegg.dir, 
-                         cpd.data = cpd_data)
+                         cpd.data = cpd_data,  cpd.idtype = cpd_id_type)
                 #,keys.align="y",match.data=F,multi.state= T, 
                  #        same.layer=T,  cpd.idtype = cpd_id_type, gene_id_type = gene_id_type,kegg.native= TRUE, split.group=TRUE
                  #       )
